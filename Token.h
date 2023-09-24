@@ -15,27 +15,35 @@ class Token {
 public:
     enum class Type {
         Unknown,
-        Number, // [0-9]
-        Operator, // +,-,*,/,^,
-        LeftParen, //'('
+        Number,     // [0-9]
+        Integer,
+        Real,
+        Operator,   // +,-,*,/,^,
+        LeftParen,  //'('
         RightParen, //')'
-        Algebra,  //[a-z][A-Z]
-        Ration,  // =,>=,<=,<,>
-        Function, // sin(x), cos(x)
+        Algebra,    //[a-z][A-Z]
+        Ration,     // =,>=,<=,<,>
+        Function    // sin(x), cos(x)
     };
+
+    const Type type;
+    const int intValue;
+    const double doubleValue;
+    string value;
+    const int precedence;
+    const bool rightAssociative;
 
     Token();
     Token(Type t, const string& s, int prec = -1, bool ra = false);
     Token(const Token& other);
-    Token operator=(const Token other);
-    bool operator == (const Token other);
+    Token(Type t, const int m);
+    Token(Type t, const double m);
+    Token operator=(const Token& other);
+    bool operator==(const Token& other);
     friend ostream& operator<<(ostream& os, const Token& token);
-
-    const Type type;
-    string str;
-    const int precedence;
-    const bool rightAssociative;
-    const char Associative = 0;
+    template<typename T>
+    T GetValue() const;
+    ~Token();
 };
 
 bool f_arg(const Token& T);

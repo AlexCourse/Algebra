@@ -67,14 +67,14 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 			stack.pop_back();
 
 			if (!match && stack.empty()) {
-				printf("RightParen error (%s)\n", token.str.c_str());
+				printf("RightParen error (%s)\n", token.value.c_str());
 				return {};
 			}
 		}
 		break;
 
 		default:
-			printf("error (%s)\n", token.str.c_str());
+			printf("error (%s)\n", token.value.c_str());
 			return {};
 		}
 	}
@@ -102,13 +102,13 @@ double PolishCalculation(deque<Token> es)
 		es.pop_front();
 		switch (T.type) {
 		case Token::Type::Number:
-			stack.push_back(stof(T.str));
-			op = "Push " + T.str;
+			stack.push_back(stof(T.value));
+			op = "Push " + T.value;
 			break;
 		case Token::Type::Algebra:
 		{
-			cst.push_back(T.str[0]);
-			op = "Push" + T.str[0];
+			cst.push_back(T.value[0]);
+			op = "Push" + T.value[0];
 
 		}
 		case Token::Type::Operator:
@@ -119,9 +119,9 @@ double PolishCalculation(deque<Token> es)
 				stack.pop_back();
 				const auto lhs = stack.back();
 				stack.pop_back();
-				switch (T.str[0]) {
+				switch (T.value[0]) {
 				default:
-					printf("Operator error [%s]\n", T.str.c_str());
+					printf("Operator error [%s]\n", T.value.c_str());
 					exit(0);
 					break;
 				case '^':
@@ -141,14 +141,14 @@ double PolishCalculation(deque<Token> es)
 					break;
 				}
 
-				op = "Push " + to_string(lhs) + " " + T.str + " " + to_string(rhs);
+				op = "Push " + to_string(lhs) + " " + T.value + " " + to_string(rhs);
 				break;
 			}
 			else if (f_opr_one(T))
 			{
 				const auto x = stack.back();
 				stack.pop_back();
-				string c = T.str;
+				string c = T.value;
 				if (c == "exp") { stack.push_back(exp(x)); }
 				if (c == "ln") { stack.push_back(log1p(x)); }
 				if (c == "sin") { stack.push_back(sin(x)); }
@@ -176,7 +176,7 @@ double PolishCalculation(deque<Token> es)
 			{
 				const auto x = stack.back();
 				stack.pop_back();
-				string c = T.str;
+				string c = T.value;
 				if (c == "exp") { stack.push_back(exp(x)); }
 				if (c == "ln") { stack.push_back(log1p(x)); }
 				if (c == "sin") { stack.push_back(sin(x)); }

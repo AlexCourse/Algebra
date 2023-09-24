@@ -2,28 +2,35 @@
 #include <regex>
 #define DEBUG 1
 
-Token::Token() : type(Type::Unknown), str(""), precedence(-1), rightAssociative(false) {}
+Token::Token() : type(Type::Unknown), intValue(0), doubleValue(0), value(""), precedence(-1), rightAssociative(false) {}
 
+Token::Token(Type t, const string& s, int prec, bool ra) : type(t), intValue(0), doubleValue(0), value(s), precedence(prec), rightAssociative(ra) {}
 
-Token::Token(Type t, const string& s, int prec, bool ra)
-    : type(t), str(s), precedence(prec), rightAssociative(ra) {}
+Token::Token(Type t, const int m) : type(t), intValue(m), doubleValue(0), value(""), precedence(-1), rightAssociative(false) {}
 
-Token::Token(const Token& other)
-    : type(other.type), str(other.str), precedence(other.precedence), rightAssociative(other.rightAssociative) {}
+Token::Token(Type t, const double m) : type(t), intValue(0), doubleValue(m), value(""), precedence(-1), rightAssociative(false) {}
 
-Token Token::operator=(const Token other) {
-    return Token(other);
+Token::Token(const Token& other) : type(other.type), intValue(other.intValue), doubleValue(other.doubleValue), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative) {}
+
+Token Token::operator=(const Token& other) {
+	Token T = Token(other.type, other.value, other.precedence, other.rightAssociative);
+	return T;
+}
+
+bool Token::operator==(const Token& other) {
+	return (type == other.type && intValue == other.intValue && doubleValue == other.doubleValue && value == other.value && precedence == other.precedence && rightAssociative == other.rightAssociative);
 }
 
 ostream& operator<<(ostream& os, const Token& token) {
-    os << token.str;
-    return os;
+	os << token.value;
+	return os;
 }
 
 struct Operator {
 	int precedence;
 	string associativity;
 };
+
 
 unordered_set<string> operator_info_two = { "+" , "-", "/", "*", "^" };
 unordered_set<string> operator_info_one = { "!" };
@@ -48,7 +55,7 @@ bool f_arg(const Token& T)
 	else return false;
 }
 bool f_opr_two(const Token& T) {
-	string p = T.str;
+	string p = T.value;
 	if (operator_info_two.count(p) || func_info_two.count(p)) {
 		return true;
 	}
@@ -56,7 +63,7 @@ bool f_opr_two(const Token& T) {
 }
 
 bool f_opr_one(const Token& T) {
-	string p = T.str;
+	string p = T.value;
 	if (operator_info_one.count(p) || func_info_one.count(p)) {
 		return true;
 	}
@@ -64,7 +71,7 @@ bool f_opr_one(const Token& T) {
 }
 
 bool f_opr_free(const Token& T) {
-	string p = T.str;
+	string p = T.value;
 	if (func_info_free.count(p)) {
 		return true;
 	}
@@ -78,6 +85,11 @@ bool isliter(char p)
 		return true;
 	}
 	else return false;
+}
+
+Token::~Token() {
+	// Destructor definition
+	// Add any necessary cleanup code here
 }
 
 deque<Token> exprToTokens(const string& expr) {
@@ -95,12 +107,14 @@ deque<Token> exprToTokens(const string& expr) {
 				tokens.push_back(Token{ Token::Type::Unknown, std::string(p, p), pr,  false });
 				cout << "Неверная запись десятичного числа" << std::endl;
 			}
+			Token::Type t = Token::Type::Integer;
 			const auto* b = p;
 			while (isdigit(*p) || (*p) == '.') {
+				if ((*p) == '.') t = Token::Type::Real;
 				++p;
 			}
 			const auto s = std::string(b, p);
-			tokens.push_back(Token{ Token::Type::Number, s });
+			tokens.push_back(Token{ t, s });
 			--p;
 		}
 		else
@@ -160,7 +174,9 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 					return T;
 				}
 				const auto* b = p;
+				Token::Type t = Token::Type::Integer;
 				while (isdigit(*p) || (*p) == '.') {
+					if ((*p) == '.') t = Token::Type::Real;
 					++p;
 				}
 				const auto s = std::string(b, p);
@@ -210,7 +226,7 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 
 bool operator == (Token& C , Token& S) 
 {
-	if (C.str == S.str) return true;
+	if (C.value == S.value) return true;
 	else return false;
 }
 
@@ -230,7 +246,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 		Token& T_1 = *(iter[1]);
 		if (T_0.type == Token::Type::LeftParen)
 			if (T_1.type == Token::Type::Operator)
-				if (T_1.str == "-") entries.push_back(i);
+				if (T_1.value == "-") entries.push_back(i);
 		iter[0] = iter[1];
 		iter[1]++;
 		i++;
@@ -250,7 +266,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 			{
 				if (T_1.type == Token::Type::Number)
 				{  
-					int q = stoi(T_1.str);
+					int q = stoi(T_1.value);
 					q = (-1) * q;
 					Token T_2 = SetToken(q);
 					fh.erase(fh.begin() + p, fh.begin() + p + 4); // Функция странно удаляет
@@ -277,15 +293,15 @@ void Tokenize_u_minus(deque<Token>& fh) {
 	}
 	Token& T_0 = fh.front();
 	Token& T_1 = fh[1];
-	if (T_0.str == "-")  // Этот случай не пересекается с предыдущим случаем.
+	if (T_0.value == "-")  // Этот случай не пересекается с предыдущим случаем.
 	{   // Случай когда унарный минус стоит в начале строки.
 		string f, r;
 		if (T_1.type == Token::Type::Number)
 		{
 			fh.pop_front();
-			int m = stoi(T_1.str);
+			int m = stoi(T_1.value);
 			m = (-1) * m;
-			T_1.str = to_string(m);
+			T_1.value = to_string(m);
 			if (DEBUG) r = TokensToStr(fh);
 			f = r;
 	    }
@@ -310,7 +326,7 @@ string TokensToStr(deque<Token> fh)
 	string s = "";
 	for (Token T : fh)
 	{
-		s = s + T.str;
+		s = s + T.value;
 	}
 	return s;
 }

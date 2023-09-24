@@ -22,6 +22,8 @@ class Algebra_Node {
         Algebra_Node* left;
         Algebra_Node* right;
 
+        Algebra_Node();
+        ~Algebra_Node();
         Algebra_Node(const Token& data, Algebra_Node* left = nullptr, Algebra_Node* right = nullptr);
         string toString();
         void addLeftNode(Algebra_Node* Q);
@@ -41,11 +43,12 @@ class Algebra_Tree {
         Algebra_Tree(Algebra_Node* node);
         Algebra_Tree& CopyTree();
         Algebra_Tree& AddSubtree(Algebra_Node* node, LR lr);
-        void TreeExprReplaceD_T(const string c , const string s);
         void FindValueD_T(string c, vector<vector<char>>& paths);
         void FindValueW_T(string c, vector<vector<char>>& paths);
         void Print_Tree_T();
         void TreeToPolish_T();
+        Algebra_Tree& TreeExprReplaceD_T(const string c, const string s);
+        Algebra_Tree& TreeExprReplaceW_T(const string c, const string s);
         void TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* second);
         void TreeRExprReplaceOnSubTreeW_T(const string c, Algebra_Node* second);
         double FunctionValue_T(double value, string symbol);
@@ -62,8 +65,9 @@ void Print_Tree_R(Algebra_Node const* node, string const& prefix, bool root, boo
 void Print_Tree(Algebra_Node const* node, string const& prefix, bool root, bool last);
 void FindValueW(Algebra_Node* root, string c, vector<vector<char>>& paths);
 void FindValueD(Algebra_Node* root, string c, vector<vector<char>>& paths);
-void TreeExprReplaceW(Algebra_Node* root, const string c, const string s);
-void TreeExprReplaceD(Algebra_Node* root, const string c, const string s);
+Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const string s);
+Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const string c, const string s);
+Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const string c, const string s);
 bool CompareTrees(Algebra_Node* root1, Algebra_Node* root2);
 Algebra_Node* GetOperand(Algebra_Node* root, LR lr);
 
@@ -81,5 +85,8 @@ deque<Token> FToPolish(string expr);
 double FunctionValueM(string expr, map<string, float> ds);
 double FunctionValue(deque<Token> fh, double value, string symbol);
 double FunctionValue(vector<Token> fh, double value, string symbol);
+
+template<typename T> // Для типов int , double , string.
+Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const T s);
 
 #endif
