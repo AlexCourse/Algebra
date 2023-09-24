@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 deque<Token> shuntingYard(const deque<Token>& tokens) {
 	deque<Token> eh;
 	stack<Token> st;
@@ -469,11 +470,15 @@ bool CheckBalance(deque<Token> fh)
 	else return false;
 }
 
-deque<Token> FToPolishI(string expr , int& index)
+deque<Token> FToPolishI(string expr , int& index , Enumerable q)
 {
 	deque<Token> fh, eh;
 	bool B;
-	fh = exprToTokens(expr , index , "ORDERING");
+	switch (q)
+	{
+	    case Enumerable::DEFAULT : fh = exprToTokens(expr);
+	    case Enumerable::ORDERING : fh = exprToTokens(expr, index, "ORDERING"); // Отладочный.
+	}
 	B = Check_Bracket_Matching(fh);
 	if (!B)
 	{
@@ -494,6 +499,6 @@ deque<Token> FToPolishI(string expr , int& index)
 deque<Token> FToPolish(string expr)
 {
 	int index = 0;
-	deque<Token> fs = FToPolishI(expr, index);
+	deque<Token> fs = FToPolishI(expr, index , Enumerable::DEFAULT);
 	return fs;
 }

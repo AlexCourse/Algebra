@@ -135,6 +135,7 @@
     <ClCompile Include="Algebra.cpp" />
     <ClCompile Include="Algebra_Node.cpp" />
     <ClCompile Include="Derivate.cpp" />
+    <ClCompile Include="Enumerate.cpp" />
     <ClCompile Include="PrintColourConsole.cpp" />
     <ClCompile Include="Shunting_yard.cpp" />
     <ClCompile Include="simplify.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Algebra.h" />
     <ClInclude Include="Algebra_Node.h" />
     <ClInclude Include="Derivate.h" />
+    <ClInclude Include="Enumerate.h" />
     <ClInclude Include="PrintColourConsole.h" />
     <ClInclude Include="Shanting_yard.h" />
     <ClInclude Include="simplify.h" />

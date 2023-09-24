@@ -28,9 +28,30 @@
             Function,
             Comma,
         };
+        enum class Function
+        {
+            EXP ,
+            LN,
+            SIN,
+            COS ,
+            TG,
+            CTG ,
+            ARCSIN,
+            ARCCOS,
+            ARCTG,
+            ARCCTG,
+            SH,
+            CH,
+            TH,
+            CTH,
+            ARSH,
+            ARCH,
+            ARTH,
+            ARCTH
+        };
 
         const Type type;
-        std::variant<std::string, int, double> value;
+        std::variant<std::string, char ,int, double , Token::Function> value;
         const int precedence;
         const bool rightAssociative;
         const int index;
@@ -54,8 +75,8 @@
         friend std::ostream& operator << (std::ostream& os, const Token& token);
         std::string ToString();
 
-        void SetValue(const std::variant<std::string, int, double>& newValue);
-        std::variant<std::string, int, double> GetValue() const;
+        void SetValue(const std::variant<std::string, char, int, double, Token::Function>& newValue);
+        std::variant<std::string, char, int, double, Token::Function> GetValue() const;
 
         ~Token();
     };
@@ -65,13 +86,14 @@
     bool f_opr_one(const Token& T);
     bool f_opr_free(const Token& T);
 
-    std::string ToString(const std::variant<std::string, int, double>& value);
+    std::string ToString(const std::variant<std::string, char, int, double, Token::Function>& value);
 
-    bool CE(const std::variant<std::string, int, double>, const std::string m); // #
-    bool CE(const std::variant<std::string, int, double>, const int m); // #
-    bool CE(const std::variant<std::string, int, double>, const double m); // #
+    bool CE(const std::variant<std::string, char, int, double, Token::Function>, const std::string m); // #
+    bool CE(const std::variant<std::string, char, int, double, Token::Function>, const int m); // #
+    bool CE(const std::variant<std::string, char, int, double, Token::Function>, const double m); // #
 
-    Token SetToken(const std::variant<int, double, std::string> value);
+    Token SetToken(const std::variant<std::string, char, int, double, Token::Function> value);
+    Token SetToken(const std::variant<std::string, char, int, double, Token::Function> value , int& index);
 
     std::string TokensToStr(std::deque<Token> fh);
     std::deque<Token> exprToTokens(const std::string& expr);

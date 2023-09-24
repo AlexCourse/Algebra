@@ -300,14 +300,14 @@ void test_7() // Тестирование функции DerivateFunc()
 	string eh[] = { "2*(x-1)" , // + ,0
 					  "x-2-x" , // +
 						"sin(x)" , // +
-					     "cos(x^2)" , // -
+					     "cos(x^2)" , // +
 						 "x+2" , // +
 						  "x-2-x+5+x+x+x-3-x+6+x+4+x" , // +
 						  "x*x", // +
 						  "x*x*x", // +
 						  "3*x*x*(x-1)*(x-1)+7*(x-1)*x+5-9*x", // + (b) , - (a)
-						   "x^3", // -
-							"5*x^7", // + , 10
+						   "x^3", // +
+							"5*x^7", // + , 10 , для проверки нумерции узлов.
 							"2*(x+1)", // +
 							 "0.5*x*(x+1)", // -
 							 "x+4+x+7+x+5+x", // +
@@ -332,7 +332,7 @@ void test_7() // Тестирование функции DerivateFunc()
 		                   "(x+2)*sin(x)", // +
 		                   "(x-1)*cos(x)", // +
 		                   "cos(x)", // +
-		                   "(x+1)*(x-9)", // +
+		                   "(x+1)*(x-9)", // + 
 		                   "5*(x+5)", // +
 		                   "(x-3)*7", // +
 		                   "6*11", // +
@@ -379,30 +379,46 @@ void test_7() // Тестирование функции DerivateFunc()
 		                   "(x-7)^2*(x+4)*tg(x)", // -
 		                   "x*tg(x)", // +  , 80
 		                   "(x+4)*tg(x)", // +
-		                   "(x-7)^2*tg(x)" // - ,минимальный неработающий пример.
-		               	                  
+		                   "(x-7)^2*tg(x)", // - ,минимальный неработающий пример
+		               	   "sin(x)^cos(x)", // + , func_5a
+		                   "sin(x)^(x+1)" , // +
+		                   "(x+5)^cos(x)" , // +
+		                   "(x+1)^(x+7)" , // +
+		                   "sin(x)^4" , // +
+		                   "(x+3)^4" , // +
+		                   "3^(x+1)" , // +
+		                   "2^(cos(x))" , // 90.
+		                   "5^7"  , 
 	};
 	const double x = 2;
 	// x = M_PI/4;
 	double Q[2];
-	string s = eh[82];
+	string s = eh[7];
 	deque<Token> fh, fs, es;
 	// getline(cin, s);
 	int index = 0;
-	fs = FToPolishI(s , index);
+	fs = FToPolishI(s , index , Enumerable::ORDERING);
 	Algebra_Node* node = PolishToTree(fs);
 	Algebra_Tree* K = new Algebra_Tree(node);
-	Algebra_Tree& first_tree = *K;
+	Algebra_Tree& A = *K;
+	Algebra_Tree& B = A.SetIndexTree_T();
 	if (DEBUG)
 	{
-		cout << "test_7() : " << endl;
-		first_tree.Print_Tree_T();
+		cout << "test_7() : A " << endl;
+		A.Print_Tree_T();
+		cout << "test_7() : B " << endl;
+		B.Print_Tree_T();
 	}
-	Q[0] = Numerical_Differentiation(first_tree, x, pow(10, -4), "x");
-	Algebra_Node* D = DerivateFunction(node);
+	Q[0] = Numerical_Differentiation(A, x, pow(10, -4), "x");
+	Debug_concept W = Debug_concept();
+	Algebra_Node* D = DerivateFunction(node , W);
 	Algebra_Tree* d_tree = new Algebra_Tree(D);
 	Algebra_Tree& T = *d_tree;
+	cout << "test_7() : T" << endl;
 	T.Print_Tree_T();
+	Algebra_Tree& DI = T.SetIndexTree_T();
+	cout << "test_7() : DI" << endl;
+	DI.Print_Tree_T();
 	Q[1] = T.FunctionValue_T(x, "x");
 	string f = T.TreeToInfix_T();
 	ph.push_back(make_tuple(Q[0], Q[1]));

@@ -43,12 +43,13 @@ public:
     Algebra_Tree(Algebra_Node* node);
     Algebra_Tree& CopyTree();
     Algebra_Tree& AddSubtree(Algebra_Node* node, LR lr);
+    Algebra_Tree& SetIndexTree_T();
     void FindValueD_T(std::string c, std::vector<std::vector<char>>& paths);
     void FindValueW_T(std::string c, std::vector<std::vector<char>>& paths);
     void Print_Tree_T();
     void TreeToPolish_T();
-    Algebra_Tree& TreeExprReplaceD_T(const std::string c, const std::variant<int, double, std::string> s); // ƒальше перегрузки заменить на шаблоны.
-    Algebra_Tree& TreeExprReplaceW_T(const std::string c, const std::variant<int, double, std::string> s);
+    Algebra_Tree& TreeExprReplaceD_T(const std::string c, const std::variant<std::string, char, int, double, Token::Function> s); // ƒальше перегрузки заменить на шаблоны.
+    Algebra_Tree& TreeExprReplaceW_T(const std::string c, const std::variant<std::string, char, int, double, Token::Function> s);
     void TreeRExprReplaceOnSubTreeD_T(const std::string c, Algebra_Node* second);
     void TreeRExprReplaceOnSubTreeW_T(const std::string c, Algebra_Node* second);
     double FunctionValue_T(double value, std::string symbol);
@@ -68,9 +69,9 @@ void Print_Tree(Algebra_Node const* node, std::string const& prefix, bool root, 
 void Print_Tree_R_ColoredSelectNode(Algebra_Node const* node, Algebra_Node* const selectedNode, std::string const& prefix, bool root, bool last);
 void FindValueW(Algebra_Node* root, std::string c, std::vector<std::vector<char>>& paths);
 void FindValueD(Algebra_Node* root, std::string c, std::vector<std::vector<char>>& paths);
-Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const std::string c, const std::variant<int, double, std::string> s);
-Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const std::string c, const std::variant<int, double, std::string> s);
-Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const std::string c, const std::variant<int, double, std::string> s);
+Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const std::string c, const std::variant<std::string, char, int, double, Token::Function> s);
+Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const std::string c, const std::variant<std::string, char, int, double, Token::Function> s);
+Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const std::string c, const std::variant<std::string, char, int, double, Token::Function> s);
 bool CompareTrees(Algebra_Node* root1, Algebra_Node* root2);
 Algebra_Node* GetOperand(Algebra_Node* root, LR lr);
 
@@ -79,17 +80,24 @@ std::string PostfixToInfix(std::vector<Token>& fs);
 std::string PostfixToInfix(std::deque<Token>& fs);
 void TreeToPolish(Algebra_Node* root, std::vector<Token>& kh);
 void TreeToPolish(Algebra_Node* root, std::deque<Token>& kh);
+
 Algebra_Node* SetNode(int m);
+Algebra_Node* SetNode(double m);
 Algebra_Node* SetNode(const std::string s);
+Algebra_Node* SetNode(int m , int& index);
+Algebra_Node* SetNode(double m , int& index);
+Algebra_Node* SetNode(const std::string s , int& index);
+
+
 Algebra_Tree& SetAlgebricTree(const std::string s);
 Algebra_Node* SetOperatorTree(const std::string s);
-Algebra_Node* SetOperatorTree(const std::string s , int& index , std::string q);
+Algebra_Node* SetOperatorTree(const std::string s , int& index);
 
 Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const std::string c, Algebra_Node* second);
 Algebra_Node* TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const std::string c, Algebra_Node* second);
 double FunctionValueM(std::string expr, std::map<std::string, double>& ds);
 
-Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const std::string c, const std::variant<int, double, std::string> s);
+Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const std::string c, const std::variant<std::string, char, int, double, Token::Function> s);
 
 
 template<typename T>

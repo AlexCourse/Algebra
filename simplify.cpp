@@ -187,7 +187,7 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
         if (P[1]->data.type == Token::Type::Integer || P[1]->data.type == Token::Type::Real || P[1]->data.type == Token::Type::Number)
         {
             double m;
-            std::variant<std::string, int, double> Q = P[1]->data.GetValue();
+            std::variant<std::string, char, int, double, Token::Function> Q = P[1]->data.GetValue();
             if (holds_alternative<int>(Q)) m = get<int>(Q);
             else if (holds_alternative<double>(Q)) m = get<double>(Q);
             if (m > 0)

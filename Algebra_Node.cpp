@@ -335,7 +335,7 @@ void Algebra_Tree::FindValueW_T(string c, vector<vector<char>>& paths)
 
 
 // ===========================================================================================================================
-Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const variant<int, double, string> value) {
+Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const variant<string, char, int, double, Token::Function> value) {
     // Возвращает копию дерева с замененными значениями.
     if (root == nullptr) {
         return nullptr;
@@ -361,7 +361,7 @@ Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const variant
 // =================================================================================================================================
 
 
-Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const string c, const variant<int, double, string> s) {
+Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const string c, const variant<string, char, int, double, Token::Function> s) {
     // Возвращение копии дерева с заменой.
     if (root == nullptr) {
         return nullptr;
@@ -391,7 +391,7 @@ Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const string c, const variant
     return root;
 }
 
-Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const string c, const variant<int, double, string> value) {
+Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const string c, const variant<string, char, int, double, Token::Function> value) {
     if (root == nullptr) {
         return nullptr;
     }
@@ -421,7 +421,7 @@ Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const string c, const variant
 }
 // Отделение области перегруженных функций.
 // ============================================================================================================================================================
-Algebra_Tree& Algebra_Tree::TreeExprReplaceD_T(const string c, const variant<int, double, string> value)
+Algebra_Tree& Algebra_Tree::TreeExprReplaceD_T(const string c, const variant<string, char, int, double, Token::Function> value)
 {
     const int MODE = 1;
     Algebra_Node* first_root = this->root;
@@ -432,7 +432,7 @@ Algebra_Tree& Algebra_Tree::TreeExprReplaceD_T(const string c, const variant<int
     return t;
 }
 
-Algebra_Tree& Algebra_Tree::TreeExprReplaceW_T(const string c, const variant<int, double, string> value)
+Algebra_Tree& Algebra_Tree::TreeExprReplaceW_T(const string c, const variant<string, char, int, double, Token::Function> value)
 {
     const int MODE = 1;
     Algebra_Node* first_root = this->root;
@@ -868,19 +868,49 @@ bool Algebra_Tree::Is_Algebric() // Реализовать с использованием итератора по де
     return true;
 }
 
-Algebra_Node* SetNode(const string s)
+Algebra_Node* SetNode(const int m)
 {
-    Token T = SetToken(s);
-    Algebra_Node* node = new Algebra_Node(T);
+    Token token = SetToken(m);
+    Algebra_Node* node = new Algebra_Node(token);
     return node;
 }
 
-Algebra_Node* SetNode(int m)
+Algebra_Node* SetNode(const double m)
 {
-    Token T = SetToken(m);
-    Algebra_Node* node = new Algebra_Node(T);
+    Token token = SetToken(m);
+    Algebra_Node* node = new Algebra_Node(token);
     return node;
 }
+
+Algebra_Node* SetNode(const string s)
+{
+    Token token = SetToken(s);
+    Algebra_Node* node = new Algebra_Node(token);
+    return node;
+}
+
+Algebra_Node* SetNode(const int m , int& index)
+{
+    Token token = SetToken(m , index);
+    Algebra_Node* node = new Algebra_Node(token);
+    return node;
+}
+
+Algebra_Node* SetNode(const double m, int& index)
+{
+    Token token = SetToken(m , index);
+    Algebra_Node* node = new Algebra_Node(token);
+    return node;
+}
+
+Algebra_Node* SetNode(const string s, int& index)
+{
+    Token token = SetToken(s , index);
+    Algebra_Node* node = new Algebra_Node(token);
+    return node;
+}
+
+
 
 Algebra_Tree& SetAlgebricTree(const string s)
 { // Функция на вход получаем выражение в инфиксной записи, а на выходе деренво алгебраического выражения.
@@ -894,7 +924,7 @@ Algebra_Tree& SetAlgebricTree(const string s)
     return T;
 }
 
-Algebra_Node* SetOperatorTree(const string s , int& index , string q)
+Algebra_Node* SetOperatorTree(const string s , int& index)
 {
     deque<Token> fh, eh;
     fh = exprToTokens(s);
@@ -907,7 +937,7 @@ Algebra_Node* SetOperatorTree(const string s , int& index , string q)
 Algebra_Node* SetOperatorTree(const string s)
 {
     int index = 0;
-    Algebra_Node* root = SetOperatorTree(s, index, "DEFAULT");
+    Algebra_Node* root = SetOperatorTree(s, index);
     return root;
 }
 
@@ -1007,6 +1037,34 @@ string Algebra_Tree::TreeToInfix_T()
     Algebra_Node* root = this->root;
     string s = TreeToInfix(root);
     return s;
+}
+
+Algebra_Node* SetIndexTree(Algebra_Node* root)
+{
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    Algebra_Node* newNode = new Algebra_Node();
+    int m = root->data.index;
+    Token token = SetToken(m);
+    newNode = new Algebra_Node(token);
+    while (0); // For breakpoint.
+
+    newNode->left = SetIndexTree(root->left);
+    newNode->right = SetIndexTree(root->right);
+
+    return newNode;
+}
+
+Algebra_Tree& Algebra_Tree::SetIndexTree_T()
+{
+    Algebra_Node* root = this->root;
+    Algebra_Node* second_root = SetIndexTree(root);
+    // Algebra_Tree C = Algebra_Tree(second_root);
+    Algebra_Tree* K = new Algebra_Tree(second_root);
+    Algebra_Tree& C = *K;
+    return C;
 }
 
 void deleteBinaryTree(Algebra_Node* node) {
