@@ -398,7 +398,6 @@ void test_13() // Тестирование функции SetAlgebricTree()
 
 void test_14()
 {  // Тестирование функции TreeRExprReplaceOnSubTreeD()
-	/*
 	const int N = 5;
 	string fh[4] = { "3*(x+c)+c*x^2*(x-c)+8*x*c" , "4*x^2*(x^2-c^2)+3*x*(x-c/x)" , "(x-c)^2" , "x-c"};
 	string s ,r, f;
@@ -411,8 +410,8 @@ void test_14()
 	for (int i = 0; i < 42; i++) cout << '=';
 	cout << endl;
 	first_tree.Print_Tree_T();
-	*/
 }
+
 
 void test_15()
 {  // Тестирование функции TreeRExprReplaceOnSubTreeW()

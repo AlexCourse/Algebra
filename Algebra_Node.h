@@ -47,6 +47,10 @@ class Algebra_Tree {
         void FindValueW_T(string c, vector<vector<char>>& paths);
         void Print_Tree_T();
         void TreeToPolish_T();
+        Algebra_Tree& TreeExprReplaceD_T(const string c, const int s); // ƒальше перегрузки заменить на шаблоны.
+        Algebra_Tree& TreeExprReplaceW_T(const string c, const int s);
+        Algebra_Tree& TreeExprReplaceD_T(const string c, const double s);
+        Algebra_Tree& TreeExprReplaceW_T(const string c, const double s);
         Algebra_Tree& TreeExprReplaceD_T(const string c, const string s);
         Algebra_Tree& TreeExprReplaceW_T(const string c, const string s);
         void TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* second);

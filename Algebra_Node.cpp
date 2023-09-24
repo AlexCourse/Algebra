@@ -367,7 +367,8 @@ Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const string 
 }
  
 // template<typename T> // Для типов int , double , string.
-Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const string s) {
+template <typename T>
+Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const T s) {
     // Возвращает копию дерева с замененными значениями.
     if (root == nullptr) {
         return nullptr;
@@ -389,6 +390,76 @@ Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const string
 
     return newNode;
 }
+// ===========================================================================================================================
+Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const string s) {
+    // Возвращает копию дерева с замененными значениями.
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    Algebra_Node* newNode = new Algebra_Node();
+
+    if (CheckEquality(root->data.value, c)) {
+        Token token = SetToken(s);
+        newNode = new Algebra_Node(token);
+        while (0); // For breakpoint.
+    }
+    else {
+        newNode = new Algebra_Node(root->data);
+    }
+
+    newNode->left = TreeExprReplaceRT(root->left, c, s);
+    newNode->right = TreeExprReplaceRT(root->right, c, s);
+
+    return newNode;
+}
+
+Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const int s) {
+    // Возвращает копию дерева с замененными значениями.
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    Algebra_Node* newNode = new Algebra_Node();
+
+    if (CheckEquality(root->data.value, c)) {
+        Token token = SetToken(s);
+        newNode = new Algebra_Node(token);
+        while (0); // For breakpoint.
+    }
+    else {
+        newNode = new Algebra_Node(root->data);
+    }
+
+    newNode->left = TreeExprReplaceRT(root->left, c, s);
+    newNode->right = TreeExprReplaceRT(root->right, c, s);
+
+    return newNode;
+}
+
+Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const double s) {
+    // Возвращает копию дерева с замененными значениями.
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    Algebra_Node* newNode = new Algebra_Node();
+
+    if (CheckEquality(root->data.value, c)) {
+        Token token = SetToken(s);
+        newNode = new Algebra_Node(token);
+        while (0); // For breakpoint.
+    }
+    else {
+        newNode = new Algebra_Node(root->data);
+    }
+
+    newNode->left = TreeExprReplaceRT(root->left, c, s);
+    newNode->right = TreeExprReplaceRT(root->right, c, s);
+
+    return newNode;
+}
+// =================================================================================================================================
 
 
 Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const string c, const string s) {
@@ -449,14 +520,15 @@ Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const string c, const string 
 
     return root;
 }
-
+// Отделение области перегруженных функций.
+// ============================================================================================================================================================
 Algebra_Tree& Algebra_Tree::TreeExprReplaceD_T(const string c, const string s)
 {
     const int MODE = 1;
     Algebra_Node* first_root = this->root;
     Algebra_Node* second_root;
-    if (MODE == 0) second_root = TreeExprReplaceD(first_root, c, s); // Замена нерабочей функции
-    else if(MODE == 1) second_root = TreeExprReplaceRT(first_root, c, s);
+    //if (MODE == 0) second_root = TreeExprReplaceD(first_root, c, s); // Замена нерабочей функции
+    if(MODE == 1) second_root = TreeExprReplaceRT(first_root, c, s);
     Algebra_Tree t = Algebra_Tree(second_root);
     return t;
 }
@@ -466,12 +538,56 @@ Algebra_Tree& Algebra_Tree::TreeExprReplaceW_T(const string c, const string s)
     const int MODE = 1;
     Algebra_Node* first_root = this->root;
     Algebra_Node* second_root;
-    if (MODE == 0) second_root = TreeExprReplaceW(first_root, c, s); // Замена нерабочей функции
-    else if(MODE == 1) second_root = TreeExprReplaceRT(first_root, c, s);
+    // if (MODE == 0) second_root = TreeExprReplaceW(first_root, c, s); // Замена нерабочей функции
+    if(MODE == 1) second_root = TreeExprReplaceRT(first_root, c, s);
     Algebra_Tree t = Algebra_Tree(second_root);
     return t;
 }
 
+Algebra_Tree& Algebra_Tree::TreeExprReplaceD_T(const string c, const int m)
+{
+    const int MODE = 1;
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root;
+    // if (MODE == 0) second_root = TreeExprReplaceD(first_root, c, m); // Замена нерабочей функции
+    if (MODE == 1) second_root = TreeExprReplaceRT(first_root, c, m);
+    Algebra_Tree t = Algebra_Tree(second_root);
+    return t;
+}
+
+Algebra_Tree& Algebra_Tree::TreeExprReplaceW_T(const string c, const int m)
+{
+    const int MODE = 1;
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root;
+    // if (MODE == 0) second_root = TreeExprReplaceW(first_root, c, m); // Замена нерабочей функции
+    if (MODE == 1) second_root = TreeExprReplaceRT(first_root, c, m);
+    Algebra_Tree t = Algebra_Tree(second_root);
+    return t;
+}
+
+Algebra_Tree& Algebra_Tree::TreeExprReplaceD_T(const string c, const double m)
+{
+    const int MODE = 1;
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root;
+    // if (MODE == 0) second_root = TreeExprReplaceD(first_root, c, m); // Замена нерабочей функции
+    if (MODE == 1) second_root = TreeExprReplaceRT(first_root, c, m);
+    Algebra_Tree t = Algebra_Tree(second_root);
+    return t;
+}
+
+Algebra_Tree& Algebra_Tree::TreeExprReplaceW_T(const string c, const double m)
+{
+    const int MODE = 1;
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root;
+    // if (MODE == 0) second_root = TreeExprReplaceW(first_root, c, m); // Замена нерабочей функции
+    if (MODE == 1) second_root = TreeExprReplaceRT(first_root, c, m);
+    Algebra_Tree t = Algebra_Tree(second_root);
+    return t;
+}
+// =============================================================================================================================================================
 void TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Algebra_Node* second)
 {
     if (first == nullptr)
