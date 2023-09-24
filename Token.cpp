@@ -12,6 +12,10 @@ Token::Token(Type t, const int m) : type(t), value(m), precedence(-1), rightAsso
 
 Token::Token(Type t, const double m) : type(t), value(m), precedence(-1), rightAssociative(false) , index(0) {}
 
+Token::Token(Type t, const Token::Function m) : type(t), value(m), precedence(1), rightAssociative(false), index(0) {}
+
+Token::Token(Type t , char c , int prec , bool ra) : type(t) , value(c) , precedence(prec), rightAssociative(ra), index(0) {}
+
 Token::Token(const Token& other) : type(other.type), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative) , index(other.index) {}
 
 
@@ -26,6 +30,97 @@ Token::Token(Type t, const double m, int index) : type(t), value(m), precedence(
 
 Token::Token(const Token& other, int index) : type(other.type), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative), index(index) {}
 
+Token::Token(Type t, char c , int index , int prec , bool ra) : type(t), value(c), precedence(prec), rightAssociative(ra), index(index) {}
+
+Token::Token(Type t, const Token::Function m, int index) : type(t), value(m), precedence(1), rightAssociative(false), index(index) {}
+
+void Token::SetValue(const variant<string, char, int, double, Token::Function>& newValue) {
+	this->value = newValue;
+}
+
+
+variant<string, char, int, double, Token::Function> Token::GetValue() const {
+	return this->value;
+}
+
+struct Operator {
+	int precedence;
+	string associativity;
+};
+
+
+unordered_set<string> operator_info_two = { "+" , "-", "/", "*", "^" };
+unordered_set<string> operator_info_one = { "!" };
+unordered_set<string> func_info_one = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
+"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" };
+unordered_set<string> func_info_two = { "log" , "pow" , "S" , "Integral" };
+unordered_set<string> func_info_free = { "D" , "Z" , "P" , "Derivate" };
+unordered_set<string> func_info = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
+"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" , "log" , "pow" };
+
+
+
+map<char, Operator> operator_info = { { '+' , { 2, "L" }} ,
+										{'-' , { 2, "L" }},
+										{'/' , { 3, "L" }},
+										{'*' , { 3, "L" }},
+										{'^' , { 4, "R" }},
+};
+
+map< string, Token::Function> func_name = 
+  { { "exp" , Token::Function::EXP },
+	{ "ln" , Token::Function::LN   } ,
+	  {"sin" , Token::Function::SIN} ,
+	  { "cos" , Token::Function::COS} ,
+	  { "tg"  , Token::Function::TG } ,
+	  { "ctg"  , Token::Function::CTG } ,
+	  { "arcsin"  , Token::Function::ARCSIN } ,
+	  { "arccos"  , Token::Function::ARCCOS } ,
+	  { "arctg"   , Token::Function::ARCTG } ,
+	  { "arcctg"  , Token::Function::ARCCTG } ,
+	  { "sh"      , Token::Function::SH } ,
+	  { "ch"      , Token::Function::CH } ,
+	  { "th"      , Token::Function::TH } ,
+	  { "cth"     , Token::Function::CTH } ,
+	  { "sh"      , Token::Function::SH } ,
+	  { "ch"      , Token::Function::CH } ,
+	  { "th"      , Token::Function::TH } ,
+	  { "arsh"     , Token::Function::ARSH } ,
+	  { "arch"     , Token::Function::ARCH } ,
+	  { "arth"     , Token::Function::ARTH } ,
+	  { "arcth"    , Token::Function::ARCTH } ,
+	  { "abs"      , Token::Function::ABS } ,
+	  { "log"      , Token::Function::LOG } ,
+	  { "pow"      , Token::Function::POW }
+};
+
+map< Token::Function, string > rfunc_name =
+{
+	  { Token::Function::EXP , "exp"},
+	  { Token::Function::LN   , "ln"} ,
+	  { Token::Function::SIN , "sin"} ,
+	  { Token::Function::COS , "cos"} ,
+	  { Token::Function::TG  , "tg"} ,
+	  { Token::Function::CTG , "ctg"} ,
+	  { Token::Function::ARCSIN , "arcsin"} ,
+	  { Token::Function::ARCCOS , "arccos"} ,
+	  { Token::Function::ARCTG , "arctg"} ,
+	  { Token::Function::ARCCTG , "arcctg"} ,
+	  { Token::Function::SH , "sh"} ,
+	  { Token::Function::CH , "ch"} ,
+	  { Token::Function::TH , "th"} ,
+	  { Token::Function::CTH , "cth"} ,
+	  { Token::Function::SH  , "sh"} ,
+	  { Token::Function::CH  , "ch"} ,
+	  { Token::Function::TH  , "th"} ,
+	  { Token::Function::ARSH  , "arsh"} ,
+	  { Token::Function::ARCH  , "arch"} ,
+	  { Token::Function::ARTH  , "arth"} ,
+	  { Token::Function::ARCTH , "arcth" } ,
+	  { Token::Function::ABS , "abs"} ,
+	  { Token::Function::LOG , "log"} ,
+	  { Token::Function::POW , "pow"}
+};
 
 Token Token::operator=(const Token& other) {
 	return Token(other);
@@ -82,6 +177,15 @@ ostream& operator<<(ostream& os, const Token& token) {
 		double m = get<double>(token.value);;
 		os << m;
 	}
+	else if (holds_alternative<char>(token.value)) {
+		char c = get<char>(token.value);
+		os << c;
+	}
+	else if (holds_alternative<Token::Function>(token.value)) {
+		Token::Function p = get<Token::Function>(token.value);
+		string s = rfunc_name[p];
+		os << s;
+	}
 	return os;
 }
 
@@ -100,10 +204,18 @@ string Token::ToString()
 		double m = get<double>(value);;
 		s = to_string(m);
 	}
+	else if (holds_alternative<char>(value)) {
+		char c = get<char>(value);
+		s = string(1, c);
+	}
+	else if (holds_alternative<Token::Function>(value)) {
+		Token::Function p = get<Token::Function>(value);
+		s = rfunc_name[p];
+	}
 	return s;
 }
 
-string ToString(const variant<string, char ,int, double , Token::Function>& value)
+string ToString(const variant<string, char, int, double, Token::Function>& value)
 {
 	string s = "";
 	if (holds_alternative<string>(value)) {
@@ -117,41 +229,16 @@ string ToString(const variant<string, char ,int, double , Token::Function>& valu
 		double m = get<double>(value);;
 		s = to_string(m);
 	}
+	else if (holds_alternative<char>(value)) {
+		char c = get<char>(value);;
+		s = string(1, c);
+	}
+	else if (holds_alternative<Token::Function>(value)) {
+		Token::Function p = get<Token::Function>(value);
+		s = rfunc_name[p];
+	}
 	return s;
 }
-
-void Token::SetValue(const variant<string, char, int, double, Token::Function>& newValue) {
-	this->value = newValue;
-}
-
-
-variant<string, char, int, double, Token::Function> Token::GetValue() const {
-	return this->value;
-}
-
-struct Operator {
-	int precedence;
-	string associativity;
-};
-
-
-unordered_set<string> operator_info_two = { "+" , "-", "/", "*", "^" };
-unordered_set<string> operator_info_one = { "!" };
-unordered_set<string> func_info_one = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
-"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" };
-unordered_set<string> func_info_two = { "log" , "pow" , "S" , "Integral" };
-unordered_set<string> func_info_free = { "D" , "Z" , "P" , "Derivate" };
-unordered_set<string> func_info = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
-"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" , "log" , "pow" };
-
-
-
-map<char, Operator> operator_info = { { '+' , { 2, "L" }} ,
-										{'-' , { 2, "L" }},
-										{'/' , { 3, "L" }},
-										{'*' , { 3, "L" }},
-										{'^' , { 4, "R" }},
-};
 
 bool f_arg(const Token& T) {
 	if (T.type == Token::Type::Algebra || T.type == Token::Type::Number || T.type == Token::Type::Integer || T.type == Token::Type::Real)
@@ -162,21 +249,38 @@ bool f_arg(const Token& T) {
 
 bool f_opr_two(const Token& T) {
 	Token token = T;
-	string p = token.ToString();
-	if (operator_info_two.count(p) || func_info_two.count(p)) {
-		return true;
+	bool B = false;
+	if(T.type == Token::Type::Operator)
+		B = true;
+	else if(T.type == Token::Type::Function)
+	{
+		Token::Function p = get<Token::Function>(T.value);
+		switch (p)
+		{
+		    case Token::Function::LOG: { B = true; break; }
+			case Token::Function::POW : { B = true; break; }
+		}
 	}
-	return false;
+	return B;
 }
 
 bool f_opr_one(const Token& T) {
 	Token token = T;
-	string p = token.ToString();
-	if (operator_info_one.count(p) || func_info_one.count(p)) {
-		return true;
+	bool B = true;
+	if (T.type == Token::Type::Operator)
+		B = false;
+	else if (T.type == Token::Type::Function)
+	{
+		Token::Function p = get<Token::Function>(T.value);
+		switch (p)
+		{
+		case Token::Function::LOG: { B = false; break; }
+		case Token::Function::POW: { B = false; break; }
+		}
 	}
-	return false;
+	return B;
 }
+
 
 bool f_opr_free(const Token& T) {
 	Token token = T;
@@ -231,6 +335,26 @@ bool CE(const variant<string, char, int, double, Token::Function> value, const d
 	else return false;
 }
 
+bool CE(const variant<string, char, int, double, Token::Function> value, const char c)
+{
+	if (holds_alternative<char>(value))
+	{
+		if (get<char>(value) == c) return true;
+		else return false;
+	}
+	else return false;
+}
+
+bool CE(const variant<string, char, int, double, Token::Function> value, Token::Function p)
+{
+	if (holds_alternative<Token::Function>(value))
+	{
+		if (get<Token::Function>(value) == p) return true;
+		else return false;
+	}
+	else return false;
+}
+
 deque<Token> exprToTokens(const string& expr , int& index , string q ="DEFAULT") {
 	// q принимает 2 значения - DEFAULT и ORDERING.
 	deque<Token> tokens;
@@ -278,7 +402,7 @@ deque<Token> exprToTokens(const string& expr , int& index , string q ="DEFAULT")
 					c = *p;
 				}
 				const string s = string(b, p);
-				if (func_info.count(s)) tokens.push_back(Token{ Token::Type::Function, s , index++ ,-1 , false});
+				if (func_info.count(s)) tokens.push_back(Token{ Token::Type::Function, func_name[s] , index++});
 				else tokens.push_back(Token{ Token::Type::Algebra, s , index++ , -1 , false});
 				p--;
 				continue;
@@ -287,7 +411,7 @@ deque<Token> exprToTokens(const string& expr , int& index , string q ="DEFAULT")
 			else if (c == ',')
 			{
 				string s = string(p, p + 1);
-				tokens.push_back(Token{ Token::Type::Comma , s , index++ , -1 , false});
+				tokens.push_back(Token{ Token::Type::Comma , c , index++ , -1 , false});
 			}
 			else {
 				Token::Type t = Token::Type::Unknown;
@@ -303,8 +427,8 @@ deque<Token> exprToTokens(const string& expr , int& index , string q ="DEFAULT")
 				case '+':   t = Token::Type::Operator;      pr = 2; break;
 				case '-':   t = Token::Type::Operator;      pr = 2; break;
 				}
-				const auto s = string(1, c);
-				tokens.push_back(Token{ t, s, index++ , pr, ra });
+				// const auto s = string(1, c);
+				tokens.push_back(Token{ t, c, index++ , pr, ra });
 				while (0); // Для точки останова.
 			}
 	}
@@ -341,7 +465,6 @@ Token _SetToken(const double m , int& index)
 	Token T = Token{ Token::Type::Real, m , index++};
 	return T;
 }
-
 
 Token _SetToken(const string& expr , int& index) // фунция возвращает первый токен , если их несколько.
 { // Или можно передать одно отрицательное число.
@@ -394,7 +517,7 @@ Token _SetToken(const string& expr , int& index) // фунция возвращает первый ток
 					const string s = string(b, p);
 					if (func_info.count(s))
 					{
-						Token T = Token{ Token::Type::Function, s , index++ , -1 , false};
+						Token T = Token{ Token::Type::Function, func_name[s] , index++};
 						return T;
 					}
 					else
@@ -417,8 +540,8 @@ Token _SetToken(const string& expr , int& index) // фунция возвращает первый ток
 					case '+':   t = Token::Type::Operator;      pr = 2; break;
 					case '-':   t = Token::Type::Operator;      pr = 2; break;
 					}
-					const auto s = string(1, c);
-					Token T = Token{ t, s, index++ , pr, ra };
+					// const auto s = string(1, c);
+					Token T = Token{ t, c, index++ , pr, ra };
 					return T;
 				}
 
@@ -444,6 +567,20 @@ Token _SetToken(const string& expr)
 	return token;
 }
 
+Token _SetToken(const char c, int& index)
+{
+	string s = string(1, c);
+	Token token = _SetToken(s, index);
+	return token;
+}
+
+Token _SetToken(const char c)
+{
+	int index = 0;
+	Token token = _SetToken(c, index);
+	return token;
+}
+
 Token SetToken(const variant<string, char, int, double, Token::Function> value)
 {
 	if (holds_alternative<string>(value)) {
@@ -459,6 +596,12 @@ Token SetToken(const variant<string, char, int, double, Token::Function> value)
 	else if (holds_alternative<double>(value)) {
 		double m = get<double>(value);
 		Token T = _SetToken(m);
+		return T;
+	}
+	else if (holds_alternative<char>(value))
+	{
+		char c = get<char>(value);
+		Token T = _SetToken(c);
 		return T;
 	}
 }
@@ -478,6 +621,12 @@ Token SetToken(const variant<string, char, int, double, Token::Function> value, 
 	else if (holds_alternative<double>(value)) {
 		double m = get<double>(value);
 		Token T = _SetToken(m, index);
+		return T;
+	}
+	else if (holds_alternative<char>(value))
+	{
+		char c = get<char>(value);
+		Token T = _SetToken(c, index);
 		return T;
 	}
 }
@@ -505,7 +654,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 		Token& T_1 = *(iter[1]);
 		if (T_0.type == Token::Type::LeftParen)
 			if (T_1.type == Token::Type::Operator)
-				if (get<string>(T_1.value) == "-") entries.push_back(i);
+				if (get<char>(T_1.value) == '-') entries.push_back(i);
 		iter[0] = iter[1];
 		iter[1]++;
 		i++;
@@ -526,12 +675,12 @@ void Tokenize_u_minus(deque<Token>& fh) {
 				if (T_1.type == Token::Type::Number || T_1.type == Token::Type::Integer || T_1.type == Token::Type::Real)
 				{
 					double q = -1;
-					if (holds_alternative<int>(T_1.value))
+					if (T_1.type == Token::Type::Integer)
 					{
 						int q = get<int>(T_1.value);
 						q = (-1) * q;
 					}
-					else if (holds_alternative<double>(T_1.value))
+					else if (T_1.type == Token::Type::Real)
 					{
 						double q = get<double>(T_1.value);
 						q = (-1) * q;
@@ -615,11 +764,11 @@ void Tokenize_u_minus(deque<Token>& fh) {
 					fh.pop_front();
 					fh.pop_front();
 					double m = -1;
-					if (holds_alternative<int>(T_1.value))
+					if (T_1.type == Token::Type::Integer)
 					{
 						m = get<int>(T_1.value);
 					}
-					else if (holds_alternative<double>(T_1.value))
+					else if (T_1.type == Token::Type::Real)
 					{
 						m = get<double>(T_1.value);
 					}
@@ -650,19 +799,29 @@ void Tokenize_u_minus(deque<Token>& fh) {
 string TokensToStr(deque<Token> fh)
 {
 	string s = "";
-	for (Token t : fh)
+	for (Token token : fh)
 	{
-		if (holds_alternative<string>(t.value)) {
-			string f = get<string>(t.value);
+		if (token.type == Token::Type::Algebra ) {
+			string f = get<string>(token.value);
 			s = s + f;
 		}
-		else if (holds_alternative<int>(t.value)) {
-			int m = get<int>(t.value);
+		else if (token.type == Token::Type::Integer ) {
+			int m = get<int>(token.value);
 			s = s + to_string(m);
 		}
-		else if (holds_alternative<double>(t.value)) {
-			double m = get<double>(t.value);
+		else if (token.type == Token::Type::Real ) {
+			double m = get<double>(token.value);
 			s = s + to_string(m);
+		}
+		else if (token.type == Token::Type::Operator ) {
+			char c = get<char>(token.value);
+			s = s + c;
+		}
+		else if (token.type == Token::Type::Function )
+		{
+			Token::Function p = get<Token::Function>(token.value);
+			string f = rfunc_name[p];
+			s = s + f;
 		}
 	}
 	return s;

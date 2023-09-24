@@ -11,15 +11,13 @@
 
 using namespace std;
 
-Debug_concept::Debug_concept() {}
 
-
-Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept* W)
+Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept* W)
 { // ['+' , '-' ]
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
 		Algebra_Node* Q;
-		Q = SetNode("+");
+		Q = SetNode('+');
 		Algebra_Node& node = *Q;
 		node.addLeftNode(D[1]);
 		node.addRightNode(D[0]);
@@ -31,14 +29,14 @@ Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_con
 	}
 	else if ((CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
-		if (c == "+")
+		if (c == '+')
 		{
 			return D[0];
 		}
-		else if (c == "-")
+		else if (c == '-')
 		{
 			Algebra_Node* Q[2];
-			Q[0] = SetNode("+"); // # Вычисление на этапе компиляции.
+			Q[0] = SetNode('+'); // # Вычисление на этапе компиляции.
 			Algebra_Node& node = *(Q[0]);
 			// =================================
 			Q[1] = SetNode(-1); // #
@@ -56,27 +54,27 @@ Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_con
 	}
 }
 
-Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 { // ['+' , '-' ]
 	Algebra_Node* T = SetNode("0");
 
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
-		if (c == "+")
+		if (c == '+')
 		{
 			const string s = "D+d";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0] , W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1] , W);
 		}
-		else if (c == "-")
+		else if (c == '-')
 		{
 			const string s = "D-d";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0] , W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 		}
 
 	}
@@ -85,24 +83,24 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 		const string s = "D";
 		T = SetOperatorTree(s);
 		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	}
 	else if ((CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
-		if (c == "+")
+		if (c == '+')
 		{
 			const string s = "d";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]); // При выходе из функции параметр T остался прежним.
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W); // При выходе из функции параметр T остался прежним.
 			if (DEBUG) while (0);
 		}
-		else if (c == "-")
+		else if (c == '-')
 		{
 			const string s = "(-1)*d";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG) while (0);
 		}
 	}
@@ -115,29 +113,29 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 	return T;
 }
 
-Algebra_Node* func_1b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_1b(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 {
 	Algebra_Node* T = SetNode("0");
-	if (c == "+")
+	if (c == '+')
 	{
 		const string s = "D+d";
 		T = SetOperatorTree(s);
 		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 	}
-	else if(c == "-")
+	else if(c == '-')
 	{
 		const string s = "D-d";
 		T = SetOperatorTree(s);
 		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 	}
 	return T;
 }
 
-Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 { // ['*']
 
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
@@ -269,7 +267,7 @@ Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_con
 
 }
 
-Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 { // ['*']
 	Algebra_Node* T = SetNode("0");
 	// Символы для замены строке : p - первый операнд ,  q - второй операнд , D - производная первого операнда , d - производная второго операнда.
@@ -280,10 +278,10 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "D*q+d*p";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -298,9 +296,9 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "D*q+p";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -315,9 +313,9 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "q+p*d";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -333,8 +331,8 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "q+p";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -352,8 +350,8 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "d*p";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -368,7 +366,7 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "p";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -386,8 +384,8 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "D*q";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -402,7 +400,7 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "q";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -432,16 +430,16 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 
 }
 
-Algebra_Node* func_2b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_2b(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 {
 	Algebra_Node* T = SetNode("0");
 	const string s = "D*q+d*p";
 	T = SetOperatorTree(s);
 	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-	T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[1]);
-	T = TreeRExprReplaceOnSubTreeD(T, "d", D[0]);
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[1], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -454,7 +452,7 @@ Algebra_Node* func_2b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 }
 
 
-Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 { // ['/']
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
@@ -688,7 +686,7 @@ Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_con
 	}
 }
 
-Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 { // ['/']
 	Algebra_Node* T = SetNode("0");
 
@@ -698,12 +696,11 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 		{
 			const string s = "(D*q-d*p)/q^2";
 			T = SetOperatorTree(s);
-			int index = W.index;
-			if (DEBUG) {  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -718,9 +715,9 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(q-d*p)/q^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -735,9 +732,9 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(D*q-p)/q^2";;
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -753,8 +750,8 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(q-p)/q^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -772,9 +769,9 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(-1)*p*d/q^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -790,8 +787,8 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(-1)*p/q^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -809,9 +806,8 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "D/q";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -827,8 +823,7 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "1/q";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -856,16 +851,16 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 	return T;
 }
 
-Algebra_Node* func_3b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_3b(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 {
 	Algebra_Node* T = SetNode("0");
 	const string s = "(D*q-d*p)/q^2";
 	T = SetOperatorTree(s);
 	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -877,7 +872,7 @@ Algebra_Node* func_3b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 	return T;
 }
 
-Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 { // ['^']
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
@@ -1329,7 +1324,7 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_con
 	}
 }
 
-Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 { // ['^']
 	Algebra_Node* T = SetNode("0");
 
@@ -1340,10 +1335,10 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "p^q*(D*q/p +d*ln(p))";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1359,9 +1354,9 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "p^q*(q/p +d*ln(p))";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1376,9 +1371,9 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "p^q*(D*q/p + ln(p))";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1394,8 +1389,8 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "p^q*(q/p + ln(p))";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1413,9 +1408,9 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "p^q*ln(p)*d";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1430,8 +1425,8 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "p^q*ln(p)";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1450,9 +1445,9 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "D*q*p^(q-1)";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1467,13 +1462,22 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 		{
 			const string s = "q*p^(q-1)";
 			T = SetOperatorTree(s);
-			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG) { 
+				int index = W.index;  
+				T = SetOperatorTree(s, index);  
+				W.index = index; 
+				vector<Token> es;
+				TreeToPolish(T , es);
+				vector<int> ks = CountIndex(es);
+				while (0);
+			}
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
 				TreeToPolish(T, V);
+				vector<int> ks = CountIndex(V); // Сбор индексов.
 				vector<Token> kh(V.rbegin(), V.rend());
 				string r = PostfixToInfix(kh); // В виде строки лучше обозримо.
 				while (0); // Для точки останова.
@@ -1497,15 +1501,15 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 	return T;
 }
 
-Algebra_Node* func_4b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_4b(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 { // ['^']
 	const string s = "p^q*(D*q/p +d*ln(p))";
 	Algebra_Node* T = SetOperatorTree(s);
 	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -1518,7 +1522,7 @@ Algebra_Node* func_4b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 }
 
 
-Algebra_Node* func_5(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_5(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 {
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{ //  f(y) = log(y , x) = ln(y)/ln(x) ,  P[1] = x , P[0] = y
@@ -1739,7 +1743,7 @@ Algebra_Node* func_5(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_con
 	}
 }
 
-Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 {
 	Algebra_Node* T = SetNode("0");
 
@@ -1751,10 +1755,10 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(D/p*ln(q)-d/q*ln(p))/(ln(q))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1769,9 +1773,9 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(ln(q)/p-d/q*ln(p))/(ln(q))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1786,9 +1790,9 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(D/p*ln(q)-ln(p)/q)/(ln(q))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1803,8 +1807,8 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(ln(q)/p-ln(p)/q)/(ln(q))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1825,8 +1829,8 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "d/(q*ln(p))";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1842,8 +1846,8 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "1/(q*ln(p))";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1862,9 +1866,9 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(-1)*d*ln(p)/(q*ln(q))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1879,8 +1883,8 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 			const string s = "(-1)*ln(p)/(q*ln(q))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1]);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1910,15 +1914,15 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 	return T;
 }
 
-Algebra_Node* func_5b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_concept& W)
+Algebra_Node* func_5b(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 {
 	const string s = "(d/q*ln(p)-D/p*ln(q))/(ln(p))^2"; // 'sin(x)*(-1)*(ln(sin(x)))/(cos(x))-cos(x)*(ln(cos(x)))/(sin(x))/(ln(sin(x)))^2'
 	Algebra_Node* T = SetOperatorTree(s);
 	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -1931,7 +1935,7 @@ Algebra_Node* func_5b(Algebra_Node* P[2], Algebra_Node* D[2], string c, Debug_co
 }
 
 
-Algebra_Node* func_6(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_6(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 {
 	if (!(CE(D[0]->data.value, 1)))
 	{
@@ -1971,7 +1975,7 @@ Algebra_Node* func_6(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_con
 	}
 }
 
-Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['exp']
 	Algebra_Node* T = SetNode("0");
 
@@ -1979,8 +1983,9 @@ Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	{
 		const string s = "exp(p)*D";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -1996,7 +2001,7 @@ Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 		const string s = "exp(p)";
 		T = SetOperatorTree(s);
 		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2012,7 +2017,7 @@ Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 }
 
 
-Algebra_Node* func_7(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_7(Algebra_Node* P[1], Algebra_Node* D[1],  Debug_concept& W)
 { // ['ln']
 	if (!(CE(D[0]->data.value, 1)))
 	{
@@ -2034,13 +2039,14 @@ Algebra_Node* func_7(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_con
 	}
 }
 
-Algebra_Node* func_7a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_7a(Algebra_Node* P[1], Algebra_Node* D[1],  Debug_concept& W)
 { // ['ln']
 	Algebra_Node* T = SetNode("0");
 	const string s = "D/p";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2053,7 +2059,7 @@ Algebra_Node* func_7a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	return T;
 }
 
-Algebra_Node* func_8(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_8(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['sin']
 	if (!(CE(D[0]->data.value, 1)))
 	{
@@ -2094,7 +2100,7 @@ Algebra_Node* func_8(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_con
 	}
 }
 
-Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['sin']
 	Algebra_Node* T = SetNode("0");
 
@@ -2102,8 +2108,8 @@ Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	{
 		const string s = "D*cos(p)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2117,7 +2123,7 @@ Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	{
 		const string s = "cos(p)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2131,7 +2137,7 @@ Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	return T;
 }
 
-Algebra_Node* func_9(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_9(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['cos']
 	if (!(CE(D[0]->data.value, 1)))
 	{
@@ -2183,7 +2189,7 @@ Algebra_Node* func_9(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_con
 	}
 }
 
-Algebra_Node* func_9a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_9a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['cos']
 	Algebra_Node* T = SetNode("0");
 
@@ -2191,8 +2197,8 @@ Algebra_Node* func_9a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	{
 		const string s = "(-1)*D*sin(p)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2206,7 +2212,7 @@ Algebra_Node* func_9a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	{
 		const string s = "(-1)*sin(p)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2221,7 +2227,7 @@ Algebra_Node* func_9a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	return T;
 }
 
-Algebra_Node* func_10(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_10(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['tg']
 
 	Algebra_Node* Q[4];
@@ -2249,14 +2255,15 @@ Algebra_Node* func_10(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	return Q[0];
 }
 
-Algebra_Node* func_10a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_10a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['tg']
 	Algebra_Node* T = SetNode("0");
 
 	const string s = "D/(cos(p))^2";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2269,7 +2276,7 @@ Algebra_Node* func_10a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_11(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_11(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['ctg']
 	if (!(CE(D[0]->data.value, 1)))
 	{
@@ -2333,7 +2340,7 @@ Algebra_Node* func_11(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	}
 }
 
-Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1],  Debug_concept& W)
 { // ['ctg']
 	Algebra_Node* T = SetNode("0");
 
@@ -2341,8 +2348,9 @@ Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		const string s = "(-1)*D/(sin(p))^2";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2356,8 +2364,9 @@ Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	else
 	{
 		const string s = "(-1)/(cos(p))^2";
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2372,7 +2381,7 @@ Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_12(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_12(Algebra_Node* P[1], Algebra_Node* D[1],  Debug_concept& W)
 { // ['arcsin']
 	Algebra_Node* Q[9];
 	Q[0] = SetNode("/");
@@ -2396,14 +2405,15 @@ Algebra_Node* func_12(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_co
 	return Q[0];
 }
 
-Algebra_Node* func_12a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_12a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['arcsin']
 	Algebra_Node* T = SetNode("0");
 
 	const string s = "D/(1-p^2)^(1/2)";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2416,7 +2426,7 @@ Algebra_Node* func_12a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_13a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_13a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['arccos']
 	Algebra_Node* T = SetNode("0");
 
@@ -2424,8 +2434,9 @@ Algebra_Node* func_13a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "(-1)*D/(1-p^2)^(1/2)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2439,7 +2450,8 @@ Algebra_Node* func_13a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "(-1)/(1-p^2)^(1/2)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2454,14 +2466,15 @@ Algebra_Node* func_13a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_14a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_14a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['arctg']
 	Algebra_Node* T = SetNode("0");
 
 	string s = "D/(1+p^2)";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2474,7 +2487,7 @@ Algebra_Node* func_14a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_15a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_15a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['arcctg']
 	Algebra_Node* T = SetNode("0");
 
@@ -2482,8 +2495,9 @@ Algebra_Node* func_15a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "(-1)*D/(1+p^2)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2497,8 +2511,9 @@ Algebra_Node* func_15a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "(-1)/(1+p^2)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2511,7 +2526,7 @@ Algebra_Node* func_15a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_16a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_16a(Algebra_Node* P[1], Algebra_Node* D[1],  Debug_concept& W)
 { // ['sh']
 	Algebra_Node* T = SetNode("0");
 
@@ -2519,8 +2534,9 @@ Algebra_Node* func_16a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "D*ch(p)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2534,7 +2550,8 @@ Algebra_Node* func_16a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "ch(p)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2549,7 +2566,7 @@ Algebra_Node* func_16a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_17a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_17a(Algebra_Node* P[1], Algebra_Node* D[1],  Debug_concept& W)
 { // ['ch']
 	Algebra_Node* T = SetNode("0");
 
@@ -2557,8 +2574,9 @@ Algebra_Node* func_17a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "(-1)*D*sh(p)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2572,8 +2590,9 @@ Algebra_Node* func_17a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "(-1)*sh(p)";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2587,14 +2606,15 @@ Algebra_Node* func_17a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_18a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_18a(Algebra_Node* P[1], Algebra_Node* D[1],  Debug_concept& W)
 { // ['th']
 	Algebra_Node* T = SetNode("0");
 
 	string s = "D/(ch(p))^2";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2607,7 +2627,7 @@ Algebra_Node* func_18a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_19a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_19a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['cth']
 	Algebra_Node* T = SetNode("0");
 
@@ -2615,8 +2635,9 @@ Algebra_Node* func_19a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "D/(ch(p))^2";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2630,8 +2651,9 @@ Algebra_Node* func_19a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	{
 		string s = "(-1)*D/(ch(p))^2";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 		if (DEBUG)
 		{
 			vector<Token> V;
@@ -2645,14 +2667,15 @@ Algebra_Node* func_19a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_20a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_20a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['arsh']
 	Algebra_Node* T = SetNode("0");
 
 	string s = "D/(1+p^2)^(1/2)";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2665,14 +2688,15 @@ Algebra_Node* func_20a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_21a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_21a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['arch']
 	Algebra_Node* T = SetNode("0");
 
 	string s = "D/(p^2-1)^(1/2)";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2685,14 +2709,15 @@ Algebra_Node* func_21a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_22a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_22a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['arth']
 	Algebra_Node* T = SetNode("0");
 
 	string s = "D/(1-p^2)";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2705,14 +2730,14 @@ Algebra_Node* func_22a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_c
 	return T;
 }
 
-Algebra_Node* func_23a(Algebra_Node* P[1], Algebra_Node* D[1], string c, Debug_concept& W)
+Algebra_Node* func_23a(Algebra_Node* P[1], Algebra_Node* D[1], Debug_concept& W)
 { // ['arcth']
 	Algebra_Node* T = SetNode("0");
-
 	string s = "D/(1-p^2)";
 	T = SetOperatorTree(s);
-	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
-	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
+	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+	T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 	if (DEBUG)
 	{
 		vector<Token> V;
@@ -2752,9 +2777,9 @@ Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept& W) // Следить , ч
 	{
 		Algebra_Node* P[2]; // Сюда сохраняются первый и второй операнд.
 		Algebra_Node* D[2]; // Сюда сохраняются соответствующие производные этих операндов.
-		P[0] = root->left;
-		P[1] = root->right;
-		for (int i = 0; i < 2; i++) D[i] = DerivateFunc(P[i] , W);
+		P[0] = _CloneTree(root->left);
+		P[1] = _CloneTree(root->right);
+		for (int i = 0; i < 2; i++) D[i] = DerivateFunc( _CloneTree(P[i]) , W);
 		string v;
 		if (DEBUG)
 		{
@@ -2765,6 +2790,7 @@ Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept& W) // Следить , ч
 			{
 				TreeToPolish(D[i], V[i]);
 				vector<Token> es(V[0].rbegin(), V[0].rend());
+				vector<int> ks = CountIndex(V[0]);
 				r[i] = PostfixToInfix(es);
 				while (0); // Для точки останова.
 
@@ -2776,21 +2802,27 @@ Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept& W) // Следить , ч
 			while (0); // Для точки останова.
 
 		}
-		string c = T.ToString();
+		char  c = get<char>(T.value);
 		Algebra_Node* node = SetNode(0);
-		for (; ;)
+		if (T.type == Token::Type::Operator)
 		{
-			if (c == "+" || c == "-") { node = func_1a(P, D, c , W); break; }
-			if (c == "*") { node = func_2a(P, D, c, W); break; }
-			if (c == "/") { node = func_3a(P, D, c, W); break;  }
-			if (c == "^") { node = func_4a(P, D, c, W); break;  }
-			if (c == "log") { node = func_5b(P, D, c, W); break;  }
-			break; 
+			switch (c)
+			{
+			    case '+': { node = func_1a(P, D, c, W); break; }
+			    case '-': { node = func_1a(P, D, c, W); break; }
+			    case '*': { node = func_2a(P, D, c, W); break; }
+			    case '/': { node = func_3a(P, D, c, W); break;  }
+			    case '^': { node = func_4a(P, D, c, W); break;  }
+			}
+		}
+		else if (T.type == Token::Type::Function)
+		{
+			if ( get<Token::Function>(T.value) == Token::Function::LOG ){ node = func_5a(P, D, c, W); }
 		}
 		if (DEBUG) { 
 			deque<Token> fs; 
 			TreeToPolish(node, fs);  
-			set<int> f_box = CountIndex(fs); // Проверка верности вычисления численым диффренцированием.
+			vector<int> kh = CountIndex(fs); // Проверка верности вычисления численым диффренцированием.
 			Algebra_Tree A = Algebra_Tree(root); // Исходная функция 
 			Algebra_Tree B = Algebra_Tree(node); // Ее производная для проверки.
 			double x = 2.0;
@@ -2811,7 +2843,7 @@ Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept& W) // Следить , ч
 			map<int, set<int>> ds = W.colored;
 			if (!ds.count(m)) ds[m] = set<int>();
 			// Выполнить union для set()
-			for (const auto& p : f_box) {
+			for (const auto& p : kh) {
 				ds[m].insert(p);
 			}
 		}
@@ -2832,65 +2864,69 @@ Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept& W) // Следить , ч
 			vector<Token> V;
 			TreeToPolish(D[0], V);
 			vector<Token> ks(V.rbegin(), V.rend());
+			vector<int> es = CountIndex(V);
 			r = PostfixToInfix(ks);
 			TreeToPolish(root, V);
 			vector<Token> kh(V.rbegin(), V.rend());
 			v = PostfixToInfix(kh); // Все поддерево.
 
 		}
-		string c = T.ToString();
-		Algebra_Node* node = SetNode(0);
-		for (; ;)
+		if (T.type == Token::Type::Function)
 		{
-			if (c == "exp") { node = func_6a(P, D, c, W); break;  }
-			else if (c == "ln") { node = func_7a(P, D, c, W); break;  }
-			else if (c == "sin") { node = func_8a(P, D, c, W); break;  }
-			else if (c == "cos") { node = func_9a(P, D, c, W); break;  }
-			else if (c == "tg") { node = func_10a(P, D, c, W); break;  }
-			else if (c == "ctg") { node = func_11a(P, D, c, W); break;  }
-			else if (c == "arcsin") { node = func_12a(P, D, c, W); break;  }
-			else if (c == "arccos") { node = func_13a(P, D, c, W); break;  }
-			else if (c == "arctg") { node = func_14a(P, D, c, W); break;  }
-			else if (c == "arcctg") { node = func_15a(P, D, c, W); break;  }
-			else if (c == "sh") { node = func_16a(P, D, c, W); break;  }
-			else if (c == "ch") { node = func_17a(P, D, c, W); break;  }
-			else if (c == "th") { node = func_18a(P, D, c, W); break;  }
-			else if (c == "cth") { node = func_19a(P, D, c, W); break;  }
-			else if (c == "arsh") { node = func_20a(P, D, c, W); break;  }
-			else if (c == "arch") { node = func_21a(P, D, c, W); break;  }
-			else if (c == "arth") { node = func_22a(P, D, c, W); break;  }
-			else if (c == "arcth") { node = func_23a(P, D, c, W); break;  }
-			break;
-		}
-		if (DEBUG) {
-			deque<Token> fs;
-			TreeToPolish(node, fs);
-			set<int> f_box = CountIndex(fs); // Проверка верности вычисления численым диффренцированием.
-			Algebra_Tree A = Algebra_Tree(root); // Исходная функция 
-			Algebra_Tree B = Algebra_Tree(node); // Ее производная для проверки.
-			double x = 2.0;
-			double y_0, y_1;
-			vector<tuple<double, double>> ph;
-			y_0 = Numerical_Differentiation(A, x, pow(10, -4), X);
-			y_1 = B.FunctionValue_T(x, X);
-			ph.push_back(make_tuple(y_0, y_1));
-			double t = (y_1 - y_0) / (y_0 + y_1);
-			if (abs(t) > pow(10, 4))
+			Token::Function c = get<Token::Function>(T.value);
+			Algebra_Node* node = SetNode(0);
+			switch (c)
 			{
-				set<int> e_box = W.red;
-				int index = node->data.index;
-				e_box.insert(index);
+			case Token::Function::EXP: { node = func_6a(P, D, W); break;  }
+			case Token::Function::LN: {  node = func_7a(P, D, W); break;  }
+			case Token::Function::SIN: { node = func_8a(P, D, W); break;  }
+			case Token::Function::COS: { node = func_9a(P, D, W); break;  }
+			case Token::Function::TG: { node = func_10a(P, D, W); break;  }
+			case Token::Function::CTG: { node = func_11a(P, D, W); break;  }
+			case Token::Function::ARCSIN: { node = func_12a(P, D, W); break;  }
+			case Token::Function::ARCCOS: { node = func_13a(P, D, W); break;  }
+			case Token::Function::ARCTG: { node = func_14a(P, D, W); break;  }
+			case Token::Function::ARCCTG: { node = func_15a(P, D, W); break;  }
+			case Token::Function::SH: { node = func_16a(P, D, W); break;  }
+			case Token::Function::CH: { node = func_17a(P, D, W); break;  }
+			case Token::Function::TH: { node = func_18a(P, D, W); break;  }
+			case Token::Function::CTH: { node = func_19a(P, D, W); break;  }
+			case Token::Function::ARSH: { node = func_20a(P, D, W); break;  }
+			case Token::Function::ARCH: { node = func_21a(P, D, W); break;  }
+			case Token::Function::ARTH: { node = func_22a(P, D, W); break;  }
+			case Token::Function::ARCTH: { node = func_23a(P, D, W); break;  }
 			}
-			int m = W.call_order;
-			map<int, set<int>> ds = W.colored;
-			if (!ds.count(m)) ds[m] = set<int>();
-			// Выполнить union для set()
-			for (const auto& p : f_box) {
-				ds[m].insert(p);
+			if (DEBUG)
+			{
+				deque<Token> fs;
+				TreeToPolish(node, fs);
+				vector<int> kh = CountIndex(fs); // Проверка верности вычисления численым диффренцированием.
+				Algebra_Tree A = Algebra_Tree(root); // Исходная функция 
+				Algebra_Tree B = Algebra_Tree(node); // Ее производная для проверки.
+				double x = 2.0;
+				double y_0, y_1;
+				vector<tuple<double, double>> ph;
+				y_0 = Numerical_Differentiation(A, x, pow(10, -4), X);
+				y_1 = B.FunctionValue_T(x, X);
+				ph.push_back(make_tuple(y_0, y_1));
+				double t = (y_1 - y_0) / (y_0 + y_1);
+				if (abs(t) > pow(10, 4))
+				{
+					set<int> e_box = W.red;
+					int index = node->data.index;
+					e_box.insert(index);
+				}
+				int m = W.call_order;
+				map<int, set<int>> ds = W.colored;
+				if (!ds.count(m)) ds[m] = set<int>();
+				// Выполнить union для set()
+				for (const auto& p : kh) {
+					ds[m].insert(p);
+				}
+				while (0); // Для точки останова.
 			}
-			while (0); // Для точки останова.
+			return node;
 		}
-		return node;
 	}
 	else
 	{

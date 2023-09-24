@@ -3,28 +3,28 @@
 
 using namespace std;
 
-set<int> CountIndex(deque<Token> fs)
+vector<int> CountIndex(deque<Token> fs)
 {
 	deque<Token>::iterator iter;
-	set<int> f_box;
+	vector<int> kh;
 	for (iter = fs.begin(); iter != fs.end(); iter++)
 	{
 		Token token = *iter;
 		int index = token.index;
-		f_box.insert(index);
+		kh.push_back(index);
 	}
-	return f_box;
+	return kh;
 }
 
-set<int> CountIndex(vector<Token> fs)
+vector<int> CountIndex(vector<Token> fs)
 {
 	vector<Token>::iterator iter;
-	set<int> f_box;
+	vector<int> kh;
 	for (iter = fs.begin(); iter != fs.end(); iter++)
 	{
 		Token token = *iter;
 		int index = token.index;
-		f_box.insert(index);
+		kh.push_back(index);
 	}
-	return f_box;
+	return kh;
 }

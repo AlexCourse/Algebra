@@ -151,7 +151,6 @@ double PolishCalculation(deque<Token> es)
 		{
 			cst.push_back(get<string>(T.value));
 			if (DEBUG) op = "Push" + T.ToString();
-
 		}
 		case Token::Type::Operator:
 		{
@@ -161,7 +160,8 @@ double PolishCalculation(deque<Token> es)
 				st.pop();
 				const auto q = st.top();
 				st.pop();
-				switch (get<string>(T.value)[0]) {
+				char c = get<char>(T.value);
+				switch (c) {
 				default:
 					printf("Operator error [%s]\n", get<string>(T.value));
 					// exit(0);
@@ -186,6 +186,7 @@ double PolishCalculation(deque<Token> es)
 				op = "Push " + to_string(q) + " " + T.ToString() + " " + to_string(p);
 				break;
 			}
+			break;
 		}
 		case Token::Type::Function:
 		{
@@ -193,38 +194,44 @@ double PolishCalculation(deque<Token> es)
 			{
 				const auto x = st.top();
 				st.pop();
-				string c = get<string>(T.value);
-				if (c == "exp") { st.push(exp(x)); }
-				if (c == "ln") { st.push(log(x)); }
-				if (c == "sin") { st.push(sin(x)); }
-				if (c == "cos") { st.push(cos(x)); }
-				if (c == "tg") { st.push(tan(x)); }
-				if (c == "ctg") { st.push(1 / tan(x)); }
-				if (c == "arcsin") { st.push(asin(x)); }
-				if (c == "arccos") { st.push(acos(x)); }
-				if (c == "arctg") { st.push(atan(x)); }
-				if (c == "arcctg") { st.push(atan(1 / x)); }
-				if (c == "sh") { st.push(sinh(x)); }
-				if (c == "ch") { st.push(cosh(x)); }
-				if (c == "th") { st.push(tanh(x)); }
-				if (c == "cth") { st.push(1 / tanh(x)); }
-				if (c == "arsh") { st.push(asinh(x)); }
-				if (c == "arch") { st.push(acosh(x)); }
-				if (c == "arth") { st.push(atanh(x)); }
-				if (c == "arcth") { st.push(atanh(1 / x)); }
-				if (c == "abs") { st.push(abs(x)); }
-
+				Token::Function c = get<Token::Function>(T.value);
+				switch (c)
+				{
+				case Token::Function::EXP: { st.push(exp(x)); break;  }
+				case Token::Function::LN: { st.push(log(x));  break;  }
+				case Token::Function::SIN: { st.push(sin(x));  break;  }
+				case Token::Function::COS: { st.push(cos(x)); break;  }
+				case Token::Function::TG: { st.push(tan(x)); break;  }
+				case Token::Function::CTG: { st.push(1 / tan(x)); break;  }
+				case Token::Function::ARCSIN: { st.push(asin(x)); break;  }
+				case Token::Function::ARCCOS: { st.push(acos(x)); break;  }
+				case Token::Function::ARCTG: { st.push(atan(x));  break;  }
+				case Token::Function::ARCCTG: { st.push(atan(1 / x));  break;  }
+				case Token::Function::SH: { st.push(sinh(x));  break;  }
+				case Token::Function::CH: { st.push(cosh(x));  break; }
+				case Token::Function::TH: { st.push(tanh(x));  break; }
+				case Token::Function::CTH: { st.push(1 / tanh(x)); break;  }
+				case Token::Function::ARSH: { st.push(asinh(x)); break; }
+				case Token::Function::ARCH: { st.push(acosh(x));  break; }
+				case Token::Function::ARTH: { st.push(atanh(x));  break;  }
+				case Token::Function::ARCTH: { st.push(atanh(1 / x));  break;  }
+				case Token::Function::ABS: { st.push(abs(x)); break;  }
+				}
 			}
-			if (f_opr_two(T))
+			else if (f_opr_two(T))
 			{
 				const auto p = st.top();
 				st.pop();
 				const auto q = st.top();
 				st.pop();
-				string c = get<string>(T.value);
-				if (c == "pow") { st.push(pow(q, p)); }
-				if (c == "log") { st.push(log(p) / log(q)); }
+				Token::Function c = get<Token::Function>(T.value);
+				switch (c)
+				{
+				    case Token::Function::POW: { st.push(pow(q, p)); break;  }
+				    case Token::Function::LOG: { st.push(log(p) / log(q)); break;  }
+				}
 			}
+			break;
 		}
 		default:
 			printf("Token error\n");
@@ -274,7 +281,8 @@ double PolishCalculation(const vector<Token> es)
 				st.pop();
 				const auto q = st.top();
 				st.pop();
-				switch (get<string>(T.value)[0]) {
+				char c = get<char>(T.value);
+				switch (c) {
 				default:
 					printf("Operator error [%s]\n", T.ToString());
 					// exit(0);
@@ -299,6 +307,7 @@ double PolishCalculation(const vector<Token> es)
 				op = "Push " + to_string(q) + " " + T.ToString() + " " + to_string(p);
 				break;
 			}
+			break;
 		}
 		case Token::Type::Function:
 		{
@@ -306,38 +315,44 @@ double PolishCalculation(const vector<Token> es)
 			{
 				const auto x = st.top();
 				st.pop();
-				string c = get<string>(T.value);
-				if (c == "exp") { st.push(exp(x)); }
-				if (c == "ln") { st.push(log(x)); }
-				if (c == "sin") { st.push(sin(x)); }
-				if (c == "cos") { st.push(cos(x)); }
-				if (c == "tg") { st.push(tan(x)); }
-				if (c == "ctg") { st.push(1 / tan(x)); }
-				if (c == "arcsin") { st.push(asin(x)); }
-				if (c == "arccos") { st.push(acos(x)); }
-				if (c == "arctg") { st.push(atan(x)); }
-				if (c == "arcctg") { st.push(atan(1 / x)); }
-				if (c == "sh") { st.push(sinh(x)); }
-				if (c == "ch") { st.push(cosh(x)); }
-				if (c == "th") { st.push(tanh(x)); }
-				if (c == "cth") { st.push(1 / tanh(x)); }
-				if (c == "arsh") { st.push(asinh(x)); }
-				if (c == "arch") { st.push(acosh(x)); }
-				if (c == "arth") { st.push(atanh(x)); }
-				if (c == "arcth") { st.push(atanh(1 / x)); }
-				if (c == "abs") { st.push(abs(x)); }
-
+				Token::Function c = get<Token::Function>(T.value);
+				switch (c)
+				{
+				case Token::Function::EXP: { st.push(exp(x)); break;  }
+				case Token::Function::LN: { st.push(log(x));  break;  }
+				case Token::Function::SIN: { st.push(sin(x)); break;  }
+				case Token::Function::COS: { st.push(cos(x)); break;  }
+				case Token::Function::TG: { st.push(tan(x));  break;  }
+				case Token::Function::CTG: { st.push(1 / tan(x)); break;  }
+				case Token::Function::ARCSIN: { st.push(asin(x)); break;  }
+				case Token::Function::ARCCOS: { st.push(acos(x)); break;  }
+				case Token::Function::ARCTG: { st.push(atan(x)); break;  }
+				case Token::Function::ARCCTG: { st.push(atan(1 / x)); break;  }
+				case Token::Function::SH: { st.push(sinh(x)); break;  }
+				case Token::Function::CH: { st.push(cosh(x)); break;  }
+				case Token::Function::TH: { st.push(tanh(x)); break;  }
+				case Token::Function::CTH: { st.push(1 / tanh(x)); break;  }
+				case Token::Function::ARSH: { st.push(asinh(x)); break;  }
+				case Token::Function::ARCH: { st.push(acosh(x)); break;  }
+				case Token::Function::ARTH: { st.push(atanh(x)); break;  }
+				case Token::Function::ARCTH: { st.push(atanh(1 / x)); break;  }
+				case Token::Function::ABS: { st.push(abs(x)); break;  }
+				}
 			}
-			if (f_opr_two(T))
+			else if (f_opr_two(T))
 			{
 				const auto p = st.top();
 				st.pop();
 				const auto q = st.top();
 				st.pop();
-				string c = get<string>(T.value);
-				if (c == "pow") { st.push(pow(q, p)); }
-				if (c == "log") { st.push(log(p) / log(q)); }
+				Token::Function c = get<Token::Function>(T.value);
+				switch (c)
+				{
+				case Token::Function::POW: { st.push(pow(q, p));  break;  }
+				case Token::Function::LOG: { st.push(log(p) / log(q)); break;  }
+				}
 			}
+			break;
 		}
 		default:
 			printf("Token error\n");
@@ -468,6 +483,137 @@ bool CheckBalance(deque<Token> fh)
 	}
 	if (balance == 0) return true;
 	else return false;
+}
+
+string PostfixToInfix(vector<Token>& fs)
+{ // В первом параметре выражение в формате Обратной Польской нотации.
+  // Результат возвращается во втором параметре в форме Инфиксной Записи.
+	string p, q, s, t;
+	reverse(fs.begin(), fs.end());
+	stack<string> st;
+	stack<int> st_opr; // Здесь сохраняются приоритеты операторов.
+	int m, n;
+	while (!fs.empty())
+	{
+		Token T = fs.back();
+		fs.pop_back();
+		// st_opr.push(0); // Для балансировки стека.
+		if (T.type == Token::Type::Algebra)
+		{
+			s = T.ToString();
+			st.push(s);
+		}
+		else if (T.type == Token::Type::Integer)
+		{
+			s = T.ToString();
+			st.push(s);
+		}
+		else if (T.type == Token::Type::Real)
+		{
+			s = T.ToString();
+			st.push(s);
+		}
+		else if (f_opr_two(T))
+		{
+			string f = T.ToString();
+			q = st.top();
+			st.pop();
+			p = st.top();
+			st.pop();
+			m = T.precedence;
+			bool ra = T.rightAssociative;
+			for (int i = 0; i < 2; i++)
+			{
+				if (st_opr.empty()) break;
+				n = st_opr.top();
+				st_opr.pop();
+				bool B = false;
+				if (n < m && ra) B = true;
+				if (n <= m && !ra) B = true;
+				if (!B)
+				{
+					if (i == 0) p = "(" + p + ")";
+					if (i == 1) p = "(" + q + ")";
+				}
+			}
+			s = p + f + q;
+			st.push(s);
+			st_opr.push(m);
+
+		}
+		else if (f_opr_one(T))
+		{
+			string f = T.ToString();
+			p = st.top();
+			st.pop();
+			s = f + "(" + p + ")";
+			st.push(s);
+		}
+
+	}
+
+	s = st.top();
+	st.pop();
+	return s;
+}
+
+string PostfixToInfix(deque<Token>& fs)
+{ // В первом параметре выражение в формате Обратной Польской нотации.
+  // Результат возвращается во втором параметре в форме Инфиксной Записи.
+	string p, q, s, t;
+	// reverse(fs.begin(), fs.end());
+	stack<string> st;
+	stack<int> st_opr; // Здесь сохраняются приоритеты операторов.
+	int m, n;
+	while (!fs.empty())
+	{
+		Token T = fs.front();
+		fs.pop_front();
+		st_opr.push(0); // Для балансировки стека.
+		if (T.type == Token::Type::Algebra)
+		{
+			s = T.ToString();
+			st.push(s);
+		}
+		else if (T.type == Token::Type::Integer || T.type == Token::Type::Real || T.type == Token::Type::Number)
+		{
+			s = T.ToString();
+			st.push(s);
+		}
+		else if (f_opr_two(T))
+		{
+			string f = T.ToString();
+			p = st.top();
+			st.pop();
+			q = st.top();
+			st.pop();
+			n = st_opr.top();
+			m = T.precedence;
+			bool ra = T.rightAssociative;
+			st_opr.pop();
+			bool B = false;
+			if (n < m && ra) B = true;
+			if (n <= m && !ra) B = true;
+
+			if (!B) s = "(" + q + f + p + ")";
+			else s = q + f + p;
+			st.push(s);
+			st_opr.push(m);
+
+		}
+		else if (f_opr_one(T))
+		{
+			p = st.top();
+			st.pop();
+			s = "(" + p + ")";
+			st.push(s);
+		}
+
+	}
+
+	s = st.top();
+	st.pop();
+	return s;
 }
 
 deque<Token> FToPolishI(string expr , int& index , Enumerable q)

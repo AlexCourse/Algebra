@@ -13,6 +13,8 @@ enum Enumerable
 	ORDERING
 };
 
+std::string PostfixToInfix(std::vector<Token>& fs);
+std::string PostfixToInfix(std::deque<Token>& fs);
 std::deque<Token> FToPolish(std::string expr);
 std::deque<Token> FToPolishI(std::string expr, int& index, Enumerable q);
 double FunctionValue(std::deque<Token> fh, double value, std::string symbol);

@@ -10,6 +10,7 @@
 #include <variant>
 
 // #include "vector_cl.h"
+// Формат данных : Оператор - символьного типа , Функция - перечеслимого типа Token::Function, Число - int , double , long_arithmetic , Алгеьраический символ - строкового типа.
 
     class Token {
     public:
@@ -47,7 +48,10 @@
             ARSH,
             ARCH,
             ARTH,
-            ARCTH
+            ARCTH,
+            ABS ,
+            LOG , 
+            POW
         };
 
         const Type type;
@@ -59,14 +63,19 @@
         Token();
         Token(Type t, const std::string& s, int prec = -1, bool ra = false);
         Token(const Token& other);
+        Token(Type t, char c, int prec, bool ra);
         Token(Type t, const int m);
         Token(Type t, const double m);
+        Token(Type t, const Token::Function m);
 
         Token(Type t, const std::string& s, int index ,int prec = -1, bool ra = false);
         Token(Type t, const std::string& s, int index);
         Token(const Token& other, int index);
+        Token(Type t, char c, int index, int prec, bool ra);
         Token(Type t, const int m, int index);
         Token(Type t, const double m, int index);
+        Token(Type t, const Token::Function m, int index);
+
         Token operator=(const Token& other);
         bool operator==(const Token& other);
         bool operator == (const int m);
@@ -91,6 +100,8 @@
     bool CE(const std::variant<std::string, char, int, double, Token::Function>, const std::string m); // #
     bool CE(const std::variant<std::string, char, int, double, Token::Function>, const int m); // #
     bool CE(const std::variant<std::string, char, int, double, Token::Function>, const double m); // #
+    bool CE(const std::variant<std::string, char, int, double, Token::Function> value, const char c);
+    bool CE(const std::variant<std::string, char, int, double, Token::Function> value, Token::Function p);
 
     Token SetToken(const std::variant<std::string, char, int, double, Token::Function> value);
     Token SetToken(const std::variant<std::string, char, int, double, Token::Function> value , int& index);

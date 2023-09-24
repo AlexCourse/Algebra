@@ -5,8 +5,7 @@
 #include "Algebra.h"
 #include "Derivate.h"
 #include "simplify.h"
-#include <boost/format.hpp>
-#include <boost/algorithm/string/replace.hpp>
+#include <algorithm>
 
 
 #define M_PI 3.1415926535897932384626
@@ -309,7 +308,7 @@ void test_7() // Тестирование функции DerivateFunc()
 						   "x^3", // +
 							"5*x^7", // + , 10 , для проверки нумерции узлов.
 							"2*(x+1)", // +
-							 "0.5*x*(x+1)", // -
+							 "0.5*x*(x+1)", // +
 							 "x+4+x+7+x+5+x", // +
 							 "5+x+3", // +
 							 "x+1+x+0.5", // +
@@ -317,16 +316,16 @@ void test_7() // Тестирование функции DerivateFunc()
 							 "1+x+x", // +
 							 "x+x+x", // +
 		                      "x-7",  // +
-		                      "7-x",  // - , 20
+		                      "7-x",  // + , 20
 							 "sin(x^2)" ,
 		                     "x-4-x+7-x", // +
 		                     "x*7", // +
-							 "x^5 + x^4 + x^3 + x^2 + 1", // +
+							 "x^5 + x^4 + x^3 + x^2 + 1", // + , 24 , //n[+] проверка нумерации индексов.
 		                     "x^11", // +
 		                     "(x*(x*x-1)+5*x*(1+1/x))/(2*x+0.25*x*x+x*(x-1))", // +
 		                    "(x+1)/x", // +
 		                   "(2+5*x*(x^2+1)-4*x^2)/(1+2*x*(x-1)^2+8*x^2*(x+1)+7*x)^2", // +
-		                   "x^2", 
+		                   "x^2", // +
 		                   "sin(x)*tg(x)", // + , 30 , func_2a
 		                   "sin(x)*(x+1)", // +
 		                   "(x+2)*sin(x)", // +
@@ -336,9 +335,9 @@ void test_7() // Тестирование функции DerivateFunc()
 		                   "5*(x+5)", // +
 		                   "(x-3)*7", // +
 		                   "6*11", // +
-		                   "sin(x)-cos(x)", // + , func_1a
-		                   "sin(x)-x", // + , 40
-		                   "x-tg(x)", // +
+		                   "sin(x)-cos(x)", // - , func_1a  , минимальный неработающий пример. , неверное копирование дерева выражения в функции func_1a
+		                   "sin(x)-x", // - , 40
+		                   "x-tg(x)", // -
 		                   "sin(x)/cos(x)", // + , func_3a
 		                   "sin(x)/(x+4)", // +
 		                   "(x+5)/sin(x)", // +
@@ -347,7 +346,7 @@ void test_7() // Тестирование функции DerivateFunc()
 		                   "(x+7)/2", // +
 		                   "5/sin(x)", // +
 		                   "(x+4)/sin(x)", // +
-		                   "x*(x+2)*(x-3)*(x+4)*(x-5)/(1+x^2*(x+1)^2) - 5*x^2*(x+3)^2*(x^2+1)*(1-1/x)^2", // + ( b) , - ,(a) , 50
+		                   "x*(x+2)*(x-3)*(x+4)*(x-5)/(1+x^2*(x+1)^2) - 5*x^2*(x+3)^2*(x^2+1)*(1-1/x)^2", // +  , 50
 		                   "x*(x-1)*(x+2)*(x-3)" , // +
 		                   "cos(x^5 + x^4 + x^3 + x^2 + 1)", // +
 						   "tg(x^5 + x^4 + x^3 + x^2 + 1)", // +
@@ -380,20 +379,48 @@ void test_7() // Тестирование функции DerivateFunc()
 		                   "x*tg(x)", // +  , 80
 		                   "(x+4)*tg(x)", // +
 		                   "(x-7)^2*tg(x)", // - ,минимальный неработающий пример
-		               	   "sin(x)^cos(x)", // + , func_5a
-		                   "sin(x)^(x+1)" , // +
-		                   "(x+5)^cos(x)" , // +
+		               	   "sin(x)^cos(x)", // - , func_5a
+		                   "sin(x)^(x+1)" , // -
+		                   "(x+5)^cos(x)" , // -
 		                   "(x+1)^(x+7)" , // +
 		                   "sin(x)^4" , // +
 		                   "(x+3)^4" , // +
 		                   "3^(x+1)" , // +
-		                   "2^(cos(x))" , // 90.
-		                   "5^7"  , 
+		                   "2^(cos(x))" , // 90. - , exception.
+		                   "5^7"  , // +
+		                   "x^4+x^2+1", // n[+]
+		                   "x^4",  // +
+		                   "x^2" , // +
+						   "3*x*x*(x-1)*(x-1)" , // +
+		                   "3*x*x*(x-1)", // +
+		                   "3*x*x", // +
+		                   "x*x*x", // + 
+		                   "x*(x+2)*(x-3)*(x+4)*(x-5)/(1+x^2*(x+1)^2)", // +
+		                   "5*x^2*(x+3)^2*(x^2+1)*(1-1/x)^2" , // 100 , +
+						   "(1-1/x)^2", // +
+						   "(1/x)^2", // +
+						   "1/x", // +
+						   "x*(x^2+1)*x*(x-1)*(x+2)^5*(x-3)^2*(x+4)^(3/2)*(x-5)^3", // +
+						   "x^(sin(x))*(1+x*cos(x^2))*x*(x^2+1)^2*x^(cos(x))", // - , exception
+						   "x^(sin(x))*(1+x*cos(x^2))",
+						   "x^(sin(x))", // - неверный ответ , не пропечатываются функции.
+						   "sin(x)",
+						   "x^x", // +
+						   "(x^2+1)^(x+3/2)" , //  + , 110
+						   "(x-1)^2*(x^2*(x+3*(x+1))+3*x*(x-1)/(x+4*x^2+1+1/x))/((x-1)^2*(x+3)^2*(x-5)*(x+7)^2)", // +
+						   "sin(x)*cos(x)", // - , минимальный неработающий пример.
+						   "sin(x^2)", // +
+						   "(x^2+3*x+7+1/x)^(1/(1+x^2))", // +
+						   "x*sin(x)", // +
+						   "cos(x)*x" // -
+
 	};
+	// Два раза один и тот же символ в строке - причина повторения индекса.
 	const double x = 2;
+	const int MODE = 0;
 	// x = M_PI/4;
 	double Q[2];
-	string s = eh[7];
+	string s = eh[39];
 	deque<Token> fh, fs, es;
 	// getline(cin, s);
 	int index = 0;
@@ -407,10 +434,20 @@ void test_7() // Тестирование функции DerivateFunc()
 		cout << "test_7() : A " << endl;
 		A.Print_Tree_T();
 		cout << "test_7() : B " << endl;
-		B.Print_Tree_T();
+		if(MODE == 1) B.Print_Tree_T();
+		if (MODE == 1)
+		{
+			A.TreeToPolish_T();
+			vector<Token> ks = A.polish;
+			vector<int> ls = CountIndex(ks);
+			sort(ls.begin(), ls.end());
+			cout << "IndexCouter : " << endl; // Идет проверка уникальности индексов.
+			for (auto p : ls) cout << p << " ";
+			cout << endl;
+		}
 	}
 	Q[0] = Numerical_Differentiation(A, x, pow(10, -4), "x");
-	Debug_concept W = Debug_concept();
+	Debug_concept W = Debug_concept(index);
 	Algebra_Node* D = DerivateFunction(node , W);
 	Algebra_Tree* d_tree = new Algebra_Tree(D);
 	Algebra_Tree& T = *d_tree;
@@ -418,7 +455,19 @@ void test_7() // Тестирование функции DerivateFunc()
 	T.Print_Tree_T();
 	Algebra_Tree& DI = T.SetIndexTree_T();
 	cout << "test_7() : DI" << endl;
-	DI.Print_Tree_T();
+	if(MODE == 1) DI.Print_Tree_T();
+    
+	if (MODE == 1)
+	{
+		T.TreeToPolish_T();
+		vector<Token> ks = T.polish;
+		vector<int> ls = CountIndex(ks);
+		sort(ls.begin(), ls.end());
+		cout << "IndexCouter : " << endl; // Идет проверка уникальности индексов.
+		for (auto p : ls) cout << p << " ";
+		cout << endl;
+	}
+
 	Q[1] = T.FunctionValue_T(x, "x");
 	string f = T.TreeToInfix_T();
 	ph.push_back(make_tuple(Q[0], Q[1]));
@@ -471,7 +520,7 @@ void test_10() // Тестирование функции PolishCalculation()
 					"0.5*0.7*(1.5+1)"  , // + , +
 					"1+0.7*(3-4+5*0.5*0.25*(1-4*3))", // + , +
 					 "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2", // + , +
-					  "sin(1-4/7+3/13*(1+4/9)^2)*cos(1-(4/11)^2)", // + , +
+					  "sin(1-4/7+3/13*(1+4/9)^2)*cos(1-(4/11)^2)", // - , -
 					   "3/4*sin(1+11/157)", // + , +
 					   "(3/4)*sin(1+11/157)", // + , +
 					   "sin(2*5)", // + , +
@@ -494,7 +543,7 @@ void test_10() // Тестирование функции PolishCalculation()
 					   "log(16 , 2)", // + , +
 					   "1-2", // + , +
 					   "5/7", // + , +
-					   "sin(3)*cos(1)", // + , +
+					   "sin(3)*cos(1)", // - , - , простейший неработающий пример
 					   "2*(2-1)",
 					   "abs(-3)", // - , не проходит tokenize_u_minus.
 		               "ln(2)", // 30
@@ -560,21 +609,22 @@ void test_14()
 {  // Тестирование функции TreeRExprReplaceOnSubTreeD() , неверно работает с функцией с одним параметром.
 	const int X = 5;
 	vector<tuple<double, double>> ph;
-	string fh[12] = { "3*(x+c)+c*x^2*(x-c)+8*x*c", // +
+	string fh[] = { "3*(x+c)+c*x^2*(x-c)+8*x*c", // + , 0
 					 "4*x^2*(x^2-c^2)+3*x*(x-c/x)" , // +
 						"(x-c)^2" , // +
 						  "x-c" , // +
 					  "c*(x-c)+3*c*x" , // +
 					   "c*(x+c)" , // +
-						 "c" , // +
+						 "c" , // + , exception
 						 "2" ,  // +
 						 "x", // +
 						 "x+c" , // +
-						 "c+x", // +
-		                 "sin(c)"
+						 "c+x", // + , 10
+		                 "sin(c)", // 
+		                 "sin(x)*cos(x)*(x+c)"
 	};
 	string s, r, f;
-	tie(s, f, r) = make_tuple(fh[11], "c", "x+3"); // A , B , C , 104
+	tie(s, f, r) = make_tuple(fh[12], "c", "x+3"); // A , B , C , 104
 	Algebra_Tree& A = SetAlgebricTree(s);
 	Algebra_Node* node = SetOperatorTree(r);
 	cout << "A:" << endl;
@@ -611,6 +661,7 @@ void test_14()
 	for (iter = ph.begin(); iter != ph.end(); iter++)
 	{
 		tuple<double, double> Q = *iter;
+		cout << "(" << get<0>(Q) << " : " << get<1>(Q) << ")" << endl;
 	}
 
 
@@ -676,7 +727,6 @@ void test_19() // Тестирование функции TreeExprReplaceRT()
 {
 	string fh[6] = { "x*(x-3)+x" // +
 				, "(x^2-1)*(x-4/5)*(7/8+3*x)^2 + 3*x*(x-1)" };
-
 	string s = fh[1];
 	Algebra_Tree A = SetAlgebricTree(s);
 	A.Print_Tree_T();
@@ -691,8 +741,8 @@ void test_19() // Тестирование функции TreeExprReplaceRT()
 
 void test_20() // Тестирование шаблонной версии функции: SetOperatorTree()
 {
-	const string fh[3] = { "3*x^2*(x+1)-x+x^2" , "(-1)*x+(-1)" , "3*x^2*(x-1)+5/3*x*(1-4/5)" };
-	const string s = fh[2];
+	const string fh[] = { "3*x^2*(x+1)-x+x^2" , "(-1)*x+(-1)" , "3*x^2*(x-1)+5/3*x*(1-4/5)" , "(-1)*p/q^2" };
+	const string s = fh[3];
 	Algebra_Node* root = SetOperatorTree(s);
 	Print_Tree_R(root, "", true, true);
 	while (0);
@@ -738,7 +788,7 @@ void test_22() // Тестирование функции FunctionValueM()
 	while (0);
 }
 
-void test_23()
+void test_23() // Тестирование обоих перегрузок PolishCalculation()
 {
 	vector<tuple<double, double, double>> ph;
 	string fh[] = { "3*(1-1/4)*(3+17/33)-2*(3+3/4)^2" , "0.5*(2-1)" , "2-3" };
@@ -759,7 +809,7 @@ void test_23()
 	while (0);
 }
 
-void test_24()
+void test_24() // Тестирование функции simplify_E()
 {
 	string fh[] = { "1+x*0" , // 0 , +
 		             "7+0*(x+1)+1*0" ,  // +
@@ -804,7 +854,7 @@ void test_24()
 	A.Print_Tree_T();
 }
 
-void test_25()
+void test_25() // Тестирование функции simplify_D()
 {
 	string fh[] = { "1", // +
 		            "x+4*3", // +
@@ -821,10 +871,78 @@ void test_25()
 	A.Print_Tree_T();
 }
 
+void test_26() // Тестирование индексного копирования дерева.
+{
+	string lh[] = {"3*(1+5/7+6/11*7/41)^2+0.25"};
+	string s = lh[0];
+	int index = 0;
+	Algebra_Node* A = SetOperatorTree(s , index);
+	Debug_concept W = Debug_concept(index);
+	Algebra_Node* B = _CloneTree(A, W);
+	vector<Token> fh , eh;
+	TreeToPolish(A, fh);
+	TreeToPolish(B, eh);
+	vector<int> fs, es;
+	fs = CountIndex(fh);
+	es = CountIndex(eh);
+	while (0);
+	vector<int>::iterator iter;
+	for (iter = fs.begin(); iter != fs.end(); iter++) cout << *iter << " ";
+	cout << endl;
+	for (iter = es.begin(); iter != es.end(); iter++) cout << *iter << " ";
+	cout << endl;
+}
+
+void test_27() // Тестирование функции PostfixToInfix() , TokensToStr() , ToString().
+{
+	string fh[] = { "(1-5*(1/2+5/6-7*(5+8/9*4^3)))" // + 
+					, "(x^2-1)*(x-4/5)*(7/8+3*x)^2 + 3*x*(x-1)" ,  // +
+						 "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2" , // + 
+							  "cos(x^2)", // -
+							  "sin(3)*cos(1)", // - ,
+							  "sin(x^2-3*x+2)*sin(7/4)",
+							  "log(x , 2)",
+							  "1-2",
+							  "4+7*3", // +
+							  "(4+5)*6", // +
+							  "7+(8+4)^2*(7-4/5)+3+7-2*3", // - 
+							  "(4-7)*(1+9)"
+	};
+	string s = fh[4];
+	deque<Token> eh = FToPolish(s);
+	deque<Token> es = exprToTokens(s);
+	deque<Token>::iterator iter;
+	string f = "";
+	string t, r = "";
+	for (iter = es.begin(); iter != es.end(); iter++)
+	{
+		Token token = *iter;
+		s = token.ToString();
+		t = ToString(token.value);
+		f = f + s;
+		r = r + t;
+	}
+	cout << f << endl;
+	cout << r << endl;
+	s = PostfixToInfix(eh);
+    f = TokensToStr(es);
+	while (0);
+}
+
+void test_28() // Тестирование функции _CloneTree()
+{
+	string fh[] = { "sin(x)*x+0.25*x^2" // +
+	};
+	string s = fh[0];
+	Algebra_Node* A = SetOperatorTree(s);
+	Algebra_Node* B = _CloneTree(A);
+	Print_Tree_R(A , "", false , false);
+	Print_Tree_R(B, "", false, false);
+}
 
 int main() {
 
-	const int n = 7;  // 7 , 1 PostfixToInfix()
+	const int n = 28;  // 7 , 1 PostfixToInfix()
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +
@@ -852,5 +970,10 @@ int main() {
 	case 23: { test_23(); break; }
 	case 24: { test_24(); break;  }
 	case 25: { test_25(); break;  }
+	case 26: { test_26(); break;  }
+	case 27: { test_27(); break;  }
+	case 28: { test_28(); break;  }
 	}
+	char c;
+	cin >> c;
 }
