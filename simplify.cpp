@@ -8,6 +8,10 @@ public:
 };
 
 
+SM::SM(const int level, Algebra_Node* const parent, Algebra_Node* const branche, const char direcect) : level(level) , parent(parent) , branche(branche) , direct(direct) {}
+    
+
+
 bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_Node*& root, char& c, GarbegeCollector& G)
 { // ['*']
     // Последний параметр содержит то: последний или предпоследний элемент в стеке содержит указатель на освобожденный из памяти элемент. 'L' - предпоследний , 'R' - последний., 'Z' - удаление обоих.
@@ -87,16 +91,49 @@ bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
             }
         }
         else root = P[k];
-        k = (k + 1) % 2; // 1-> 0 , 0 -> 1 
-        delete P[k];  // Удаление одного узла нулевого слагаемого.
+        k = (k + 1) % 2; // 1-> 0 , 0 -> 1
+        // delete P[k]; // Удаление одного узла нулевого слагаемого.
+        RecursiveDestructor(P[k]);
         free(R);
-        R = nullptr;
         while (0);
         switch (k)
         {
            case 0: { c = 'L'; break; }
            case 1: { c = 'R'; break; }
         }
+    }
+    return match;
+}
+
+bool func_1a(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, int level)
+{
+    Algebra_Node& C = *currentNode;
+    Algebra_Node* P[2];
+    P[0] = currentNode->left;
+    P[1] = currentNode->right;
+    bool B = false;
+    bool match = false;
+    int k = -1;
+
+    for (int i = 0; i < 2; i++)
+    {
+        if (CE(P[i]->data.value, 0)) B = true; // Если один из множителй равен нулю.
+        else if (CE(P[i]->data.value, 1)) k = i; // Сохраняем номер единичного операнда.
+    }
+    if (B)
+    {
+        Algebra_Node* W = SetNode(0);
+        Algebra_Node& K = *parent;
+        SM Q = SM(level, parent, W, p);
+        
+    }
+    else if (!(k == -1))
+    {
+        Algebra_Node* R = currentNode;
+        match = true;
+        Algebra_Node& K = *parent;
+        k = (k + 1) % 2; // 1-> 0 , 0 -> 1
+        SM Q = SM(level, parent, P[k], p);
     }
     return match;
 }
@@ -172,9 +209,8 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
             Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
         }
         free(prev_node);
-        prev_node = nullptr;
         // delete P[1]; // Удаление одного узла -показатель первой степени.
-        delete P[1];
+        RecursiveDestructor(P[1]);
         match = true;
         c = 'R';
         while (0);
@@ -313,7 +349,8 @@ bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
                 break;
             }
             }
-            delete P[1]; // Удаление одного узла - единичного делителя.
+            // delete P[1]; // Удаление одного узла - единичного делителя.
+            RecursiveDestructor(P[1]);
             c = 'R';
             if (DEBUG)
             {
@@ -326,7 +363,6 @@ bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
         }
         match = true;
         free(R);
-        R = nullptr;
     }
     return match;
 }
@@ -378,14 +414,14 @@ bool func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
             root = P[k];
         }
         k = (k + 1) % 2;
-        delete P[k]; // Удаление одного узла нулевого слагаемого.
+        // delete P[k];
+        RecursiveDestructor(P[k]);
         switch (k)
         {
         case 0: { c = 'L'; break; }
         case 1: { c = 'R'; break; }
         }
         free(R);
-        R = nullptr;
     }
 
     return match;
