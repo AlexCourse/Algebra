@@ -467,6 +467,7 @@ Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Al
                 case 'L': { Q.addLeftNode(second); break; }
                 case 'R': { Q.addRightNode(second); break; }
                 }
+                while (0);
             }
             else first = second; // Становится в корень.
         }
@@ -672,7 +673,7 @@ string PostfixToInfix(vector<Token>& fs)
     {
         Token T = fs.back();
         fs.pop_back();
-        st_opr.push(0); // Для балансировки стека.
+        // st_opr.push(0); // Для балансировки стека.
         if (T.type == Token::Type::Algebra)
         {
             s = T.ToString();
@@ -695,25 +696,33 @@ string PostfixToInfix(vector<Token>& fs)
             st.pop();
             p = st.top();
             st.pop();
-            n = st_opr.top();
             m = T.precedence;
             bool ra = T.rightAssociative;
-            st_opr.pop();
-            bool B = false;
-            if (n < m && ra) B = true;
-            if (n <= m && !ra) B = true;
-
-            if (B) s = "(" + p + f + q + ")";
-            else s = p + f + q;
+            for (int i = 0; i < 2; i++)
+            {
+                if (st_opr.empty()) break;
+                n = st_opr.top();
+                st_opr.pop();
+                bool B = false;
+                if (n < m && ra) B = true;
+                if (n <= m && !ra) B = true;
+                if (B)
+                {
+                    if (i == 0) p = "(" + p + ")";
+                    if (i == 1) p = "(" + q + ")";
+                }
+            }
+            s = p + f + q;
             st.push(s);
             st_opr.push(m);
 
         }
         else if (f_opr_one(T))
         {
+            string f = T.ToString();
             p = st.top();
             st.pop();
-            s = "(" + p + ")";
+            s = f + "(" + p + ")";
             st.push(s);
         }
 

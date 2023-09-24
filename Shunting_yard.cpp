@@ -193,7 +193,7 @@ double PolishCalculation(deque<Token> es)
 				st.pop();
 				string c = get<string>(T.value);
 				if (c == "exp") { st.push(exp(x)); }
-				if (c == "ln") { st.push(log1p(x)); }
+				if (c == "ln") { st.push(log(x)); }
 				if (c == "sin") { st.push(sin(x)); }
 				if (c == "cos") { st.push(cos(x)); }
 				if (c == "tg") { st.push(tan(x)); }
@@ -306,7 +306,7 @@ double PolishCalculation(const vector<Token> es)
 				st.pop();
 				string c = get<string>(T.value);
 				if (c == "exp") { st.push(exp(x)); }
-				if (c == "ln") { st.push(log1p(x)); }
+				if (c == "ln") { st.push(log(x)); }
 				if (c == "sin") { st.push(sin(x)); }
 				if (c == "cos") { st.push(cos(x)); }
 				if (c == "tg") { st.push(tan(x)); }
