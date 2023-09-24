@@ -4,6 +4,7 @@
 #include <stack>
 #define DEBUG 1
 
+using namespace std;
 
 deque<Token> shuntingYard(const deque<Token>& tokens) {
 	deque<Token> eh;

@@ -2,20 +2,19 @@
 #include <vector>
 #include <stack>
 
-using namespace std;
 
 struct Cane
 {
 
-	vector<vector<char>> paths;
+	std::vector<std::vector<char>> paths;
 };
 
 
-void Print_paths(const vector<vector<char>>& paths) {
+void Print_paths(const std::vector<std::vector<char>>& paths) {
 	for (const auto& path : paths) {
 		for (const auto& ch : path) {
-			cout << ch;
+			std::cout << ch;
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 }

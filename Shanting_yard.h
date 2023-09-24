@@ -8,11 +8,9 @@
 #include "Token.h"
 
 
-using namespace std;
-
-deque<Token> FToPolish(string expr);
-double FunctionValue(deque<Token> fh, double value, string symbol);
-double FunctionValue(vector<Token> fh, double value, string symbol);
-vector<Token> ReplaceElementInPolish(vector<Token> fh, double x, string symbol);
-deque<Token> ReplaceElementInPolish(deque<Token> fh, double x, string symbol);
+std::deque<Token> FToPolish(std::string expr);
+double FunctionValue(std::deque<Token> fh, double value, std::string symbol);
+double FunctionValue(std::vector<Token> fh, double value, std::string symbol);
+std::vector<Token> ReplaceElementInPolish(std::vector<Token> fh, double x, std::string symbol);
+std::deque<Token> ReplaceElementInPolish(std::deque<Token> fh, double x, std::string symbol);
 

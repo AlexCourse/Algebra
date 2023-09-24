@@ -816,7 +816,7 @@ void test_26() // не работает.
 
 int main() {
 
-	const int n = 26;  // 7 , 1 PostfixToInfix()
+	const int n = 24;  // 7 , 1 PostfixToInfix()
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +

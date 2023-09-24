@@ -9,6 +9,8 @@
 * Обозначения : Символы для замены строке : p - первый операнд ,  q - второй операнд , D - производная первого операнда , d - производная второго операнда.
 */
 
+using namespace std;
+
 Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['+' , '-' ]
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))

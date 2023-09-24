@@ -24,8 +24,8 @@ void func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
         {
             if (DEBUG)
             {
-                cout << "func_1 : DEFORE" << endl;
-                Print_Tree_R(root, "", false, false);
+                std::cout << "func_1 : DEFORE" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode,  "", false, false);
             }
             switch (p)
             {
@@ -34,8 +34,8 @@ void func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
             }
             if (DEBUG)
             {
-                cout << "func_1 : AFTER" << endl;
-                Print_Tree_R(root, "", false, false);
+                std::cout << "func_1 : AFTER" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode , "", false, false);
             }
             while (0);
         }
@@ -55,8 +55,8 @@ void func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
             {
                 if (DEBUG)
                 {
-                    cout << "func_1 : BEFORE" << endl;
-                    Print_Tree_Selected_R(root, currentNode, "", false, false);
+                    std::cout << "func_1 : BEFORE" << std::endl;
+                    Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
                 }
                 case 'L':
                 {
@@ -70,8 +70,8 @@ void func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
                 }
                 if (DEBUG)
                 {
-                    cout << "func_1 : AFTER" << endl;
-                    Print_Tree_Selected_R(root, currentNode, "", false, false);
+                    std::cout << "func_1 : AFTER" << std::endl;
+                    Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
                 }
             }
         }
@@ -97,8 +97,8 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
         {
             if (DEBUG)
             {
-                cout << "func_2 : BEFORE" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_2 : BEFORE" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
             switch (p)
             {
@@ -107,8 +107,8 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
             }
             if (DEBUG)
             {
-                cout << "func_2 : AFTER" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_2 : AFTER" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
             while (0);
         }
@@ -123,8 +123,8 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
         Algebra_Node& K = *parent;
         if (DEBUG)
         {
-            cout << "func_2 : BEFORE" << endl;
-            Print_Tree_Selected_R(root, currentNode, "", false, false);
+            std::cout << "func_2 : BEFORE" << std::endl;
+            Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
         }
         switch (p)
         {
@@ -141,8 +141,8 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
         }
         if (DEBUG)
         {
-            cout << "func_2 : AFTER" << endl;
-            Print_Tree_Selected_R(root, currentNode, "", false, false);
+            std::cout << "func_2 : AFTER" << std::endl;
+            Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
         }
         delete P[1]; // Удаление одного узла -показатель первой степени.
         while (0);
@@ -155,8 +155,8 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
         {
             if (DEBUG)
             {
-                cout << "func_2 : BEFORE" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_2 : BEFORE" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
             switch (p)
             {
@@ -166,8 +166,8 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
             while (0);
             if (DEBUG)
             {
-                cout << "func_2 : AFTER" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_2 : AFTER" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
         }
         else root = W;
@@ -179,7 +179,7 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
         if (P[1]->data.type == Token::Type::Integer || P[1]->data.type == Token::Type::Real || P[1]->data.type == Token::Type::Number)
         {
             double m;
-            variant<string, int, double> Q = P[1]->data.GetValue();
+            std::variant<std::string, int, double> Q = P[1]->data.GetValue();
             if (holds_alternative<int>(Q)) m = get<int>(Q);
             else if (holds_alternative<double>(Q)) m = get<double>(Q);
             if (m > 0)
@@ -188,8 +188,8 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
                 Algebra_Node& K = *parent;
                 if (DEBUG)
                 {
-                    cout << "func_2 : BEFORE" << endl;
-                    Print_Tree_Selected_R(root, currentNode, "", false, false);
+                    std::cout << "func_2 : BEFORE" << std::endl;
+                    Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
                 }
                 if (!(currentNode == root))
                 {
@@ -205,8 +205,8 @@ void func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
                 currentNode = parent;
                 if (DEBUG)
                 {
-                    cout << "func_2 : AFTER" << endl;
-                    Print_Tree_Selected_R(root, currentNode, "", false, false);
+                    std::cout << "func_2 : AFTER" << std::endl;
+                    Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
                 }
             }
 
@@ -228,8 +228,8 @@ void func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
         if (!(currentNode == root)) {
             if (DEBUG)
             {
-                cout << "func_3 : BEFORE" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_3 : BEFORE" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
             switch (p) {
             case 'L': {
@@ -243,8 +243,8 @@ void func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
             }
             if (DEBUG)
             {
-                cout << "func_3 : AFTER" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_3 : AFTER" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
         }
         else {
@@ -261,8 +261,8 @@ void func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
         if (!(currentNode == root)) {
             if (DEBUG)
             {
-                cout << "func_3 : BEFORE" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_3 : BEFORE" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
             switch (p) {
             case 'L': {
@@ -277,8 +277,8 @@ void func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
             delete P[1]; // Удаление одного узла - единичного делителя.
             if (DEBUG)
             {
-                cout << "func_3 : AFTER" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_3 : AFTER" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
         }
         else {
@@ -311,8 +311,8 @@ void func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
         {
             if (DEBUG)
             {
-                cout << "func_4 : BEFORE" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_4 : BEFORE" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
             switch (p)
             {
@@ -329,8 +329,8 @@ void func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
             }
             if (DEBUG)
             {
-                cout << "func_4 : AFTER" << endl;
-                Print_Tree_Selected_R(root, currentNode, "", false, false);
+                std::cout << "func_4 : AFTER" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
         }
         else root = P[k];
@@ -354,9 +354,9 @@ Algebra_Node* simplify_F(Algebra_Node* root)
     if ( root == nullptr)
         return nullptr;
 
-    stack<Algebra_Node*> st;
-    stack<char> lr_st;
-    stack<Algebra_Node*> parents;
+    std::stack<Algebra_Node*> st;
+    std::stack<char> lr_st;
+    std::stack<Algebra_Node*> parents;
     st.push(root);
     lr_st.push('0');
     parents.push(root);
@@ -374,8 +374,8 @@ Algebra_Node* simplify_F(Algebra_Node* root)
         Algebra_Node* R = root;
         if (DEBUG)
         {
-            cout << "simplify_F : BEFORE : " << j <<  endl;
-            Print_Tree_Selected_R(root , currentNode, "" , false , false);
+            std::cout << "simplify_F : BEFORE : " << j <<  std::endl;
+            Print_Tree_R_ColoredSelectNode(root , currentNode, "" , false , false);
         }
         if (CE(currentNode->data.value, "*")) func_1(currentNode, parent, p , R); // Правила 1 , 4.
         if (CE(currentNode->data.value, "^")) func_2(currentNode, parent, p , R); // Правила 2 , 7 , 8.
@@ -383,8 +383,8 @@ Algebra_Node* simplify_F(Algebra_Node* root)
         if (CE(currentNode->data.value, "+") || CE(currentNode->data.value, "-")) func_4(currentNode, parent, p , R); // Правило 5.
         if (DEBUG)
         {
-            cout << "simplify_F : AFTER : " << j << endl;
-            Print_Tree_Selected_R(root, currentNode, "", false, false);
+            std::cout << "simplify_F : AFTER : " << j << std::endl;
+            Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
         }
         j++;
         if (currentNode->left != nullptr)

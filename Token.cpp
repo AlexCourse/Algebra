@@ -2,6 +2,8 @@
 #include <regex>
 #define DEBUG 1
 
+using namespace std;
+
 Token::Token() : type(Type::Unknown), value(""), precedence(-1), rightAssociative(false) {}
 
 Token::Token(Type t, const string& s, int prec, bool ra) : type(t), value(s), precedence(prec), rightAssociative(ra) {}
