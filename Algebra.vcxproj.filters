@@ -30,7 +30,7 @@
     <ClCompile Include="PrintColourConsole.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Shanting_yard.cpp">
+    <ClCompile Include="Shunting_yard.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="simplify.cpp">
@@ -59,7 +59,7 @@
     <ClInclude Include="PrintColourConsole.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Shanting_yard.h">
+    <ClInclude Include="Shunting_yard.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="simplify.h">

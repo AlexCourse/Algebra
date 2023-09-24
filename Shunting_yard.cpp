@@ -1,4 +1,4 @@
-#include "Shanting_yard.h"
+#include "Shunting_yard.h"
 #include "PrintColourConsole.h"
 #include <iostream>
 #include <vector>

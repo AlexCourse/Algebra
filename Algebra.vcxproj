@@ -146,7 +146,7 @@
     <ClCompile Include="Derivate.cpp" />
     <ClCompile Include="Enumerate.cpp" />
     <ClCompile Include="PrintColourConsole.cpp" />
-    <ClCompile Include="Shanting_yard.cpp" />
+    <ClCompile Include="Shunting_yard.cpp" />
     <ClCompile Include="simplify.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="vector_cl.cpp" />
@@ -157,7 +157,7 @@
     <ClInclude Include="Derivate.h" />
     <ClInclude Include="Enumerate.h" />
     <ClInclude Include="PrintColourConsole.h" />
-    <ClInclude Include="Shanting_yard.h" />
+    <ClInclude Include="Shunting_yard.h" />
     <ClInclude Include="simplify.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="vector_cl.h" />

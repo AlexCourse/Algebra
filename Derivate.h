@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Algebra_Node.h"
-#include "Shanting_yard.h"
+#include "Shunting_yard.h"
 #include "Enumerate.h"
 #include <ratio>
 

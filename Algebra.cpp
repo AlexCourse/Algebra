@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <deque>
 #include "algebra_node.h"
-#include "Shanting_yard.h"
+#include "Shunting_yard.h"
 #include "Algebra.h"
 #include "Derivate.h"
 #include "simplify.h"
@@ -10,7 +10,7 @@
 
 #define M_PI 3.1415926535897932384626
 
-#define DEBUG 1
+#define DEBUG 0
 
 enum Type_expr { // 
 	NUMBER,

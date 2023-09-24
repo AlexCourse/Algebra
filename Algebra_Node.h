@@ -9,7 +9,7 @@
 #include <set>
 #include "token.h"
 #include "Enumerate.h"
-#include "Shanting_yard.h"
+#include "Shunting_yard.h"
 
 // #include <windows.h> // Для цветного консольного вывода.
 
