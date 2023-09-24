@@ -129,11 +129,14 @@
   <ItemGroup>
     <ClCompile Include="Algebra.cpp" />
     <ClCompile Include="Algebra_Node.cpp" />
+    <ClCompile Include="Derivate.cpp" />
     <ClCompile Include="Shunting_yard.cpp" />
     <ClCompile Include="Token.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Algebra.h" />
     <ClInclude Include="Algebra_Node.h" />
+    <ClInclude Include="Derivate.h" />
     <ClInclude Include="Shanting_yard.h" />
     <ClInclude Include="Token.h" />
   </ItemGroup>
