@@ -43,4 +43,5 @@ string TokensToStr(deque<Token> fh);
 deque<Token> exprToTokens(const string& expr);
 void Tokenize_u_minus(deque<Token>& fh);
 deque<Token> shuntingYard(const deque<Token>& tokens);
+double PolishCalculation(deque<Token> es);
 #endif

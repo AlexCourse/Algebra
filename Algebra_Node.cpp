@@ -373,6 +373,99 @@ void TreeExprReplaceW(Algebra_Node* root ,const string c , const string s) { // 
     }
 }
 
+void TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Algebra_Node* second)
+{
+    if (first == nullptr)
+        return;
+
+    stack<Algebra_Node*> st;
+    stack<char> lr_st;
+    stack<Algebra_Node*> parents;
+    st.push(first);
+    lr_st.push('0');
+    parents.push(first);
+
+    while (!st.empty()) {
+        Algebra_Node* currentNode = st.top();
+        Algebra_Node* parent = parents.top();
+        char p = lr_st.top();
+        st.pop();
+        lr_st.pop();
+        parents.pop();
+
+        if (currentNode->data.str == c)
+        {
+             Algebra_Node& Q = *parent;
+             switch (p)
+             {
+                case 'L': { Q.addLeftNode(second); break; }
+                case 'R': { Q.addRightNode(second); break; }
+             }
+        }
+
+        if (currentNode->left != nullptr)
+        {
+            lr_st.push('L');
+            parents.push(currentNode);
+            st.push(currentNode->left);
+        }
+        if (currentNode->right != nullptr)
+        {
+            lr_st.push('R');
+            parents.push(currentNode);
+            st.push(currentNode->right);
+        }
+    }
+}
+
+void TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const string c, Algebra_Node* second)
+{
+    if (first == nullptr) {
+        return;
+    }
+
+    queue<Algebra_Node*> fs;
+    queue<char> lr_fs;
+    queue<Algebra_Node*> parents;
+    fs.push(first);
+    lr_fs.push('0');
+    parents.push(first);
+
+    while (!fs.empty()) {
+        Algebra_Node* currentNode = fs.front();
+        Algebra_Node* parent = parents.front();
+        char p = lr_fs.back();
+        fs.pop();
+        lr_fs.pop();
+        parents.pop();
+
+        if (currentNode->data.str == c)
+        {
+            Algebra_Node& Q = *parent;
+            switch (p)
+            {
+                case 'L': { Q.addLeftNode(second); break; }
+                case 'R': { Q.addRightNode(second); break; }
+            }
+        }
+
+
+        if (currentNode->left != nullptr) 
+        {
+            lr_fs.push('L');
+            parents.push(currentNode);
+            fs.push(currentNode->left);
+        }
+
+        if (currentNode->right != nullptr)
+        {
+            lr_fs.push('R');
+            parents.push(currentNode);
+            fs.push(currentNode->right);
+        }
+    }
+}
+
 bool CompareTrees(Algebra_Node* root1, Algebra_Node* root2) {
     // Если оба дерева пусты, то они равны
     if (root1 == nullptr && root2 == nullptr) {
@@ -612,7 +705,7 @@ bool Is_Algebric() // Реализовать с использованием итератора по дереву.
     return true;
 }
 
-Algebra_Node* SetNode(string s)
+Algebra_Node* SetNode(const string s)
 {
     Token T = SetToken(s);
     Algebra_Node* node = new Algebra_Node(T);
@@ -626,7 +719,7 @@ Algebra_Node* SetNode(int m)
     return node;
 }
 
-Algebra_Tree& SetAlgebricTree(string s)
+Algebra_Tree& SetAlgebricTree(const string s)
 { // Функция на вход получаем выражение в инфиксной записи, а на выходе деренво алгебраического выражения.
     deque<Token> fh, eh;
     fh = exprToTokens(s);
@@ -637,3 +730,63 @@ Algebra_Tree& SetAlgebricTree(string s)
     Algebra_Tree& T = *tree;
     return T;
 }
+
+Algebra_Node* SetOperatorTree(const string s)
+{
+    deque<Token> fh, eh;
+    fh = exprToTokens(s);
+    Tokenize_u_minus(fh);
+    eh = shuntingYard(fh);
+    Algebra_Node* root = PolishToTree(eh);
+    return root;
+}
+
+void Algebra_Tree::TreeRExprReplaceOnSubTreeW_T(const string c, Algebra_Node* second)
+{
+    Algebra_Node* root = this->root;
+    TreeRExprReplaceOnSubTreeW(root, c, second);
+}
+
+void Algebra_Tree::TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* second)
+{
+    Algebra_Node* root = this->root;
+    TreeRExprReplaceOnSubTreeD(root, c, second);
+}
+
+deque<Token> FToPolish(string expr)
+{
+    deque<Token> fh, eh;
+    fh = exprToTokens(expr);
+    Tokenize_u_minus(fh);
+    eh = shuntingYard(fh);
+    return eh;
+}
+/*
+float FunctionValue(string expr, map<string, float> ds)
+{ // Вычислить значение функции заданной строкой с параметрами заданными в словаре где ключ - имя переменной, а значение - ее значение.
+    Algebra_Node* root = SetOperatorTree(expr);
+    
+    map<string, float>::iterator iter;
+    for (iter = ds.begin(); iter != ds.end(); iter++)
+    {
+        string p = iter->first;
+        TreeExprReplaceD(root ,p, to_string(ds[p]));
+    }
+    Algebra_Tree* T = new Algebra_Tree(root);
+    Algebra_Tree& tree = *T;
+    if (tree.Is_Numeric())
+    { 
+        deque<Token> kh;
+        TreeToPolish(root , kh);
+        float r = PolishCalculation(kh);
+        return r;
+    }
+    else
+    {
+        cout << "error" << endl;
+        return 0;
+    }
+
+}
+
+*/

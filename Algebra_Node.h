@@ -46,6 +46,8 @@ class Algebra_Tree {
         void FindValueW_T(string c, vector<vector<char>>& paths);
         void Print_Tree_T();
         void TreeToPolish_T();
+        void TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* second);
+        void TreeRExprReplaceOnSubTreeW_T(const string c, Algebra_Node* second);
         typedef Algebra_Tree iterator;
         // ~Algebra_Tree(); // chat 
 
@@ -75,7 +77,12 @@ void TreeToPolish(Algebra_Node* root, deque<Token>& kh);
 bool Is_Algebric();
 bool Is_Numeric();
 Algebra_Node* SetNode(int m);
-Algebra_Node* SetNode(string s);
-Algebra_Tree& SetAlgebricTree(string s);
+Algebra_Node* SetNode(const string s);
+Algebra_Tree& SetAlgebricTree(const string s);
+Algebra_Node* SetOperatorTree(const string s);
+void TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Algebra_Node* second);
+void TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const string c, Algebra_Node* second);
+deque<Token> FToPolish(string expr);
+float FunctionValue(string expr, map<string, float> ds);
 
 #endif

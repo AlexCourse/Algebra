@@ -325,9 +325,48 @@ void test_13() // Тестирование функции SetAlgebricTree()
 	T.Print_Tree_T();
 }
 
+void test_14()
+{  // Тестирование функции TreeRExprReplaceOnSubTreeD()
+	string s;
+	s = "3*(x+c)+c*x^2*(x-c)+8*x*c"; 
+	s = "4*x^2*(x^2-c^2)+3*x*(x-c/x)";
+	s = "(x-c)^2";
+	// s = "x-c";
+	Algebra_Tree& first_tree = SetAlgebricTree(s);
+	s = "x+3";
+	Algebra_Node*  node = SetOperatorTree(s);
+	string f = "c";
+	first_tree.Print_Tree_T();
+	first_tree.TreeRExprReplaceOnSubTreeD_T(f, node);
+	for (int i = 0; i < 42; i++) cout << '=';
+	cout << endl;
+	first_tree.Print_Tree_T();
+}
+
+void test_15()
+{  // Тестирование функции TreeRExprReplaceOnSubTreeW()
+	string s;
+	s = "3*(x+c)+c*x^2*(x-c)+8*x*c";
+	s = "4*x^2*(x^2-c^2)+3*x*(x-c/x)";
+	s = "(x-c)^2*x*c +3*c";
+	// s = "(x-c)^2";
+	// s = "x-c";
+	Algebra_Tree& first_tree = SetAlgebricTree(s);
+	string t = "x+3";
+	Algebra_Node* node = SetOperatorTree(t);
+	string f = "c";
+	first_tree.Print_Tree_T();
+	first_tree.TreeRExprReplaceOnSubTreeW_T(f, node);
+	for (int i = 0; i < 42; i++) cout << '=';
+	cout << endl;
+	first_tree.Print_Tree_T();
+
+}
+
+
 int main() {
 
-	const int n = 13;
+	const int n = 7;
 	switch (n)
 	{
 	    case 1: test_1();
@@ -343,5 +382,7 @@ int main() {
 		case 11: test_11();
 		case 12: test_12();
 		case 13: test_13();
+		case 14: test_14();
+		case 15: test_15();
 	}	
 }

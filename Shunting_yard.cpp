@@ -90,7 +90,7 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 	return queue;
 }
 
-double PolishCalculation(std::deque<Token> es) {
+double PolishCalculation(deque<Token> es) {
 	vector<float> stack;
 	vector<char> cst;
 
