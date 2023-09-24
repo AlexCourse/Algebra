@@ -87,9 +87,8 @@ bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
             }
         }
         else root = P[k];
-        k = (k + 1) % 2; // 1-> 0 , 0 -> 1
-        // delete P[k]; // Удаление одного узла нулевого слагаемого.
-        RecursiveDestructor(P[k]);
+        k = (k + 1) % 2; // 1-> 0 , 0 -> 1 
+        delete P[k];  // Удаление одного узла нулевого слагаемого.
         free(R);
         R = nullptr;
         while (0);

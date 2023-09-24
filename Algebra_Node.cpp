@@ -1006,7 +1006,6 @@ void deleteBinaryTree(Algebra_Node* node) {
     if ( node->right != nullptr) deleteBinaryTree(node->right);
     // Удаляем текущий узел
     delete node;
-    node = nullptr;
 }
 
 void RecursiveDestructor(Algebra_Node* root)
