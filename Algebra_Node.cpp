@@ -80,6 +80,7 @@ void Print_Tree(Algebra_Node const* node, string const& prefix = "", bool root =
 
 
 Algebra_Node* PolishToTree(deque<Token> fh) {
+    // Перевод выражения в формате Обратной Польской нотации в формате дерева выражения
     vector<Algebra_Node*> fs;
     for (Token p : fh) {
         Algebra_Node* T = new Algebra_Node(p);
@@ -154,7 +155,7 @@ deque<T> ReverseVector(deque<T>& fh) {
 }
 // ========================================================================================================================
 
-void BypassTreeD(Algebra_Node* root) {
+void BypassTreeD(Algebra_Node* root) { // Отладочная функция : обход дерева в глубину без рекурсии и печать всех элементов.
     if (root == nullptr)
         return;
 
@@ -174,7 +175,7 @@ void BypassTreeD(Algebra_Node* root) {
     }
 }
 
-void BypassTreeW(Algebra_Node* root) { // Обход дерева в ширину без рекурсии.
+void BypassTreeW(Algebra_Node* root) {  // Отладочная функция : обход дерева в ширину без рекурсии и печать всех элементов.
     if (root == nullptr) {
         return;
     }
@@ -208,7 +209,7 @@ void Print_stack(stack<char> st)
 }
 
 void FindValueD(Algebra_Node* root, string c, vector<vector<char>>& paths) { // 
-    // Первая переменная - корень дерева. с - искомое значение, paths - все найденные пути для этого значения.
+    // Первая переменная - корень дерева. с - искомое значение, paths - все найденные пути в дереве для этого значения.
     if (root == nullptr) {
         return;
     }
@@ -264,7 +265,7 @@ void FindValueD(Algebra_Node* root, string c, vector<vector<char>>& paths) { //
 
 
 void FindValueW(Algebra_Node* root, string c, vector<vector<char>>& paths) { // 
-    // Первая переменная - корень дерева. с - искомое значение, paths - все найденные пути для этого значения.
+    // Первая переменная - корень дерева. с - искомое значение, paths - все найденные пути в дереве для этого значения.
     if (root == nullptr) {
         return;
     }
@@ -336,6 +337,9 @@ void Algebra_Tree::FindValueW_T(string c, vector<vector<char>>& paths)
 // ===========================================================================================================================
 Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const variant<string, char, int, double, Token::Function> value) {
     // Возвращает копию дерева с замененными значениями.
+    // root - корень дерева.
+    // c - значение которое заменяем.
+    // value - значение , которым заменяем.
     if (root == nullptr) {
         return nullptr;
     }
@@ -361,7 +365,10 @@ Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const variant
 
 
 Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const string c, const variant<string, char, int, double, Token::Function> s) {
-    // Возвращение копии дерева с заменой.
+    // Возвращает копию дерева с замененными значениями.
+    // root - корень дерева.
+    // c - значение которое заменяем.
+    // value - значение , которым заменяем.
     if (root == nullptr) {
         return nullptr;
     }
@@ -418,7 +425,7 @@ Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const string c, const variant
 
     return root;
 }
-// Отделение области перегруженных функций.
+
 // ============================================================================================================================================================
 Algebra_Tree& Algebra_Tree::TreeExprReplaceD_T(const string c, const variant<string, char, int, double, Token::Function> value)
 {
@@ -478,7 +485,10 @@ Algebra_Tree& const Algebra_Tree::CopyTree() {
 
 
 Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Algebra_Node* second, Debug_concept& W)
-{
+{ // Замена найденного элемента на поддерево.
+  // first - корень дерева ,в котором ищется элемент.
+  // с - найденный элемент.
+    // second - поддерево на которое заменяем.
     if (first == nullptr)
         return nullptr;
 
@@ -545,7 +555,10 @@ Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Al
 }
 
 Algebra_Node* TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const string c, Algebra_Node* second, Debug_concept& W)
-{
+{ // Замена найденного элемента на поддерево.
+  // first - корень дерева ,в котором ищется элемент.
+  // с - найденный элемент.
+    // second - поддерево на которое заменяем.
     if (first == nullptr) {
         return nullptr;
     }
@@ -636,6 +649,7 @@ void Algebra_Tree::TreeRExprReplaceOnSubTreeW_T(const std::string c, Algebra_Nod
 }
 
 bool CompareTrees(Algebra_Node* root1, Algebra_Node* root2) {
+    // Функция рекурсивного сравнения двух деревьев на равенство.
     // Если оба дерева пусты, то они равны
     if (root1 == nullptr && root2 == nullptr) {
         return true;
@@ -911,7 +925,7 @@ void Algebra_Tree::TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* se
 }
 
 double FunctionValue(Algebra_Node* root, double value, string symbol)
-{ // Подстановка в функцию заданную деревом.
+{ // Подстановка в выражение функции от х заданной деревом числонного значения аргумента x.
     const bool LOCAL_DEBUG = false;
     if (LOCAL_DEBUG)
     {
@@ -979,7 +993,7 @@ double FunctionValueM(string expr, map<string, double>& ds)
 }
 
 string TreeToInfix(Algebra_Node* root)
-{
+{ // Перевод выражения заданного деревом в инфиксную запись этого выражения.
     deque<Token> fh, eh;
     TreeToPolish(root, fh);
     string s = PostfixToInfix(fh);

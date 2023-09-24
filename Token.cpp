@@ -304,7 +304,7 @@ bool f_arg(const Token& T) {
 		return false;
 }
 
-bool f_opr_two(const Token& T) {
+bool f_opr_two(const Token& T) { // Проверка является ли операторатором с двумя операндами
 	Token token = T;
 	bool B = false;
 	if (T.type == Token::Type::Operator)
@@ -322,7 +322,7 @@ bool f_opr_two(const Token& T) {
 	return B;
 }
 
-bool f_opr_one(const Token& T) {
+bool f_opr_one(const Token& T) { // Проверка является ли оператором с одним операндом.
 	Token token = T;
 	bool B = true;
 	if (T.type == Token::Type::Operator)
@@ -341,7 +341,7 @@ bool f_opr_one(const Token& T) {
 }
 
 
-bool f_opr_free(const Token& T) {
+bool f_opr_free(const Token& T) { // Проверка является ли оператором с тремя операндами.
 	Token token = T;
 	string p = token.ToString();
 	if (func_info_free.count(p)) {
@@ -365,7 +365,7 @@ Token::~Token() {
 }
 
 bool CE(const variant<string, char, int, double, Token::Function> value, const string s)
-{
+{ 
 	if (holds_alternative<string>(value))
 	{
 		if (get<string>(value) == s) return true;
@@ -443,7 +443,7 @@ int CompareString(string s, string f)
 
 deque<Token> exprToTokens(const string& expr, int& index, BW& C, string q = "DEFAULT") {
 	// q принимает 2 значения - DEFAULT и ORDERING.
-	// Ошибки генерируемые функцией - слишком большое целое или вещественное число.
+	// Ошибки генерируемые функцией - слишком длинная строковая запись целого или вещественного числа.
 	deque<Token> tokens;
 	deque<tuple<int, int>> positions;
 	deque<tuple<int, int>> ks;
@@ -462,7 +462,6 @@ deque<Token> exprToTokens(const string& expr, int& index, BW& C, string q = "DEF
 			if (c == '.')
 			{
 				int pr = -1;
-				// tokens.push_back(Token{ Token::Type::Unknown, string(p, p), index++ , int(b-c_begin) , int(p-c_begin) , pr , false });
 				tokens.push_back(Token{ Token::Type::Unknown, string(p, p), index++ , j , i , pr , false });
 				positions.push_back(make_tuple(j, i));
 				cout << "Неверная запись десятичного числа" << endl;
@@ -479,7 +478,6 @@ deque<Token> exprToTokens(const string& expr, int& index, BW& C, string q = "DEF
 			const string s = string(b, p);
 			if (t == Token::Type::Integer)
 			{
-				// tokens.push_back(Token{ t, m , index++ , int(b - c_begin) , int(p - c_begin) });
 				string f = to_string(INT_MAX);
 				int r = CompareString(s, f);
 				if (r >= 0)
@@ -499,7 +497,6 @@ deque<Token> exprToTokens(const string& expr, int& index, BW& C, string q = "DEF
 				if (s.size() <= 308)
 				{
 					double m = stod(s);
-					// tokens.push_back(Token{ t, m , index++ , int(b - c_begin) , int(p - c_begin) });
 					tokens.push_back(Token{ t, m , index++ , j , i });
 					positions.push_back(make_tuple(j, i));
 				}
@@ -527,13 +524,11 @@ deque<Token> exprToTokens(const string& expr, int& index, BW& C, string q = "DEF
 				int u_last = p - c_begin;
 				if (func_info.count(s))
 				{
-					// tokens.push_back(Token{ Token::Type::Function, func_name[s] , index++ , u_start , u_last });
 					tokens.push_back(Token{ Token::Type::Function, func_name[s] , index++ , j , i });
 					positions.push_back(make_tuple(j, i));
 				}
 				else
 				{
-					// tokens.push_back(Token{ Token::Type::Algebra, s , index++ , u_start , u_last , -1 , false });
 					tokens.push_back(Token{ Token::Type::Algebra, s , index++ , j , i , -1 , false });
 					positions.push_back(make_tuple(j, i));
 				}
@@ -545,7 +540,6 @@ deque<Token> exprToTokens(const string& expr, int& index, BW& C, string q = "DEF
 			else if (c == ',')
 			{
 				string s = string(p, p + 1);
-				// tokens.push_back(Token{ Token::Type::Comma , c , index++ , int(p - c_begin) , int(p - c_begin + 1) , -1 , false });
 				tokens.push_back(Token{ Token::Type::Comma , c , index++ , i , i + 1, -1 , false });
 				positions.push_back(make_tuple(i, i + 1));
 			}
@@ -570,7 +564,6 @@ deque<Token> exprToTokens(const string& expr, int& index, BW& C, string q = "DEF
 					pr = operator_info[c].precedence;
 					ra = !(operator_info[c].associativity == 'L');
 				}
-				// tokens.push_back(Token{ t, c, index++ ,  u_start , u_last , pr, ra });
 				tokens.push_back(Token{ t, c, index++ , i , i + 1, pr , ra });
 				positions.push_back(make_tuple(i, i + 1));
 				while (0); // Для точки останова.
@@ -630,8 +623,8 @@ Token _SetToken(const double m, int& index)
 }
 
 
-Token _SetToken(const string& expr, int& index) // фунция возвращает первый токен , если их несколько.
-{ // Или можно передать одно отрицательное число.
+Token _SetToken(const string& expr, int& index) // Функция возвращает единственный токен, или первый если при токенизации их получается несколько.
+{ //В качестве параметра expr можно передать одно действительное число..
 	int n = expr.size();
 	if (n == 1)
 	{
@@ -693,7 +686,7 @@ Token _SetToken(const string& expr, int& index) // фунция возвращает первый токе
 				else {
 					Token::Type t = Token::Type::Unknown;
 					int pr = -1;            // приоритет
-					bool ra = false;        // rightAssociative
+					bool ra = false;        // Правоассоциативность
 					bool is_operator = false;
 					switch (c) {
 					default:                                    break;
@@ -711,7 +704,6 @@ Token _SetToken(const string& expr, int& index) // фунция возвращает первый токе
 						pr = operator_info[c].precedence;
 						ra = !(operator_info[c].associativity == 'L');
 					}
-					// const auto s = string(1, c);
 					Token T = Token{ t, c, index++ , pr, ra };
 					return T;
 				}
@@ -900,10 +892,10 @@ void Tokenize_u_minus(deque<Token>& fh) {
 						int m = fh.size();
 						for (iter = fh.begin(), i = 0; iter != fh.end(); iter++, i++) { cout << i << ":" << *(iter) << endl; }
 						r = TokensToStr(fh);
-						tie(i, j) = make_pair(16, 19); // Данные для настройки.
+						tie(i, j) = make_pair(16, 19); // Данные для отладки
 						Token T_5 = *(start + i);
 						Token T_6 = *(start + j);
-						ls.erase(start + i, start + j); // Функция странно удаляет
+						ls.erase(start + i, start + j); // 
 						string f = TokensToStr(ls);
 						int l = 5;
 						for (i = 0; i < m - l - 1; i++)
@@ -916,7 +908,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 						}
 						while (0);
 					}
-					fh.erase(start + p, start + p + 4); // Функция странно удаляет
+					fh.erase(start + p, start + p + 4); //
 					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;
 					fh.insert(fh.begin() + p, T_2); // fh.insert(start + p, T_2);
@@ -979,7 +971,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 					fh.pop_front();
 					deque<Token> es = exprToTokens("(-1)*a");
 					es.pop_back();
-					es.push_back(T_1); // Замена символа a вставка в начало.
+					es.push_back(T_1); // 
 					fh.insert(fh.begin(), T_1);
 					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;

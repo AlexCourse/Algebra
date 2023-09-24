@@ -295,7 +295,7 @@ bool CheckValueOfOperatorException(char c, double p , double q)
 
 
 double PolishCalculation(deque<Token> es)
-{
+{ // Вычисление значения численного выражения в формате Обратной Польской Нотации.
 	stack<double> st;
 	vector<string> cst;
 	string s;
@@ -419,7 +419,6 @@ double PolishCalculation(deque<Token> es)
 			cout << " Token error" << endl;
 			// exit(0);
 		}
-
 	}
 	return st.top();
 
@@ -552,7 +551,6 @@ double PolishCalculation(const vector<Token> es)
 			printf("Token error\n");
 			// exit(0);
 		}
-
 	}
 	return st.top();
 
