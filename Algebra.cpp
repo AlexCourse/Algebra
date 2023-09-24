@@ -10,7 +10,7 @@
 
 #define M_PI 3.1415926535897932384626
 
-#define DEBUG 0
+#define DEBUG 1
 
 enum Type_expr { // 
 	NUMBER,
@@ -1156,7 +1156,7 @@ void test_32()
 
 void Verify() {
 
-	const int n = 10;  // 27 
+	const int n = 7;  // 27 
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +

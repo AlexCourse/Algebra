@@ -133,13 +133,12 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 	return eh;
 }
 
-bool Out_Deffinition_Scope_DIV(double p, double q)
-{ // p / q
+bool Out_Deffinition_Scope_DIV(double p, double q){
 	if (q != 0) return false;
 	else return true;
 }
 
-bool Out_Deffinition_Scope_POW(double p, double q)
+bool Out_Deffinition_Scope_POW(double p, const double q)
 { // p ^ q
 	if (p == 0 and q <= 0) return true;
 	else return false;
@@ -249,21 +248,21 @@ map< Token::Function, string > rFunc_name =
 };
 
 
-void PrintFuncInfoException(Token::Function c)
+void PrintFuncInfoException(const Token::Function c)
 {
 	string f = rFunc_name[c]; // Добавить вывод красным цветом.
 	string s = "The argument of the function" + f + "outside the scope of definition";
 	PrintColorText(s, 12);
 }
 
-void PrintFuncInfoException(char c)
+void PrintFuncInfoException(const char c)
 {
 	string f = string(1, c);
 	string s = "The argument of the function" + f + "outside the scope of definition";
 	PrintColorText(s, 12);
 }
 
-bool CheckValueOfFunctionException(Token::Function c, double x)
+bool CheckValueOfFunctionException(const Token::Function c, const double x)
 {
 	bool B = true;
 	switch (c)

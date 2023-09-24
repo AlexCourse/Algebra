@@ -992,7 +992,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 
 
 
-string TokensToStr(deque<Token> fh)
+string TokensToStr(const deque<Token> fh)
 {
 	string s = "";
 	for (Token token : fh)

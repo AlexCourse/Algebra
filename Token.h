@@ -128,7 +128,7 @@ bool CE(const std::variant<std::string, char, int, double, Token::Function> valu
 Token SetToken(const std::variant<std::string, char, int, double, Token::Function> value);
 Token SetToken(const std::variant<std::string, char, int, double, Token::Function> value, int& index);
 
-std::string TokensToStr(std::deque<Token> fh);
+std::string TokensToStr(const std::deque<Token> fh);
 std::deque<Token> exprToTokens(const std::string& expr);
 std::deque<Token> exprToTokens(const std::string& expr, BW& C);
 std::deque<Token> exprToTokens(const std::string& expr, int& index, std::string q);
