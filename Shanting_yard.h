@@ -9,6 +9,7 @@
 
 
 std::deque<Token> FToPolish(std::string expr);
+std::deque<Token> FToPolishI(std::string expr, int& index);
 double FunctionValue(std::deque<Token> fh, double value, std::string symbol);
 double FunctionValue(std::vector<Token> fh, double value, std::string symbol);
 std::vector<Token> ReplaceElementInPolish(std::vector<Token> fh, double x, std::string symbol);

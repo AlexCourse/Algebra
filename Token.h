@@ -33,12 +33,19 @@
         std::variant<std::string, int, double> value;
         const int precedence;
         const bool rightAssociative;
+        const int index;
 
         Token();
         Token(Type t, const std::string& s, int prec = -1, bool ra = false);
         Token(const Token& other);
         Token(Type t, const int m);
         Token(Type t, const double m);
+
+        Token(Type t, const std::string& s, int index ,int prec = -1, bool ra = false);
+        Token(Type t, const std::string& s, int index);
+        Token(const Token& other, int index);
+        Token(Type t, const int m, int index);
+        Token(Type t, const double m, int index);
         Token operator=(const Token& other);
         bool operator==(const Token& other);
         bool operator == (const int m);
@@ -68,6 +75,7 @@
 
     std::string TokensToStr(std::deque<Token> fh);
     std::deque<Token> exprToTokens(const std::string& expr);
+    std::deque<Token> exprToTokens(const std::string& expr , int& index , std::string q);
     void Tokenize_u_minus(std::deque<Token>& fh);
     std::deque<Token> shuntingYard(const std::deque<Token>& tokens);
     double PolishCalculation(std::deque<Token> es);

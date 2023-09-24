@@ -83,6 +83,7 @@ Algebra_Node* SetNode(int m);
 Algebra_Node* SetNode(const std::string s);
 Algebra_Tree& SetAlgebricTree(const std::string s);
 Algebra_Node* SetOperatorTree(const std::string s);
+Algebra_Node* SetOperatorTree(const std::string s , int& index , std::string q);
 
 Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const std::string c, Algebra_Node* second);
 Algebra_Node* TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const std::string c, Algebra_Node* second);

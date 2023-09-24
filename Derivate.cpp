@@ -11,6 +11,8 @@
 
 using namespace std;
 
+int order_t = 0;
+
 Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['+' , '-' ]
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
@@ -2673,15 +2675,20 @@ Algebra_Node* func_23a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	return T;
 }
 
+struct Debug_concept
+{
+	int call_order; // принимает значение 0 или 1., значение 1 окрашенное.
+	set<int> first_colored;
+	set<int> second_colored;
+};
 
-
-Algebra_Node* DerivateFunc(Algebra_Node* root) // —ледить , чтобы у каждой ветви было возвращающие значение.
+Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept W) // —ледить , чтобы у каждой ветви было возвращающие значение.
 {
 	Token& T = root->data;
 	if (T.type == Token::Type::Algebra)
 	{
 		int m;
-		if (get<string>(T.value) == X)  m = 1;
+		if (T.ToString() == X)  m = 1;
 		else m = 0;
 		Algebra_Node* node = SetNode(m);
 		return node;
@@ -2697,7 +2704,8 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // —ледить , чтобы у каждой ветви
 		Algebra_Node* D[2]; // —юда сохран€ютс€ соответствующие производные этих операндов.
 		P[0] = root->left;
 		P[1] = root->right;
-		for (int i = 0; i < 2; i++) D[i] = DerivateFunc(P[i]);
+		if (DEBUG) W.call_order ^= 1; // выполн€ем инвертирование.
+		for (int i = 0; i < 2; i++) D[i] = DerivateFunc(P[i] , W);
 		string v;
 		if (DEBUG)
 		{
@@ -2738,7 +2746,8 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // —ледить , чтобы у каждой ветви
 		Algebra_Node* P[1]; // —юда сохран€ютс€ первый и второй операнд.
 		Algebra_Node* D[1]; // —юда сохран€ютс€ соответствующие производные этих операндов.
 		P[0] = root->left;
-		D[0] = DerivateFunc(P[0]);
+		if (DEBUG) W.call_order ^= 1; // выполн€ем инвертирование.
+		D[0] = DerivateFunc(P[0] , W);
 		string v;
 		if (DEBUG)
 		{
@@ -2785,6 +2794,14 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // —ледить , чтобы у каждой ветви
 		return node;
 	}
 
+}
+
+Algebra_Node* DerivateFunction(Algebra_Node* root)
+{
+	Debug_concept W = Debug_concept();
+	W.call_order = 0;
+	Algebra_Node* second_root = DerivateFunc(root , W);
+	return second_root;
 }
 
 

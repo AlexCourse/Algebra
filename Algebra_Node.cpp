@@ -894,7 +894,7 @@ Algebra_Tree& SetAlgebricTree(const string s)
     return T;
 }
 
-Algebra_Node* SetOperatorTree(const string s)
+Algebra_Node* SetOperatorTree(const string s , int& index , string q)
 {
     deque<Token> fh, eh;
     fh = exprToTokens(s);
@@ -903,6 +903,14 @@ Algebra_Node* SetOperatorTree(const string s)
     Algebra_Node* root = PolishToTree(eh);
     return root;
 }
+
+Algebra_Node* SetOperatorTree(const string s)
+{
+    int index = 0;
+    Algebra_Node* root = SetOperatorTree(s, index, "DEFAULT");
+    return root;
+}
+
 
 void Algebra_Tree::TreeRExprReplaceOnSubTreeW_T(const string c, Algebra_Node* second)
 {

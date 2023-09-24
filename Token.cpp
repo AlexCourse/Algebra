@@ -4,15 +4,28 @@
 
 using namespace std;
 
-Token::Token() : type(Type::Unknown), value(""), precedence(-1), rightAssociative(false) {}
+Token::Token() : type(Type::Unknown), value(""), precedence(-1), rightAssociative(false) , index(0) {}
 
-Token::Token(Type t, const string& s, int prec, bool ra) : type(t), value(s), precedence(prec), rightAssociative(ra) {}
+Token::Token(Type t, const string& s, int prec, bool ra) : type(t), value(s), precedence(prec), rightAssociative(ra) , index(0) {}
 
-Token::Token(Type t, const int m) : type(t), value(m), precedence(-1), rightAssociative(false) {}
+Token::Token(Type t, const int m) : type(t), value(m), precedence(-1), rightAssociative(false) , index(0) {}
 
-Token::Token(Type t, const double m) : type(t), value(m), precedence(-1), rightAssociative(false) {}
+Token::Token(Type t, const double m) : type(t), value(m), precedence(-1), rightAssociative(false) , index(0) {}
 
-Token::Token(const Token& other) : type(other.type), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative) {}
+Token::Token(const Token& other) : type(other.type), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative) , index(other.index) {}
+
+
+
+Token::Token(Type t, const string& s, int index ,int prec, bool ra) : type(t), value(s), precedence(prec), rightAssociative(ra), index(index) {}
+
+Token::Token(Type t, const string& s, int index) : type(t), value(s), precedence(-1), rightAssociative(false), index(index) {}
+
+Token::Token(Type t, const int m, int index) : type(t), value(m), precedence(-1), rightAssociative(false), index(index) {}
+
+Token::Token(Type t, const double m, int index) : type(t), value(m), precedence(-1), rightAssociative(false), index(index) {}
+
+Token::Token(const Token& other, int index) : type(other.type), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative), index(index) {}
+
 
 Token Token::operator=(const Token& other) {
 	return Token(other);
@@ -148,7 +161,8 @@ bool f_arg(const Token& T) {
 }
 
 bool f_opr_two(const Token& T) {
-	string p = get<string>(T.value);
+	Token token = T;
+	string p = token.ToString();
 	if (operator_info_two.count(p) || func_info_two.count(p)) {
 		return true;
 	}
@@ -156,7 +170,8 @@ bool f_opr_two(const Token& T) {
 }
 
 bool f_opr_one(const Token& T) {
-	string p = get<string>(T.value);
+	Token token = T;
+	string p = token.ToString();
 	if (operator_info_one.count(p) || func_info_one.count(p)) {
 		return true;
 	}
@@ -164,7 +179,8 @@ bool f_opr_one(const Token& T) {
 }
 
 bool f_opr_free(const Token& T) {
-	string p = get<string>(T.value);
+	Token token = T;
+	string p = token.ToString();
 	if (func_info_free.count(p)) {
 		return true;
 	}
@@ -215,8 +231,10 @@ bool CE(const variant<string, int, double> value, const double m)
 	else return false;
 }
 
-deque<Token> exprToTokens(const string& expr) {
+deque<Token> exprToTokens(const string& expr , int& index , string q ="DEFAULT") {
+	// q принимает 2 значения - DEFAULT и ORDERING.
 	deque<Token> tokens;
+	if (q == "DEFAULT") index = 0;
 
 	for (const auto* p = expr.c_str(); *p; ++p) {
 		char c = *p;
@@ -228,7 +246,7 @@ deque<Token> exprToTokens(const string& expr) {
 			if (c == '.')
 			{
 				int pr = -1;
-				tokens.push_back(Token{ Token::Type::Unknown, string(p, p), pr,  false });
+				tokens.push_back(Token{ Token::Type::Unknown, string(p, p), index++ ,pr,  false });
 				cout << "Неверная запись десятичного числа" << endl;
 			}
 			Token::Type t = Token::Type::Integer;
@@ -242,12 +260,12 @@ deque<Token> exprToTokens(const string& expr) {
 			if (t == Token::Type::Integer)
 			{
 				int m = stoi(s);
-				tokens.push_back(Token{ t, m });
+				tokens.push_back(Token{ t, m , index++});
 			}
 			else if (t == Token::Type::Real)
 			{
 				double m = stod(s);
-				tokens.push_back(Token{ t, m });
+				tokens.push_back(Token{ t, m , index++});
 			}
 			--p;
 		}
@@ -260,8 +278,8 @@ deque<Token> exprToTokens(const string& expr) {
 					c = *p;
 				}
 				const string s = string(b, p);
-				if (func_info.count(s)) tokens.push_back(Token{ Token::Type::Function, s });
-				else tokens.push_back(Token{ Token::Type::Algebra, s });
+				if (func_info.count(s)) tokens.push_back(Token{ Token::Type::Function, s , index++ ,-1 , false});
+				else tokens.push_back(Token{ Token::Type::Algebra, s , index++ , -1 , false});
 				p--;
 				continue;
 
@@ -269,7 +287,7 @@ deque<Token> exprToTokens(const string& expr) {
 			else if (c == ',')
 			{
 				string s = string(p, p + 1);
-				tokens.push_back(Token{ Token::Type::Comma , s });
+				tokens.push_back(Token{ Token::Type::Comma , s , index++ , -1 , false});
 			}
 			else {
 				Token::Type t = Token::Type::Unknown;
@@ -286,10 +304,18 @@ deque<Token> exprToTokens(const string& expr) {
 				case '-':   t = Token::Type::Operator;      pr = 2; break;
 				}
 				const auto s = string(1, c);
-				tokens.push_back(Token{ t, s, pr, ra });
+				tokens.push_back(Token{ t, s, index++ , pr, ra });
+				while (0); // Для точки останова.
 			}
 	}
 	return tokens;
+}
+
+deque<Token> exprToTokens(const string& expr)
+{
+	int index = 0;
+	deque<Token> fs = exprToTokens(expr, index, "DEFAULT");
+	return fs;
 }
 
 Token _SetToken(const int m) // На основе этой функции создать шаблон.

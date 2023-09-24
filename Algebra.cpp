@@ -373,16 +373,23 @@ void test_7() // Тестирование функции DerivateFunc()
 		                   "log( x+1 , x + 9 )" ,// +
 		                   "log( x+1 , x+7 )" , // +
 		                   "ln(x)" , // +
+		                   "sin(x^2)*(x^2 + 1/(3-cos(x^2)) + x )*x+sin(x)*(x^2-3*x+1-x)^2+7", // -
+		                   "3*x*(x-1)*cos(4*x)+(x-7)^2*(x+4)*tg(x)", // - 
+		                   "3*x*(x-1)*cos(4*x)", // +
+		                   "(x-7)^2*(x+4)*tg(x)", // -
+		                   "x*tg(x)", // +  , 80
+		                   "(x+4)*tg(x)", // +
+		                   "(x-7)^2*tg(x)" // - ,минимальный неработающий пример.
 		               	                  
 	};
 	const double x = 2;
 	// x = M_PI/4;
 	double Q[2];
-	string s = eh[50];
+	string s = eh[82];
 	deque<Token> fh, fs, es;
 	// getline(cin, s);
-	fh = exprToTokens(s);
-	fs = shuntingYard(fh);
+	int index = 0;
+	fs = FToPolishI(s , index);
 	Algebra_Node* node = PolishToTree(fs);
 	Algebra_Tree* K = new Algebra_Tree(node);
 	Algebra_Tree& first_tree = *K;
@@ -392,7 +399,7 @@ void test_7() // Тестирование функции DerivateFunc()
 		first_tree.Print_Tree_T();
 	}
 	Q[0] = Numerical_Differentiation(first_tree, x, pow(10, -4), "x");
-	Algebra_Node* D = DerivateFunc(node);
+	Algebra_Node* D = DerivateFunction(node);
 	Algebra_Tree* d_tree = new Algebra_Tree(D);
 	Algebra_Tree& T = *d_tree;
 	T.Print_Tree_T();
@@ -768,13 +775,13 @@ void test_24()
 		            "0^(x^2*cos(x)+16)", // +
 		            "0^2", // +
 		            "1*(1+3*(x^2+1)/1*x/1*1 +0*x^2-0*sin(x)+(x+1)^1*x^0)", // -
-		            "(1/2+(x+1)^1*x^0)", // +
+		            "(1/2+(x+1)^1*x^0)", // + , 30
 		            "(x^2+4*5*6*(x+1)^(1/2*2)+4*2*x-9*4/5*(x-1))*x+(x-3/4*7/11)",
 		            "x^2+4*5",
 		            "3/4+(x+1)*1", // +
 		            "4/5+1*(x+1)" // +
 	             };
-	string s = fh[34];
+	string s = fh[29];
 	Algebra_Node* first_node = SetOperatorTree(s);
 	Algebra_Node* second_node = simplify_E(first_node);
 	Algebra_Tree A = Algebra_Tree(second_node);
@@ -801,7 +808,7 @@ void test_25()
 
 int main() {
 
-	const int n = 25;  // 7 , 1 PostfixToInfix()
+	const int n = 7;  // 7 , 1 PostfixToInfix()
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +

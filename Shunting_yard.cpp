@@ -275,7 +275,7 @@ double PolishCalculation(const vector<Token> es)
 				st.pop();
 				switch (get<string>(T.value)[0]) {
 				default:
-					printf("Operator error [%s]\n", get<string>(T.value));
+					printf("Operator error [%s]\n", T.ToString());
 					// exit(0);
 					break;
 				case '^':
@@ -346,16 +346,6 @@ double PolishCalculation(const vector<Token> es)
 	}
 	return st.top();
 
-}
-
-
-deque<Token> FToPolish(string expr)
-{
-	deque<Token> fh, eh;
-	fh = exprToTokens(expr);
-	Tokenize_u_minus(fh);
-	eh = shuntingYard(fh);
-	return eh;
 }
 
 double FunctionValue(deque<Token> fh, double x, string symbol)
@@ -448,4 +438,62 @@ vector<Token> ReplaceElementInPolish(vector<Token> fh, double x, string symbol)
 		}
 	}
 	return kh;
+}
+// Проверка синтаксической корректности.
+bool Check_Bracket_Matching(deque<Token> fh)
+{ // Функция применяется после функции exprToTokens().
+	int balance = 0;
+	deque<Token>::iterator iter;
+	for (iter = fh.begin(); iter != fh.end(); iter++)
+	{
+		Token token = *iter;
+		if (token.type == Token::Type::LeftParen) balance ++;
+		if (token.type == Token::Type::RightParen) balance--;
+	}
+	if (balance == 0) return true;
+	else return false;
+}
+
+bool CheckBalance(deque<Token> fh)
+{ // Функция применяется после функции exprToTokens().
+	int balance = 1;
+	deque<Token>::iterator iter;
+	for (iter = fh.begin(); iter != fh.end(); iter++)
+	{
+		Token token = *iter;
+		if (f_arg(token)) balance--;
+		if (f_opr_two(token)) balance++;
+		if (f_opr_one(token)){}
+	}
+	if (balance == 0) return true;
+	else return false;
+}
+
+deque<Token> FToPolishI(string expr , int& index)
+{
+	deque<Token> fh, eh;
+	bool B;
+	fh = exprToTokens(expr , index , "ORDERING");
+	B = Check_Bracket_Matching(fh);
+	if (!B)
+	{
+		printf("Mismatched parentheses error\n");
+		return fh;
+	}
+	B = CheckBalance(fh);
+	if (!B)
+	{
+		printf("Dissbalance operator error\n");
+		return fh;
+	}
+	Tokenize_u_minus(fh);
+	eh = shuntingYard(fh);
+	return eh;
+}
+
+deque<Token> FToPolish(string expr)
+{
+	int index = 0;
+	deque<Token> fs = FToPolishI(expr, index);
+	return fs;
 }
