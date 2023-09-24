@@ -44,6 +44,17 @@ void Print_Tree_R(Algebra_Node const* node, string const& prefix = " ", bool roo
         Print_Tree_R(v[i], prefix + (root ? "" : (last ? "  " : ch_ver_spa)), false, i + 1 >= v.size());
 }
 
+void Print_Tree_Selected_R(Algebra_Node const* node, Algebra_Node* const selectedNode , string const& prefix = " ", bool root = true, bool last = true) {
+    cout << prefix << (root ? "" : (last ? ch_udia_hor : ch_ver_hor)); 
+    if( node == selectedNode ) cout << (node ? "[" + ToString(node->data.value) + "]" : "") << endl; // Заменить на цветной вывод.
+    else cout << (node ? ToString(node->data.value) : "") << endl;
+    if (!node || (!node->left && !node->right))
+        return;
+    vector<Algebra_Node*> v{ node->left, node->right };
+    for (size_t i = 0; i < v.size(); ++i)
+        Print_Tree_Selected_R(v[i], selectedNode ,prefix + (root ? "" : (last ? "  " : ch_ver_spa)), false, i + 1 >= v.size());
+}
+
 void Print_Tree(Algebra_Node const* node, string const& prefix = "", bool root = true, bool last = true) {
     stack<pair<Algebra_Node const*, string>> stack;
     stack.emplace(node, "");

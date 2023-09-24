@@ -10,5 +10,5 @@ void Print_Tree_R_ColoredSelectNode(Algebra_Node const* node, Algebra_Node* cons
         return;
     vector<Algebra_Node*> v{ node->left, node->right };
     for (size_t i = 0; i < v.size(); ++i)
-        Print_Tree_R(v[i], prefix + (root ? "" : (last ? "  " : ch_ver_spa)), false, i + 1 >= v.size());
+        Print_Tree_R_ColoredSelectNode(v[i], selectedNode , prefix + (root ? "" : (last ? "  " : ch_ver_spa)), false, i + 1 >= v.size());
 }

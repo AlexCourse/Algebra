@@ -66,6 +66,7 @@ public:
 void BypassTreeD(Algebra_Node* root);
 void BypassTreeW(Algebra_Node* root);
 void Print_Tree_R(Algebra_Node const* node, string const& prefix, bool root, bool last);
+void Print_Tree_Selected_R(Algebra_Node const* node, Algebra_Node* const selectedNode, string const& prefix, bool root, bool last);
 void Print_Tree(Algebra_Node const* node, string const& prefix, bool root, bool last);
 void Print_Tree_R_ColoredSelectNode(Algebra_Node const* node, Algebra_Node* const selectedNode, string const& prefix, bool root, bool last);
 void FindValueW(Algebra_Node* root, string c, vector<vector<char>>& paths);

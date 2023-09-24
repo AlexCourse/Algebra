@@ -5,6 +5,10 @@
 #include "Algebra.h"
 #include "Derivate.h"
 #include "simplify.h"
+#include <boost/format.hpp>
+#include <boost/algorithm/string/replace.hpp>
+
+
 #define M_PI 3.1415926535897932384626
 
 #define DEBUG 1
@@ -769,15 +773,50 @@ void test_24()
 	A.Print_Tree_T();
 }
 
-void test_25() // Вывод цветного текста
+void test_25() // Вывод цветного текста , не работает.
 {
-	std::cout << "\e[1;31m This is red text \e[0m" << std::endl;
+	// Инициализация ncurses
+	 // Используем boost::format для форматированного вывода
+	boost::format red("This is %s text in red.");
+	red % "\033[31m"; // Используем escape-последовательность для установки красного цвета
+	std::cout << red << std::endl;
+
+	boost::format green("This is %s text in green.");
+	green % "\033[32m"; // Используем escape-последовательность для установки зеленого цвета
+	std::cout << green << std::endl;
+
+	boost::format blue("This is %s text in blue.");
+	blue % "\033[34m"; // Используем escape-последовательность для установки синего цвета
+	std::cout << blue << std::endl;
+
+
 }
+
+void set_console_color(const std::string& color) {
+	std::cout << "\033[" << color << "m";
+}
+
+// Function to reset the console color
+void reset_console_color() {
+	std::cout << "\033[0m";
+}
+
+void test_26() // не работает.
+{
+	std::string message = "This message will be displayed in orange color.";
+
+	// Replace any occurrences of the word "orange" with the ANSI escape code for orange color
+	boost::algorithm::replace_all(message, "orange", "\033[33morange\033[0m");
+
+	std::cout << message << std::endl;
+}
+
+
 
 
 int main() {
 
-	const int n = 25;  // 7 , 1 PostfixToInfix()
+	const int n = 26;  // 7 , 1 PostfixToInfix()
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +
@@ -805,5 +844,6 @@ int main() {
 	case 23: { test_23(); break; }
 	case 24: { test_24(); break;  }
 	case 25: { test_25(); break;  }
+	case 26: { test_26(); break;  }
 	}
 }
