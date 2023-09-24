@@ -691,9 +691,9 @@ string PostfixToInfix(vector<Token>& fs)
         else if (f_opr_two(T))
         {
             string f = T.ToString();
-            p = st.top();
-            st.pop();
             q = st.top();
+            st.pop();
+            p = st.top();
             st.pop();
             n = st_opr.top();
             m = T.precedence;
@@ -966,5 +966,22 @@ double FunctionValueM(string expr, map<string, double>& ds)
         return 0;
     }
 
+}
+
+string TreeToInfix(Algebra_Node* root)
+{
+    vector<Token> fh , eh;
+    TreeToPolish(root, fh);
+    vector<Token> kh(fh.rbegin(), fh.rend());
+    // reverse(fh.begin(), fh.end());
+    string s = PostfixToInfix(kh);
+    return s;
+}
+
+string Algebra_Tree::TreeToInfix_T()
+{
+    Algebra_Node* root = this->root;
+    string s = TreeToInfix(root);
+    return s;
 }
 

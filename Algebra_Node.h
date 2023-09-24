@@ -52,6 +52,7 @@ public:
     void TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* second);
     void TreeRExprReplaceOnSubTreeW_T(const string c, Algebra_Node* second);
     double FunctionValue_T(double value, string symbol);
+    string TreeToInfix_T();
     typedef Algebra_Tree iterator;
     // ~Algebra_Tree(); // chat 
 
@@ -90,5 +91,7 @@ Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const variant
 
 template<typename T>
 void _FindValueD(Algebra_Node* root, T c, vector<vector<char>>& paths);
+
+string TreeToInfix(Algebra_Node* root);
 
 #endif

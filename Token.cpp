@@ -195,7 +195,7 @@ bool CE(const variant<string, int, double> value, const string s)
 
 bool CE(const variant<string, int, double> value, const int m)
 {
-	if (holds_alternative<string>(value))
+	if (holds_alternative<int>(value))
 	{
 		if (get<int>(value) == m) return true;
 		else return false;
@@ -205,7 +205,7 @@ bool CE(const variant<string, int, double> value, const int m)
 
 bool CE(const variant<string, int, double> value, const double m)
 {
-	if (holds_alternative<string>(value))
+	if (holds_alternative<double>(value))
 	{
 		if (get<double>(value) == m) return true;
 		else return false;
@@ -423,6 +423,7 @@ bool operator == (Token& C, Token& S)
 }
 
 void Tokenize_u_minus(deque<Token>& fh) {
+	const bool LOCAL_DEBUG = false;
 	string patthern = "(-";
 	deque<Token>::iterator iter[2];
 	vector<int> entries;
@@ -471,15 +472,15 @@ void Tokenize_u_minus(deque<Token>& fh) {
 					}
 					const deque<Token>::iterator start = fh.begin();
 					Token T_2 = SetToken(q);
-					if (DEBUG) r = TokensToStr(fh);
+					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;
-					if (DEBUG) {
+					if (LOCAL_DEBUG) {
 						const Token T_3 = *(start + p);
 						const Token T_4 = *(start + p + 4);
 						deque<Token> eh = fh;
 						while (0); // Для точки останова.
 					}
-					if (DEBUG)
+					if (LOCAL_DEBUG)
 					{
 						deque<Token> ls;
 						copy(fh.begin(), fh.end(), back_inserter(ls));
@@ -504,30 +505,30 @@ void Tokenize_u_minus(deque<Token>& fh) {
 						}
 						while (0);
 					}
-					fh.erase(start + p - 1, start + p + 4 - 1); // Функция странно удаляет
-					if (DEBUG) r = TokensToStr(fh);
+					fh.erase(start + p, start + p + 4); // Функция странно удаляет
+					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;
-					fh.insert(start + p, T_2);
-					if (DEBUG) r = TokensToStr(fh);
+					fh.insert(fh.begin() + p, T_2); // fh.insert(start + p, T_2);
+					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;
 				}
 				else if (T_1.type == Token::Type::Algebra)
 				{
 					const deque<Token>::iterator start = fh.begin();
-					if (DEBUG) {
+					if (LOCAL_DEBUG) {
 						const Token T_3 = *(start + p);
 						const Token T_4 = *(start + p + 4);
 						deque<Token> eh = fh;
 						while (0); // Для точки останова.
 					}
 					fh.erase(start + p - 1, start + p + 4 - 1);
-					if (DEBUG) r = TokensToStr(fh);
+					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;
 					deque<Token> es = exprToTokens("(-1)*a");
 					es.pop_back();
 					es.push_back(T_1);
 					fh.insert(fh.begin() + p, T_1);
-					if (DEBUG) r = TokensToStr(fh);
+					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;
 				}
 			}
@@ -559,7 +560,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 					m = (-1) * m;
 					Token T_2 = SetToken(m);
 					fh.insert(fh.begin(), T_2); // Добавление вперед очереди.
-					if (DEBUG) r = TokensToStr(fh);
+					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;
 				}
 				else if (T_1.type == Token::Type::Algebra)
@@ -569,7 +570,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 					es.pop_back();
 					es.push_back(T_1); // Замена символа a вставка в начало.
 					fh.insert(fh.begin(), T_1);
-					if (DEBUG) r = TokensToStr(fh);
+					if (LOCAL_DEBUG) r = TokensToStr(fh);
 					f = r;
 				}
 			}

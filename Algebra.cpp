@@ -15,18 +15,19 @@ enum Type_expr { //
 using namespace std;
 
 
-void test_1() // Тестирование функций exprToTokens() , shuntingYard() , CopyTree() , PolishToTree().
+void test_1() // Тестирование функций exprToTokens() , shuntingYard() , CopyTree() , PolishToTree() , TreeToInfix()
 {
 	const int MODE = 0;
-	string fh[7] = { "(1-5*(1/2+5/6-7*(5+8/9*4^3)))" // +
+	string fh[8] = { "(1-5*(1/2+5/6-7*(5+8/9*4^3)))" // +
 				, "(x^2-1)*(x-4/5)*(7/8+3*x)^2 + 3*x*(x-1)" ,  // +
 					 "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2" , // + 
 						  "cos(x^2)", // +
 						  "sin(3)*cos(1)", // - , не работает PolishToTree()
 						  "sin(x^2-3*x+2)*sin(7/4)",
-						  "log(x , 2)"
+						  "log(x , 2)",
+		                  "1-2"
 	};
-	string s = fh[4];
+	string s = fh[2];
 	if (MODE == 1) getline(cin, s);
 
 	deque<Token> fs, es;
@@ -43,7 +44,7 @@ void test_1() // Тестирование функций exprToTokens() , shuntingYard() , CopyTree
 		for (iter = es.begin(); iter != es.end(); iter++) cout << *iter << " ";
 		cout << endl;
 	}
-	// double r = PolishCalculation(es);
+	double r = PolishCalculation(es);
 
 	// cout << r << endl;
 
@@ -70,6 +71,14 @@ void test_1() // Тестирование функций exprToTokens() , shuntingYard() , CopyTree
 	Algebra_Tree third_tree = second_tree.AddSubtree(third_node, LR::LEFT);
 	for (int i = 0; i < 2; i++) cout << endl;
 	third_tree.Print_Tree_T();
+	string t = first_tree->TreeToInfix_T();
+	es = FToPolish(t);
+	double r_1 = PolishCalculation(es);
+	vector<tuple<double, double>> ph;
+	ph.push_back(make_tuple(r, r_1));
+	for (const auto& element : ph) {
+		cout << "(" << get<0>(element) << ", " << get<1>(element) << ")" << endl;
+	}
 }
 
 void test_2() // Тестирование перегруженного оператора для класса AlgebraTree.
@@ -273,30 +282,35 @@ void test_6() // Тестирование функции TreeToPolish_T()
 void test_7() // Тестирование функции DerivateFunc()
 {
 	vector<tuple<double, double>> ph;
-	string eh[20] = { "2*(x-1)" ,
-					  "x-2-x" ,
-						"sin(x)" ,
-					   "cos(x^2)" ,
+	string eh[25] = { "2*(x-1)" , // + ,0
+					  "x-2-x" , // +
+						"sin(x)" , // -
+					     "cos(x^2)" , // -
 						 "x+2" , // +
-						  "x-2-x+5+x+x+x-3-x+6+x+4+x" , // - , падает tokenize_u_minus()
+						  "x-2-x+5+x+x+x-3-x+6+x+4+x" , // - 
 						  "x*x", // +
-						  "x*x*x", // -
+						  "x*x*x", // +
 						  "3*x*x*(x-3)*(x-3)+7*(x-1)*x+5-9*x",
 						   "x^3", // +
-							"5*x^7", // -
+							"5*x^7", // + , 10
 							"2*(x+1)", // +
 							 "0.5*x*(x+1)", // -
 							 "x+4+x+7+x+5+x", // +
-							 "5+x+3", // -
-							 "x+1+x+0.5", // -
+							 "5+x+3", // +
+							 "x+1+x+0.5", // +
 							 "x+1+x", // +
-							 "1+x+x", // -
-							 "x+x+x", // -
-							 "sin(x^2)"
+							 "1+x+x", // +
+							 "x+x+x", // +
+		                      "x-7",  // - 
+		                      "7-x",  // - , 20
+							 "sin(x^2)" ,
+		                     "x-4-x+7-x",
+		                     "x*7", // +
+							 "x^5 + x^4 + x^3 + x^2 + 1" // -
 	};
 	double x = 2.0;
 	double Q[2];
-	string s = eh[18];
+	string s = eh[19];
 	deque<Token> fh, fs, es;
 	// getline(cin, s);
 	fh = exprToTokens(s);
@@ -315,7 +329,12 @@ void test_7() // Тестирование функции DerivateFunc()
 	Algebra_Tree& T = *d_tree;
 	T.Print_Tree_T();
 	Q[1] = T.FunctionValue_T(x, "x");
+	string f = T.TreeToInfix_T();
 	ph.push_back(make_tuple(Q[0], Q[1]));
+	for (const auto& element : ph) {
+		cout << "(" << get<0>(element) << ", " << get<1>(element) << ")" << endl;
+	}
+	cout << f << endl;
 	while (0);
 }
 
@@ -413,11 +432,12 @@ void test_10() // Тестирование функции PolishCalculation()
 
 void test_11() // Тестирование функции Tokenize_u_minus()
 {
-	string fh[3] = { "(-1)+x+(-1)*x^2*((-1)+3*x))" // -
-					  , "-1+x" , // +
-					   "(-1)" // +
+	string fh[4] = { "(-1)+x+(-1)*x^2*((-1)+3*x))" ,// -
+					   "-1+x" , // +
+					   "(-1)" , // +
+		               "(-1)*x" // -
 	};
-	string s = fh[0];
+	string s = fh[3];
 	deque<Token> fs, es;
 	fs = exprToTokens(s);
 	Tokenize_u_minus(fs);
@@ -648,7 +668,7 @@ void test_23()
 
 int main() {
 
-	const int n = 7;  // 7
+	const int n = 1;  // 7
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +
