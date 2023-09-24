@@ -6,6 +6,7 @@
 #include <map>
 #include <deque>
 #include <vector>
+#include <unordered_set>
 
 using namespace std;
 
@@ -36,6 +37,11 @@ public:
     const bool rightAssociative;
     const char Associative = 0;
 };
+
+bool f_arg(const Token& T);
+bool f_opr_two(const Token& T);
+bool f_opr_one(const Token& T);
+bool f_opr_free(const Token& T);
 
 Token SetToken(const string& expr);
 Token SetToken(int m);

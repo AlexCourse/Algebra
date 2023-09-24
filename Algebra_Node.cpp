@@ -21,43 +21,9 @@ void Algebra_Node::addRightNode(Algebra_Node* Q) {
     this->right = Q;
 }
 
-unordered_set<string> operator_info_two = { "+" , "-", "/", "*", "^" };
-unordered_set<string> operator_info_one = { "!" };
-unordered_set<string> func_info_one = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
-"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" };
-unordered_set<string> func_info_two = { "log" , "pow" , "S" , "Integral" };
-unordered_set<string> func_info_free = { "D" , "Z" , "P" , "Derivate" };
 
 static string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
 
-bool f_arg(const Token& T)
-{
-    if (T.type == Token::Type::Algebra || T.type == Token::Type::Number) return true;
-    else return false;
-}
-bool f_opr_two(const Token& T) {
-    string p = T.str;
-    if (operator_info_two.count(p) || func_info_two.count(p)) {
-        return true;
-    }
-    return false;
-}
-
-bool f_opr_one(const Token& T) {
-    string p = T.str;
-    if (operator_info_one.count(p) || func_info_one.count(p)) {
-        return true;
-    }
-    return false;
-}
-
-bool f_opr_free(const Token& T) {
-    string p = T.str;
-    if (func_info_free.count(p)) {
-        return true;
-    }
-    return false;
-}
 
 
 void Print_Tree_R(Algebra_Node const* node, string const& prefix = " ", bool root = true, bool last = true) {
@@ -540,7 +506,7 @@ Algebra_Tree& Algebra_Tree::AddSubtree(Algebra_Node* node, LR lr)
 { // Добавление поддерева к выбранному узлу:
   // Параметры - node выбранный узел. lr - какого направления потомок заменяется поддеревом.
   // Добавляемое поддерево содержится в текущем классе.
-    Algebra_Tree& second_tree = CopyTree(this->root);
+    Algebra_Tree& second_tree = CopyTree();
     Algebra_Node* second = this->root;
     this->root = node;
     if (lr == LR::LEFT)
@@ -567,7 +533,8 @@ Algebra_Node* Algebra_Tree::CloneTree(Algebra_Node* root) {
     return newNode;
 }
 
-Algebra_Tree& Algebra_Tree::CopyTree(Algebra_Node* node) {
+Algebra_Tree& Algebra_Tree::CopyTree() {
+    Algebra_Node* node = this->root;
     Algebra_Tree* clonedTree = new Algebra_Tree();
     clonedTree->root = CloneTree(node);
     return *clonedTree;
@@ -762,7 +729,40 @@ deque<Token> FToPolish(string expr)
     return eh;
 }
 
-float FunctionValue(string expr, map<string, float> ds)
+double FunctionValue(Algebra_Node* root , double value , string symbol)
+{ // Подстановка в функцию заданную деревом.
+    TreeExprReplaceD(root, symbol, to_string(value));
+    deque<Token> ks;
+    TreeToPolish(root, ks);
+    double r = PolishCalculation(ks);
+    return r;
+}
+
+double Algebra_Tree::FunctionValue_T(double value , string symbol)
+{
+    Algebra_Node* root = this->root;
+    double r = FunctionValue(root, value, symbol);
+    return r;
+}
+
+double FunctionValue(deque<Token> fh, double value, string symbol)
+{ // Подстановка в функцию заданную деревом.
+    deque<Token>::iterator iter;
+    for (iter = fh.begin(); iter != fh.end(); iter++)
+    {
+        string c = to_string(value);
+        if (iter->str == symbol)
+        {
+            Token T = SetToken(c);
+            *iter = T;
+        }
+    }
+    double r = PolishCalculation(fh);
+    return r;
+}
+
+
+double FunctionValueM(string expr, map<string, float> ds)
 { // Вычислить значение функции заданной строкой с параметрами заданными в словаре где ключ - имя переменной, а значение - ее значение.
     Algebra_Node* root = SetOperatorTree(expr);
     
@@ -788,4 +788,5 @@ float FunctionValue(string expr, map<string, float> ds)
     }
 
 }
+
 

@@ -54,7 +54,7 @@ void test_1() // Тестирование функций exprToTokens() , shuntingYard().
 		BypassTreeD(tree);
 		cout << endl;
 	}
-	Algebra_Tree second_tree = first_tree->CopyTree(tree);
+	Algebra_Tree second_tree = first_tree->CopyTree();
 	second_tree.TreeExprReplaceD_T("x", "5");
 	second_tree.Print_Tree_T();
 	string f = "x";
@@ -205,8 +205,7 @@ void test_4() // Тестирование функции CompareTrees()
 	es = shuntingYard(eh);
 	Algebra_Node* first_node;
 	Algebra_Node* second_node;
-	Algebra_Tree* 
-		tree[2];
+	Algebra_Tree* tree[2];
 	first_node = PolishToTree(fs);
 	second_node = PolishToTree(es);
 	bool B = false;
@@ -254,16 +253,22 @@ void test_6() // Тестирование функции TreeToPolish_T()
 void test_7() // Тестирование функции DerivateFunc()
 {  // (x+1)/(x-1) , возникает ошибка из-за неверной обработки унарных минусов в разделении на Token
 	// Простейши йнеработающий пример 2*(x-1) , x-2-x
+	double x = 2.0;
 	string s;
 	deque<Token> fh, fs, es;
 	getline(cin, s);
 	fh = exprToTokens(s);
 	fs = shuntingYard(fh);
 	Algebra_Node* node = PolishToTree(fs);
+	Algebra_Tree* K = new Algebra_Tree(node);
+	Algebra_Tree& first_tree = *K;
+	Algebra_Tree& second_tree = first_tree.CopyTree();
+	double r = Numerical_Differentiation(second_tree , x , pow(10 , -4) , "x");
 	Algebra_Node* D = DerivateFunc(node);
 	Algebra_Tree* d_tree = new Algebra_Tree(D);
 	Algebra_Tree& T = *d_tree;
 	T.Print_Tree_T();
+	double t = T.FunctionValue_T(x , "x");
 }
 
 void test_8() // Тестирование фунции SetToken()

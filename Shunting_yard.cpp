@@ -90,57 +90,113 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 	return queue;
 }
 
-double PolishCalculation(deque<Token> es) {
+double PolishCalculation(deque<Token> es) 
+{
 	vector<float> stack;
 	vector<char> cst;
 
 	while (!es.empty()) {
 		string op;
 
-		const auto token = es.front();
+		const auto T = es.front();
 		es.pop_front();
-		switch (token.type) {
+		switch (T.type) {
 		case Token::Type::Number:
-			stack.push_back(stof(token.str));
-			op = "Push " + token.str;
+			stack.push_back(stof(T.str));
+			op = "Push " + T.str;
 			break;
 		case Token::Type::Algebra:
 		{
-			cst.push_back(token.str[0]);
-			op = "Push" + token.str[0];
+			cst.push_back(T.str[0]);
+			op = "Push" + T.str[0];
 
 		}
 		case Token::Type::Operator:
 		{
-			const auto rhs = stack.back();
-			stack.pop_back();
-			const auto lhs = stack.back();
-			stack.pop_back();
-			switch (token.str[0]) {
-			default:
-				printf("Operator error [%s]\n", token.str.c_str());
-				exit(0);
-				break;
-			case '^':
-				stack.push_back(static_cast<int>(pow(lhs, rhs)));
-				break;
-			case '*':
-				stack.push_back(lhs * rhs);
-				break;
-			case '/':
-				stack.push_back(lhs / rhs);
-				break;
-			case '+':
-				stack.push_back(lhs + rhs);
-				break;
-			case '-':
-				stack.push_back(lhs - rhs);
+			if (f_opr_two(T))
+			{
+				const auto rhs = stack.back();
+				stack.pop_back();
+				const auto lhs = stack.back();
+				stack.pop_back();
+				switch (T.str[0]) {
+				default:
+					printf("Operator error [%s]\n", T.str.c_str());
+					exit(0);
+					break;
+				case '^':
+					stack.push_back(static_cast<int>(pow(lhs, rhs)));
+					break;
+				case '*':
+					stack.push_back(lhs * rhs);
+					break;
+				case '/':
+					stack.push_back(lhs / rhs);
+					break;
+				case '+':
+					stack.push_back(lhs + rhs);
+					break;
+				case '-':
+					stack.push_back(lhs - rhs);
+					break;
+				}
+
+				op = "Push " + to_string(lhs) + " " + T.str + " " + to_string(rhs);
 				break;
 			}
+			else if (f_opr_one(T))
+			{
+				const auto x = stack.back();
+				stack.pop_back();
+				string c = T.str;
+				if (c == "exp") { stack.push_back(exp(x)); }
+				if (c == "ln") { stack.push_back(log1p(x)); }
+				if (c == "sin") { stack.push_back(sin(x)); }
+				if (c == "cos") { stack.push_back(cos(x)); }
+				if (c == "tg") { stack.push_back(tan(x)); }
+				if (c == "ctg") { stack.push_back(1 / tan(x)); }
+				if (c == "arcsin") { stack.push_back(asin(x)); }
+				if (c == "arccos") { stack.push_back(acos(x)); }
+				if (c == "arctg") { stack.push_back(atan(x)); }
+				if (c == "arcctg") { stack.push_back(atan(1 / x)); }
+				if (c == "sh") { stack.push_back(sinh(x)); }
+				if (c == "ch") { stack.push_back(cosh(x)); }
+				if (c == "th") { stack.push_back(tanh(x)); }
+				if (c == "cth") { stack.push_back(1 / tanh(x)); }
+				if (c == "arsh") { stack.push_back(asinh(x)); }
+				if (c == "arch") { stack.push_back(acosh(x)); }
+				if (c == "arth") { stack.push_back(atanh(x)); }
+				if (c == "arcth") { stack.push_back(atanh(1 / x)); }
 
-			op = "Push " + to_string(lhs) + " " + token.str + " " + to_string(rhs);
+			}
 		}
-		break;
+		case Token::Type::Function:
+		{
+			if (f_opr_one(T))
+			{
+				const auto x = stack.back();
+				stack.pop_back();
+				string c = T.str;
+				if (c == "exp") { stack.push_back(exp(x)); }
+				if (c == "ln") { stack.push_back(log1p(x)); }
+				if (c == "sin") { stack.push_back(sin(x)); }
+				if (c == "cos") { stack.push_back(cos(x)); }
+				if (c == "tg") { stack.push_back(tan(x)); }
+				if (c == "ctg") { stack.push_back(1 / tan(x)); }
+				if (c == "arcsin") { stack.push_back(asin(x)); }
+				if (c == "arccos") { stack.push_back(acos(x)); }
+				if (c == "arctg") { stack.push_back(atan(x)); }
+				if (c == "arcctg") { stack.push_back(atan(1 / x)); }
+				if (c == "sh") { stack.push_back(sinh(x)); }
+				if (c == "ch") { stack.push_back(cosh(x)); }
+				if (c == "th") { stack.push_back(tanh(x)); }
+				if (c == "cth") { stack.push_back(1 / tanh(x)); }
+				if (c == "arsh") { stack.push_back(asinh(x)); }
+				if (c == "arch") { stack.push_back(acosh(x)); }
+				if (c == "arth") { stack.push_back(atanh(x)); }
+				if (c == "arcth") { stack.push_back(atanh(1 / x)); }
+			}
+		}
 
 		default:
 			printf("Token error\n");
@@ -150,3 +206,4 @@ double PolishCalculation(deque<Token> es) {
 	return stack.back();
 
 }
+

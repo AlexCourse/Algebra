@@ -39,7 +39,7 @@ class Algebra_Tree {
         bool Is_Numeric(); // В дереве присутствуют только числа.
         Algebra_Tree() { this->root = nullptr; }
         Algebra_Tree(Algebra_Node* node);
-        Algebra_Tree& CopyTree(Algebra_Node* node);
+        Algebra_Tree& CopyTree();
         Algebra_Tree& AddSubtree(Algebra_Node* node, LR lr);
         void TreeExprReplaceD_T(const string c , const string s);
         void FindValueD_T(string c, vector<vector<char>>& paths);
@@ -48,16 +48,13 @@ class Algebra_Tree {
         void TreeToPolish_T();
         void TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* second);
         void TreeRExprReplaceOnSubTreeW_T(const string c, Algebra_Node* second);
+        double FunctionValue_T(double value, string symbol);
         typedef Algebra_Tree iterator;
         // ~Algebra_Tree(); // chat 
 
     
 };
 
-
-bool f_arg(const Token& T);
-bool f_opr_two(const Token& T);
-bool f_opr_one(const Token& T);
 
 void BypassTreeD(Algebra_Node* root);
 void BypassTreeW(Algebra_Node* root);
@@ -81,6 +78,8 @@ Algebra_Node* SetOperatorTree(const string s);
 void TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Algebra_Node* second);
 void TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const string c, Algebra_Node* second);
 deque<Token> FToPolish(string expr);
-float FunctionValue(string expr, map<string, float> ds);
+double FunctionValueM(string expr, map<string, float> ds);
+double FunctionValue(deque<Token> fh, double value, string symbol);
+double FunctionValue(vector<Token> fh, double value, string symbol);
 
 #endif

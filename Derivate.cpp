@@ -2579,3 +2579,24 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 	}
 		
 }
+
+double Numerical_Differentiation(Algebra_Tree& treeExpr, double t, double h, string x) {
+	// 
+	// x - символ переменных для численного дифееренцирования
+    // t - точка для численного дифференцирования.
+    // h - шаг для численного дифференцирования.
+	double dy = 0;
+	double P[] = {-1 / 12 , 8 / 12 , -8 / 12 , 1 / 12};
+	int Q[] = { 2 , 1 , -1 , -2 };
+	int m = 1;
+	for (int i = 0; i < 4; i++) {
+		double k = P[i];
+		int n = Q[i];
+		double y = k * treeExpr.FunctionValue_T(t + n * h , "x") / pow(h, m);
+		dy += y;
+		// Здесь "x" переменная по которой берется произодная.
+	}
+	return dy;
+}
+
+

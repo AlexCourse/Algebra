@@ -25,6 +25,14 @@ struct Operator {
 	string associativity;
 };
 
+unordered_set<string> operator_info_two = { "+" , "-", "/", "*", "^" };
+unordered_set<string> operator_info_one = { "!" };
+unordered_set<string> func_info_one = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
+"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" };
+unordered_set<string> func_info_two = { "log" , "pow" , "S" , "Integral" };
+unordered_set<string> func_info_free = { "D" , "Z" , "P" , "Derivate" };
+
+
 
 map<char, Operator> operator_info = { { '+' , { 2, "L" }} ,
 										{'-' , { 2, "L" }},
@@ -32,6 +40,36 @@ map<char, Operator> operator_info = { { '+' , { 2, "L" }} ,
 										{'*' , { 3, "L" }},
 										{'^' , { 4, "R" }},
 };
+
+
+bool f_arg(const Token& T)
+{
+	if (T.type == Token::Type::Algebra || T.type == Token::Type::Number) return true;
+	else return false;
+}
+bool f_opr_two(const Token& T) {
+	string p = T.str;
+	if (operator_info_two.count(p) || func_info_two.count(p)) {
+		return true;
+	}
+	return false;
+}
+
+bool f_opr_one(const Token& T) {
+	string p = T.str;
+	if (operator_info_one.count(p) || func_info_one.count(p)) {
+		return true;
+	}
+	return false;
+}
+
+bool f_opr_free(const Token& T) {
+	string p = T.str;
+	if (func_info_free.count(p)) {
+		return true;
+	}
+	return false;
+}
 
 bool isliter(char p)
 {
