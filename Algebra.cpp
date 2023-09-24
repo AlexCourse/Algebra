@@ -55,7 +55,7 @@ void test_1() // Тестирование функций exprToTokens() , shuntingYard().
 		cout << endl;
 	}
 	Algebra_Tree second_tree = first_tree->CopyTree();
-	second_tree.TreeExprReplaceD_T("x", "5");
+	second_tree.TreeExprReplaceD_T("x", "5"); // Здесь исключение.
 	second_tree.Print_Tree_T();
 	string f = "x";
 	es = exprToTokens(f);
@@ -443,10 +443,10 @@ void test_20()
 
 int main() {
 
-	const int n = 20;
+	const int n = 1;
 	switch (n)
 	{
-	case 1: { test_1(); break; }
+	case 1: { test_1(); break; } // 3*x - минимальный неработающий пример.
 	case 2: { test_2(); break; }
 	case 3: { test_3(); break; }
 	case 4: { test_4(); break; }

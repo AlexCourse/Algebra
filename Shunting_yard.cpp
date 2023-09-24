@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#define DEBUG 1
 
 
 deque<Token> shuntingYard(const deque<Token>& tokens) {
@@ -9,21 +10,29 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 	vector<Token> stack;
 
 	// Пока есть токены для чтения:
-	for (auto token : tokens) {
+	for (auto T : tokens) {
 		// Читать токен
-		switch (token.type) {
+		switch (T.type) {
 		case Token::Type::Number:
 			// Если токен представляет собой число, то добавьте его в очередь вывода
-			queue.push_back(token);
+			queue.push_back(T);
+			break;
+		case Token::Type::Integer:
+			// Если токен представляет собой число, то добавьте его в очередь вывода
+			queue.push_back(T);
+			break;
+		case Token::Type::Real:
+			// Если токен представляет собой число, то добавьте его в очередь вывода
+			queue.push_back(T);
 			break;
 		case Token::Type::Algebra:
-			queue.push_back(token);
+			queue.push_back(T);
 			break;
 
 		case Token::Type::Operator:
 		{
 			// Если токен является оператором, o1, то:
-			const auto o1 = token;
+			const auto o1 = T;
 			// пока есть токен оператора,
 			while (!stack.empty()) {
 
@@ -51,7 +60,7 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 		break;
 
 		case Token::Type::LeftParen:
-			stack.push_back(token);
+			stack.push_back(T);
 			break;
 
 		case Token::Type::RightParen:
@@ -67,14 +76,14 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 			stack.pop_back();
 
 			if (!match && stack.empty()) {
-				printf("RightParen error (%s)\n", token.value.c_str());
+				printf("RightParen error (%s)\n", get<string>(T.value));
 				return {};
 			}
 		}
 		break;
 
 		default:
-			printf("error (%s)\n", token.value.c_str());
+			printf("error (%s)\n", get<string>(T.value));
 			return {};
 		}
 	}
@@ -92,8 +101,8 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 
 double PolishCalculation(deque<Token> es) 
 {
-	vector<float> stack;
-	vector<char> cst;
+	vector<double> stack;
+	vector<string> cst;
 
 	while (!es.empty()) {
 		string op;
@@ -101,14 +110,18 @@ double PolishCalculation(deque<Token> es)
 		const auto T = es.front();
 		es.pop_front();
 		switch (T.type) {
-		case Token::Type::Number:
-			stack.push_back(stof(T.value));
-			op = "Push " + T.value;
+		case Token::Type::Integer:
+			stack.push_back(get<int>(T.value));
+			if (DEBUG) op = "Push " + get<string>(T.value);
+			break;
+		case Token::Type::Real:
+			stack.push_back(get<double>(T.value));
+			if (DEBUG) op = "Push " + get<string>(T.value);
 			break;
 		case Token::Type::Algebra:
 		{
-			cst.push_back(T.value[0]);
-			op = "Push" + T.value[0];
+			cst.push_back(get<string>(T.value));
+			if (DEBUG) op = "Push" + get<string>(T.value);
 
 		}
 		case Token::Type::Operator:
@@ -119,9 +132,9 @@ double PolishCalculation(deque<Token> es)
 				stack.pop_back();
 				const auto lhs = stack.back();
 				stack.pop_back();
-				switch (T.value[0]) {
+				switch (get<string>(T.value)[0]) {
 				default:
-					printf("Operator error [%s]\n", T.value.c_str());
+					printf("Operator error [%s]\n", get<string>(T.value));
 					exit(0);
 					break;
 				case '^':
@@ -141,14 +154,14 @@ double PolishCalculation(deque<Token> es)
 					break;
 				}
 
-				op = "Push " + to_string(lhs) + " " + T.value + " " + to_string(rhs);
+				op = "Push " + to_string(lhs) + " " + get<string>(T.value) + " " + to_string(rhs);
 				break;
 			}
 			else if (f_opr_one(T))
 			{
 				const auto x = stack.back();
 				stack.pop_back();
-				string c = T.value;
+				string c = get<string>(T.value);
 				if (c == "exp") { stack.push_back(exp(x)); }
 				if (c == "ln") { stack.push_back(log1p(x)); }
 				if (c == "sin") { stack.push_back(sin(x)); }
@@ -176,7 +189,7 @@ double PolishCalculation(deque<Token> es)
 			{
 				const auto x = stack.back();
 				stack.pop_back();
-				string c = T.value;
+				string c = get<string>(T.value);
 				if (c == "exp") { stack.push_back(exp(x)); }
 				if (c == "ln") { stack.push_back(log1p(x)); }
 				if (c == "sin") { stack.push_back(sin(x)); }

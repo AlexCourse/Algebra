@@ -11,7 +11,7 @@
 
 Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 { // ['+' , '-' ]
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
 		Algebra_Node* Q;
 		Q = SetNode("+");
@@ -20,11 +20,11 @@ Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 		node.addRightNode(D[0]);
 		return Q;
 	}
-	else if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	else if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
 		return D[1];
 	}
-	else if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	else if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		if (c == "+")
 		{
@@ -43,7 +43,7 @@ Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 			return Q[0];
 		}
 	}
-	else if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	else if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		Algebra_Node* Q = SetNode("0");
 		Algebra_Node& node = *Q;
@@ -55,7 +55,7 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['+' , '-' ]
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
 		if (c == "+")
 		{
@@ -73,13 +73,13 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		}
 
 	}
-	else if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	else if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
 		const string s = "D";
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T ,"D", D[0]);
 	}
-	else if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	else if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		if (c == "+")
 		{
@@ -94,7 +94,7 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T ,"d", D[1]);
 		}
 	}
-	else if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	else if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		const string s = "0";
 		T = SetOperatorTree(s);
@@ -106,9 +106,9 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 { // ['*']
 
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q[3];
 			Q[0] = SetNode("+"); // #  # Вычисление на этапе компиляции.
@@ -132,7 +132,7 @@ Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 			}
 			return Q[0];
 		}
-		if ((D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q[2];
 			Q[0] = SetNode("+"); // #
@@ -152,7 +152,7 @@ Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 			}
 			return Q[0];
 		}
-		if (!(D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q[2];
 			Q[0] = SetNode("+"); // #
@@ -172,7 +172,7 @@ Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 			}
 			return Q[0];
 		}
-		if ((D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q = SetNode("+"); // #
 			Algebra_Node& node = *Q;
@@ -189,9 +189,9 @@ Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 		}
 
 	}
-	if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (D[1]->data.value == "1")
+		if (get<int>(D[1]->data.value) == 1)
 		{
 			Algebra_Node* Q = SetNode("*");
 			Algebra_Node& node = *Q;
@@ -208,9 +208,9 @@ Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 		}
 		else return P[0];
 	}
-	if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
-		if (D[0]->data.value == "1")
+		if (get<int>(D[0]->data.value) == 1)
 		{
 			Algebra_Node* Q = SetNode("*");
 			Algebra_Node& node = *Q;
@@ -227,7 +227,7 @@ Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 		}
 		else return P[1];
 	}
-	if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		Algebra_Node* Q = SetNode("0");
 		return Q;
@@ -239,9 +239,9 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['*']
 	Algebra_Node* T = SetNode("0");
   // Символы для замены строке : p - первый операнд ,  q - второй операнд , D - производная первого операнда , d - производная второго операнда.
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "D*q+d*p";
 			T = SetOperatorTree(s);
@@ -257,7 +257,7 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				while (0); // Для точки останова.
 			}
 		}
-		if ((D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "q+d*p";
 			T = SetOperatorTree(s);
@@ -272,7 +272,7 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				while (0); // Для точки останова.
 			}
 		}
-		if (!(D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "D*q+p";
 			T = SetOperatorTree(s);
@@ -288,7 +288,7 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 
 		}
-		if ((D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "q+p";
 			T = SetOperatorTree(s);
@@ -303,9 +303,9 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		}
 	}
-	if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[1]->data.value == "1"))
+		if (!(get<int>(D[1]->data.value) == 1))
 		{ // Умножение на константу p.
 			const string s = "d*p";
 			T = SetOperatorTree(s);
@@ -333,9 +333,9 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		}	
 	}
-	if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[0]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1))
 		{ // Умножение на константу q.
 			const string s = "D*q";
 			T = SetOperatorTree(s);
@@ -363,7 +363,7 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		}
 	}
-	if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		const string s = "0";
 		T = SetOperatorTree(s);
@@ -382,9 +382,9 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['/']
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q[6];
 			Q[0] = SetNode("/"); // #
@@ -419,7 +419,7 @@ Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			return Q[0];
 
 		}
-		if (!(D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q[5];
 			Q[0] = SetNode("/");
@@ -450,7 +450,7 @@ Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			return Q[0];
 
 		}
-		if ((D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q[5];
 			Q[0] = SetNode("/");
@@ -480,7 +480,7 @@ Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 			return Q[0];
 		}
-		if ((D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q[4];
 			Q[0] = SetNode("/");
@@ -507,9 +507,9 @@ Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			return Q[0];
 		}
 	}
-	if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[1]->data.value == "1"))
+		if (!(get<int>(D[1]->data.value) == 1))
 		{
 			Algebra_Node* Q;
 			Q = SetNode("/");
@@ -543,9 +543,9 @@ Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			return Q[0];
 		}
 	}
-	if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[0]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1))
 		{
 			Algebra_Node* Q[6];
 			Q[0] = SetNode("/");
@@ -607,7 +607,7 @@ Algebra_Node* func_3(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 		}
 	}
-	if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		Algebra_Node* Q = SetNode("0");
 		return Q;
@@ -618,9 +618,9 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['/']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "(D*q+d*p)/q^2";
 			T = SetOperatorTree(s);
@@ -636,7 +636,7 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				while (0); // Для точки останова.
 			}
 		}
-		if ((D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "(q+d*p)/q^2";
 			T = SetOperatorTree(s);
@@ -651,7 +651,7 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				while (0); // Для точки останова.
 			}
 		}
-		if (!(D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "(D*q+p)/q^2";;
 			T = SetOperatorTree(s);
@@ -667,7 +667,7 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 
 		}
-		if ((D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "(q+p)/q^2";
 			T = SetOperatorTree(s);
@@ -682,9 +682,9 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		}
 	}
-	if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{ // Деление константы p на q.
-		if (!(D[1]->data.value == "1"))
+		if (!(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "(-1)*p*d/q^2";
 			T = SetOperatorTree(s);
@@ -714,9 +714,9 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		};
 	}
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{ // Деление p на константу q.
-		if (D[1]->data.value == "1")
+		if (get<int>(D[1]->data.value) == 1)
 		{
 			const string s = "p*D/q";
 			T = SetOperatorTree(s);
@@ -747,7 +747,7 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		};
 	}
-	if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		const string s = "0";
 		T = SetOperatorTree(s);
@@ -764,9 +764,9 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['^']
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (!(D[0]->data.value == "1") && !(D[1]->data.value == "1")) // f(x)^g(x)
+		if (!(get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1)) // f(x)^g(x)
 		{
 			Algebra_Node* Q[7];
 			Q[0] = SetNode("*");
@@ -795,7 +795,7 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			return Q[0];
 
 		}
-		if ((D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{ // f(x) = F^x -> F^x * (D(F) * x / F + ln(F))
 			Algebra_Node* Q[6];
 			Q[0] = SetNode("*");
@@ -831,7 +831,7 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			return Q[0];
 
 		}
-		if (!(D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{ // f(x) = x^G -> x^G * (G / F + D(G)*ln(F))
 			Algebra_Node* Q[6];
 			Q[0] = SetNode("*");
@@ -867,7 +867,7 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			return Q[0];
 
 		}
-		if ((D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{ // # f'(x) = F^G * (G / F + ln(F)) , (x+a)^(x+b) , a , b - постоянные.
 			Algebra_Node* Q[6];
 			Q[0] = SetNode("*");
@@ -899,14 +899,16 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			return Q[0];
 		}
 	}
-	if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{ // # f(x)^c - степенная функция , f(x) = x^n -> f'(x) = n*x^(n-1), f(x) = P[1], n = P[0]
 		Token& T = P[0]->data;
-		if (!(D[1]->data.value == "1"))
+		if (!(get<int>(D[1]->data.value) == 1))
 		{
-			if (T.type == Token::Type::Number)
+			if (T.type == Token::Type::Integer || T.type == Token::Type::Real)
 			{
-				int n = stoi(T.value); // Извлекаем константный показатель степени.
+				int n = 0;
+				if ( T.type == Token::Type::Integer)  n = get<int>(T.value); // Извлекаем константный показатель степени.
+				else if(T.type == Token::Type::Real ) n = get<double>(T.value);
 				Algebra_Node* Q[4];
 				Q[0] = SetNode("*");
 				Q[1] = SetNode("*");
@@ -964,11 +966,13 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		}
 		else // f(x) = (x+a)^n ->  f'(x) = n*(x+a)^(n-1)
 		{
-			if (!(D[1]->data.value == "1"))
+			if (!(get<int>(D[1]->data.value) == 1))
 			{
-				if (T.type == Token::Type::Number)
+				if (T.type == Token::Type::Integer || T.type == Token::Type::Real)
 				{
-					int n = stoi(T.value); // Извлекаем константное основание степени.
+					int n = 0;
+					if (T.type == Token::Type::Integer)  int n = get<int>(T.value); // Извлекаем константный показатель степени.
+					else if (T.type == Token::Type::Real) int n = get<double>(T.value);
 					Algebra_Node* Q[4];
 					Q[0] = SetNode("*");
 					Q[1] = SetNode(n);
@@ -1020,9 +1024,11 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 			else
 			{
-				if (T.type == Token::Type::Number)
+				if (T.type == Token::Type::Integer || T.type == Token::Type::Real)
 				{
-					int n = stoi(T.value); // Извлекаем константное основание степени.
+					int n = 0;
+					if (T.type == Token::Type::Integer)  int n = get<int>(T.value); // Извлекаем константный показатель степени.
+					else if (T.type == Token::Type::Real) int n = get<double>(T.value);
 					Algebra_Node* Q[4];
 					Q[0] = SetNode("*");
 					Q[1] = SetNode(n);
@@ -1076,14 +1082,16 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		}
 
 	}
-	if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{ // c^f(x) - показательная функция , f(x) = a^x -> f'(x) = a^x*ln(a)
 		// g(x) = a^f(x) -> g'(x) = a^f(x) * f'(x) * ln(a) , P[0] = f(x) , P[1] = a
 		Token& T = P[1]->data;
-		int a = stoi(T.value);
-		if (!(D[0]->data.value == "0"))
+		int a = 0;
+		if (T.type == Token::Type::Integer)  a = get<int>(T.value); // Извлекаем константный показатель степени.
+		else if (T.type == Token::Type::Real) a = get<double>(T.value);
+		if (!(get<int>(D[0]->data.value) == 0))
 		{
-			if (T.type == Token::Type::Number)
+			if (T.type == Token::Type::Number || T.type == Token::Type::Integer || T.type == Token::Type::Real)
 			{
 				Algebra_Node* Q[6];
 				Q[0] = SetNode("*");
@@ -1144,7 +1152,7 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		}
 		else
 		{
-			if (T.type == Token::Type::Number)
+			if (T.type == Token::Type::Integer || T.type == Token::Type::Real)
 			{
 				Algebra_Node* Q[5];
 				Q[0] = SetNode("*");
@@ -1198,7 +1206,7 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		}
 
 	}
-	if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{
 		Algebra_Node* Q;
 		Q = SetNode("0");
@@ -1210,9 +1218,9 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['^']
 	Algebra_Node* T =  SetNode("0");
 
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{
-		if (!((D[0]->data.value == "1") && !(D[1]->data.value == "1")))
+		if (!((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1)))
 		{
 			const string s = "p^q*(D*q/p +d*ln(p))";
 			T = SetOperatorTree(s);
@@ -1229,7 +1237,7 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		}
 
-		if ((D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "p^q*(q/p +d*ln(p))";
 			T = SetOperatorTree(s);
@@ -1244,7 +1252,7 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				while (0); // Для точки останова.
 			}
 		}
-		if (!(D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if (!(get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "p^q*(D*q/p + ln(p))";
 			T = SetOperatorTree(s);
@@ -1260,7 +1268,7 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 
 		}
-		if ((D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "p^q*(q/p + ln(p))";
 			T = SetOperatorTree(s);
@@ -1275,9 +1283,9 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		}
 	}
-	if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{ // Показательная функция
-		if (!(D[1]->data.value == "1"))
+		if (!(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "p^q*ln(p)*d";
 			T = SetOperatorTree(s);
@@ -1308,9 +1316,9 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 		}
 	}
-	if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{ // Степеннная функция
-		if (!(D[1]->data.value == "1"))
+		if (!(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "D*q*p^(q-1)";
 			T = SetOperatorTree(s);
@@ -1341,7 +1349,7 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			}
 		}
 	}
-	if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{ // Константа в степени константа.
 		const string s = "0";
 		T = SetOperatorTree(s);
@@ -1360,10 +1368,10 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 Algebra_Node* func_5(Algebra_Node* P[2] , Algebra_Node* D[2], string c)
 {
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{ //  f(y) = log(y , x) = ln(y)/ln(x) ,  P[1] = x , P[0] = y
 	  // f'(y) = (D(y) / y * ln(x) - D(x) / x * ln(y)) / ln^2(x)
-		if (!((D[0]->data.value == "1") && (D[1]->data.value == "1")))
+		if (!((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1)))
 		{
 			Algebra_Node* Q[11];
 			Q[0] = SetNode("/");
@@ -1414,7 +1422,7 @@ Algebra_Node* func_5(Algebra_Node* P[2] , Algebra_Node* D[2], string c)
 			}
 			return Q[0];
 
-			if ((D[0]->data.value == "1") && (D[1]->data.value == "1"))
+			if ((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 			{
 				Algebra_Node* Q[9];
 				Q[0] = SetNode("/");
@@ -1459,7 +1467,7 @@ Algebra_Node* func_5(Algebra_Node* P[2] , Algebra_Node* D[2], string c)
 			}
 
 		}
-		if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+		if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 		{ // f(y) = log(c , y) - логарифм по постоянному основанию степени.
 		  //  f'(y) = D(y)/(y * ln(c)) , P[0] = c , P[1] = y
 			Algebra_Node* Q[3];
@@ -1483,9 +1491,9 @@ Algebra_Node* func_5(Algebra_Node* P[2] , Algebra_Node* D[2], string c)
 			}
 			return Q[0];
 		}
-		if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+		if ((get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 		{
-			if (!(D[1]->data.value == "1"))
+			if (!(get<int>(D[1]->data.value) == 1))
 			{
 				Algebra_Node* Q[9];
 				Q[0] = SetNode("/");
@@ -1567,7 +1575,7 @@ Algebra_Node* func_5(Algebra_Node* P[2] , Algebra_Node* D[2], string c)
 				return Q[0];
 			}
 		}
-		if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+		if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 		{
 			Algebra_Node* Q;
 			Q = SetNode("0");
@@ -1580,10 +1588,10 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 {
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{ //  f(y) = log(y , x) = ln(y)/ln(x) ,  P[1] = x , P[0] = y
 	  // f'(y) = (D(y) / y * ln(x) - D(x) / x * ln(y)) / ln^2(x)
-		if (!((D[0]->data.value == "1") && !(D[1]->data.value == "1")))
+		if (!((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1)))
 		{
 			const string s = "(D/p*ln(q)-d/q*ln(p))/(ln(q))^2";
 			T = SetOperatorTree(s);
@@ -1599,7 +1607,7 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				while (0); // Для точки останова.
 			}
 		}
-		if ((D[0]->data.value == "1") && !(D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && !(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "(ln(q)/p-d/q*ln(p))/(ln(q))^2";
 			T = SetOperatorTree(s);
@@ -1614,7 +1622,7 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				while (0); // Для точки останова.
 			}
 		}
-		if (!((D[0]->data.value == "1") && (D[1]->data.value == "1")))
+		if (!((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1)))
 		{
 			const string s = "(D/p*ln(q)-ln(p)/q)/(ln(q))^2";
 			T = SetOperatorTree(s);
@@ -1629,7 +1637,7 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				while (0); // Для точки останова.
 			}
 		}
-		if ((D[0]->data.value == "1") && (D[1]->data.value == "1"))
+		if ((get<int>(D[0]->data.value) == 1) && (get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "(ln(q)/p-ln(p)/q)/(ln(q))^2";
 			T = SetOperatorTree(s);
@@ -1646,10 +1654,10 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		}
 
 	}
-	if (!(D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if (!(get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
 	{ // f(y) = log(c , y) - логарифм по постоянному основанию степени.
 		  //  f'(y) = D(y)/(y * ln(c)) , P[0] = c , P[1] = y
-		if (!(D[1]->data.value == "1"))
+		if (!(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "d/(q*ln(p))";
 			T = SetOperatorTree(s);
@@ -1680,9 +1688,9 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 		}
 	}
-	if ((D[0]->data.value == "0") && !(D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value ) == 0) && !(get<int>(D[1]->data.value) == 0))
 	{ // Логарифм от постоянного числа по переменному основнию.
-		if (!(D[1]->data.value == "1"))
+		if (!(get<int>(D[1]->data.value) == 1))
 		{
 			const string s = "(-1)*d*ln(p)/(q*ln(q))^2";
 			T = SetOperatorTree(s);
@@ -1713,7 +1721,7 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 		}
 	}
-	if ((D[0]->data.value == "0") && (D[1]->data.value == "0"))
+	if ((get<int>(D[0]->data.value) == 0) && (get<int>(D[1]->data.value) == 0))
     { // Логарифм постоянного числа по постоянной степени.
 		const string s = "0";
 		T = SetOperatorTree(s);
@@ -1732,7 +1740,7 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 Algebra_Node* func_6(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 {
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		Algebra_Node* Q[2];
 		Q[0] = SetNode("*");
@@ -1772,7 +1780,7 @@ Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['exp']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		const string s = "exp(p)*D";
 		T = SetOperatorTree(s);
@@ -1807,7 +1815,7 @@ Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 
 Algebra_Node* func_7(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['ln']
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		Algebra_Node* Q;
 		Q = SetNode("ln");
@@ -1846,7 +1854,7 @@ Algebra_Node* func_7a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 
 Algebra_Node* func_8(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['sin']
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		Algebra_Node* Q[2];
 		Q[0] = SetNode("*");
@@ -1887,7 +1895,7 @@ Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['sin']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		const string s = "D*cos(p)";
 		T = SetOperatorTree(s);
@@ -1921,7 +1929,7 @@ Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 
 Algebra_Node* func_9(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['cos']
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		Algebra_Node* Q[4];
 		Q[0] = SetNode("*");
@@ -1973,7 +1981,7 @@ Algebra_Node* func_9a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['cos']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		const string s = "(-1)*D*sin(p)";
 		T = SetOperatorTree(s);
@@ -2053,7 +2061,7 @@ Algebra_Node* func_10a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 
 Algebra_Node* func_11(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['ctg']
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		Algebra_Node* Q[6];
 		Q[0] = SetNode("/");
@@ -2117,7 +2125,7 @@ Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['ctg']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		const string s = "(-1)*D/(cos(p))^2";
 		T = SetOperatorTree(s);
@@ -2196,7 +2204,7 @@ Algebra_Node* func_13a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['arccos']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		string s = "(-1)*D/(1-p^2)^(1/2)";
 		T = SetOperatorTree(s);
@@ -2251,7 +2259,7 @@ Algebra_Node* func_15a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['arcctg']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		string s = "(-1)*D/(1+p^2)";
 		T = SetOperatorTree(s);
@@ -2286,7 +2294,7 @@ Algebra_Node* func_16a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['sh']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		string s = "D*ch(p)";
 		T = SetOperatorTree(s);
@@ -2322,7 +2330,7 @@ Algebra_Node* func_17a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['ch']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		string s = "(-1)*D*sh(p)";
 		T = SetOperatorTree(s);
@@ -2377,7 +2385,7 @@ Algebra_Node* func_19a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 { // ['cth']
 	Algebra_Node* T = SetNode("0");
 
-	if (!(D[0]->data.value == "1"))
+	if (!(get<int>(D[0]->data.value) == 1))
 	{
 		string s = "D/(ch(p))^2";
 		T = SetOperatorTree(s);
@@ -2490,15 +2498,20 @@ Algebra_Node* func_23a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви было возвращающие значение.
 {
 	Token& T = root->data;
-	if (T.type == Token::Type::Algebra || T.type == Token::Type::Number)
+	if (T.type == Token::Type::Algebra)
 	{
 		string s;
-		if (T.value == X)  s = "1";
+		if (get<string>(T.value) == X)  s = "1";
 		else s = "0";
 		Algebra_Node* node = SetNode(s);
 		return node;
 	}
-	if (f_opr_two(T))
+	else if (T.type == Token::Type::Number || T.type == Token::Type::Real )
+	{ 
+		Algebra_Node* node = SetNode("0");
+		return node;
+	}
+	else if (f_opr_two(T))
 	{
 		Algebra_Node* P[2]; // Сюда сохраняются первый и второй операнд.
 		Algebra_Node* D[2]; // Сюда сохраняются соответствующие производные этих операндов.
@@ -2522,7 +2535,7 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 			v = PostfixToInfix(V[0]); // Все поддерево.
 			
 		}
-		string c = T.value;
+		string c = get<string>(T.value);
 		Algebra_Node* node = SetNode("0");
 		if (c == "+" || c == "-") node = func_1a(P, D, c);
 		if (c == "*") node = func_2a(P, D, c);
@@ -2550,7 +2563,7 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 			v = PostfixToInfix(V); // Все поддерево.
 
 		}
-		string c = T.value;
+		string c = get<string>(T.value);
 		Algebra_Node* node = SetNode("0");
 		if (c == "exp") node = func_6a(P, D, c);
 		else if (c == "ln") node = func_7a(P, D, c);

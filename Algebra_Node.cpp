@@ -22,7 +22,7 @@ Algebra_Node::~Algebra_Node() {
 }
 
 string Algebra_Node::toString() {
-    return data.value;
+    return get<string>(data.value);
 }
 
 void Algebra_Node::addLeftNode(Algebra_Node* Q) {
@@ -39,7 +39,8 @@ static string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udi
 
 
 void Print_Tree_R(Algebra_Node const* node, string const& prefix = " ", bool root = true, bool last = true) {
-    cout << prefix << (root ? "" : (last ? ch_udia_hor : ch_ver_hor)) << (node ? node->data.value : "") << endl;
+    cout << prefix << (root ? "" : (last ? ch_udia_hor : ch_ver_hor));
+    cout << (node ? ToString(node->data.value) : "") << endl;
     if (!node || (!node->left && !node->right))
         return;
     vector<Algebra_Node*> v{ node->left, node->right };
@@ -58,7 +59,7 @@ void Print_Tree(Algebra_Node const* node, string const& prefix = "", bool root =
         node = pair.first;
         string cur_prefix = prefix + (root ? "" : (pair.second.empty() ? "" : (last ? ch_udia_hor : ch_ver_hor)));
 
-        cout << cur_prefix << (node ? node->data.value : "") << endl;
+        cout << cur_prefix << get<string>(node ? node->data.value : "") << endl;
 
         if (node && (node->left || node->right)) {
             vector<Algebra_Node*> v{ node->left, node->right };
@@ -84,7 +85,7 @@ Algebra_Node* PolishToTree(deque<Token> fh) {
     while (!fs.empty()) {
         T = fs.back();
         fs.pop_back();
-        string c = T->data.value;
+        // string c = get<string>(T->data.value);
         if (f_arg(T->data)) {
             stack.push(T);
         }
@@ -176,7 +177,7 @@ void FindValueD(Algebra_Node* root, string c, vector<vector<char>>& paths) { //
 
     while (true) {
 
-        if (currentNode->data.value == c)
+        if (CheckEquality(currentNode->data.value , c))
         {
             bool B = false;
             if (track.empty())
@@ -232,7 +233,7 @@ void FindValueW(Algebra_Node* root , string c , vector<vector<char>>& paths) { /
 
     while (true) {
 
-        if (currentNode->data.value == c)
+        if (CheckEquality(currentNode->data.value , c))
         {
             bool B = false;
             if (track.empty())
@@ -291,7 +292,7 @@ Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const string 
             return nullptr;
         }
         Algebra_Node* newNode = new Algebra_Node();
-        if (root->data.value == c)
+        if (CheckEquality(root->data.value, c))
         {
             Token T = SetToken(s);
             newNode = new Algebra_Node(T);
@@ -307,15 +308,15 @@ Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const string 
         return newNode;
 }
  
-template<typename T> // Для типов int , double , string.
-Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const T s) {
+// template<typename T> // Для типов int , double , string.
+Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const string s) {
     if (root == nullptr) {
         return nullptr;
     }
 
     Algebra_Node* newNode = new Algebra_Node();
 
-    if (root->data.value == c) {
+    if (CheckEquality(root->data.value , c)) {
         Token token = SetToken(s);
         newNode = new Algebra_Node(token);
         while (0); // For breakpoint.
@@ -344,7 +345,7 @@ Algebra_Node* TreeExprReplaceD(Algebra_Node* root, const string c, const string 
         Algebra_Node* currentNode = nodeStack.top();
         nodeStack.pop();
 
-        if (currentNode->data.value == c) {
+        if (CheckEquality(currentNode->data.value , c)) { // Здесь ошибка.
             Token T = SetToken(s);
             currentNode = new Algebra_Node(T);
         }
@@ -373,7 +374,7 @@ Algebra_Node* TreeExprReplaceW(Algebra_Node* root, const string c, const string 
         Algebra_Node* currentNode = nodeQueue.front();
         nodeQueue.pop();
 
-        if (currentNode->data.value == c) {
+        if (CheckEquality(currentNode->data.value , c)) {
             Token T = SetToken(s);
             currentNode = new Algebra_Node(T);
         }
@@ -426,7 +427,7 @@ void TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Algebra_Nod
         lr_st.pop();
         parents.pop();
 
-        if (currentNode->data.value == c)
+        if (CheckEquality(currentNode->data.value, c))
         {
              Algebra_Node& Q = *parent;
              switch (p)
@@ -472,7 +473,7 @@ void TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const string c, Algebra_Nod
         lr_fs.pop();
         parents.pop();
 
-        if (currentNode->data.value == c)
+        if (CheckEquality(currentNode->data.value, c))
         {
             Algebra_Node& Q = *parent;
             switch (p)
@@ -625,12 +626,22 @@ string PostfixToInfix(vector<Token>& fs)
     while (!fs.empty())
     {
         Token T = fs.back();
-        string f = T.value;
+        string f = get<string>(T.value);
         fs.pop_back();
         st_opr.push(0); // Для балансировки стека.
-        if (T.type == Token::Type::Algebra || T.type == Token::Type::Number)
-        {   
-            t = T.value;
+        if (T.type == Token::Type::Algebra)
+        {
+            t = get<string>(T.value);
+            st.push(t);
+        }
+        else if (T.type == Token::Type::Integer)
+        {
+            t = get<int>(T.value);
+            st.push(t);
+        }
+        else if (T.type == Token::Type::Real)
+        {
+            t = get<double>(T.value);
             st.push(t);
         }
         else if (f_opr_two(T))
@@ -824,7 +835,7 @@ double FunctionValue(deque<Token> fh, double value, string symbol)
     for (iter = fh.begin(); iter != fh.end(); iter++)
     {
         string c = to_string(value);
-        if (iter->value == symbol)
+        if (get<string>(iter->value) == symbol)
         {
             Token T = SetToken(c);
             *iter = T;
@@ -835,11 +846,11 @@ double FunctionValue(deque<Token> fh, double value, string symbol)
 }
 
 
-double FunctionValueM(string expr, map<string, float> ds)
+double FunctionValueM(string expr, map<string, double> ds)
 { // Вычислить значение функции заданной строкой с параметрами заданными в словаре где ключ - имя переменной, а значение - ее значение.
     Algebra_Node* root = SetOperatorTree(expr);
     
-    map<string, float>::iterator iter;
+    map<string, double>::iterator iter;
     for (iter = ds.begin(); iter != ds.end(); iter++)
     {
         string p = iter->first;
@@ -851,7 +862,7 @@ double FunctionValueM(string expr, map<string, float> ds)
     { 
         deque<Token> kh;
         TreeToPolish(root , kh);
-        float r = PolishCalculation(kh);
+        double r = PolishCalculation(kh);
         return r;
     }
     else

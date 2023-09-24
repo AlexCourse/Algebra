@@ -2,28 +2,116 @@
 #include <regex>
 #define DEBUG 1
 
-Token::Token() : type(Type::Unknown), intValue(0), doubleValue(0), value(""), precedence(-1), rightAssociative(false) {}
+Token::Token() : type(Type::Unknown), value(""), precedence(-1), rightAssociative(false) {}
 
-Token::Token(Type t, const string& s, int prec, bool ra) : type(t), intValue(0), doubleValue(0), value(s), precedence(prec), rightAssociative(ra) {}
+Token::Token(Type t, const string& s, int prec, bool ra) : type(t), value(s), precedence(prec), rightAssociative(ra) {}
 
-Token::Token(Type t, const int m) : type(t), intValue(m), doubleValue(0), value(""), precedence(-1), rightAssociative(false) {}
+Token::Token(Type t, const int m) : type(t), value(m), precedence(-1), rightAssociative(false) {}
 
-Token::Token(Type t, const double m) : type(t), intValue(0), doubleValue(m), value(""), precedence(-1), rightAssociative(false) {}
+Token::Token(Type t, const double m) : type(t), value(m), precedence(-1), rightAssociative(false) {}
 
-Token::Token(const Token& other) : type(other.type), intValue(other.intValue), doubleValue(other.doubleValue), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative) {}
+Token::Token(const Token& other) : type(other.type), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative) {}
 
 Token Token::operator=(const Token& other) {
-	Token T = Token(other.type, other.value, other.precedence, other.rightAssociative);
-	return T;
+	return Token(other);
 }
 
 bool Token::operator==(const Token& other) {
-	return (type == other.type && intValue == other.intValue && doubleValue == other.doubleValue && value == other.value && precedence == other.precedence && rightAssociative == other.rightAssociative);
+	return (type == other.type  && value == other.value && precedence == other.precedence && rightAssociative == other.rightAssociative);
 }
 
+bool Token::operator == (const int m)
+{
+	auto t = this->value;
+	if (holds_alternative<int>(t)) {
+		int p = get<int>(t);
+		if (p == m) return true;
+		else return false;
+	}
+	else return false;
+}
+
+bool Token::operator == (const double m)
+{
+	auto t = this->value;
+	if (holds_alternative<double>(t)) {
+		double p = get<double>(t);
+		if (p == m) return true;
+		else return false;
+	}
+	else return false;
+}
+
+bool Token::operator == (const string s)
+{
+	auto t = this->value;
+	if (holds_alternative<string>(t)) {
+		string p = get<string>(t);
+		if (p == s) return true;
+		else return false;
+	}
+	else return false;
+}
+
+
 ostream& operator<<(ostream& os, const Token& token) {
-	os << token.value;
+	if (holds_alternative<string>(token.value)) {
+		string s = get<string>(token.value);
+		os << s;
+	}
+	else if (holds_alternative<int>(token.value)) {
+		int m = get<int>(token.value);
+		os << m;
+	}
+	else if (holds_alternative<double>(token.value)) {
+		double m = get<double>(token.value);;
+		os << m;
+	}
 	return os;
+}
+
+string Token::ToString()
+{
+	string s ="";
+	auto value = this->value;
+	if (holds_alternative<string>(value)) {
+		s = get<string>(value);
+	}
+	else if (holds_alternative<int>(value)) {
+		int m = get<int>(value);
+		s = to_string(m);
+	}
+	else if (holds_alternative<double>(value)) {
+		double m = get<double>(value);;
+		s = to_string(m);
+	}
+	return s;
+}
+
+string ToString(const variant<string, int, double>& value)
+{
+	string s = "";
+	if (holds_alternative<string>(value)) {
+		s = get<string>(value);
+	}
+	else if (holds_alternative<int>(value)) {
+		int m = get<int>(value);
+		s = to_string(m);
+	}
+	else if (holds_alternative<double>(value)) {
+		double m = get<double>(value);;
+		s = to_string(m);
+	}
+	return s;
+}
+
+void Token::SetValue(const variant<string, int, double>& newValue) {
+	this->value = newValue;
+}
+
+
+variant<string, int, double> Token::GetValue() const {
+	return this->value;
 }
 
 struct Operator {
@@ -48,14 +136,15 @@ map<char, Operator> operator_info = { { '+' , { 2, "L" }} ,
 										{'^' , { 4, "R" }},
 };
 
-
-bool f_arg(const Token& T)
-{
-	if (T.type == Token::Type::Algebra || T.type == Token::Type::Number) return true;
-	else return false;
+bool f_arg(const Token& T) {
+	if (T.type == Token::Type::Algebra || T.type == Token::Type::Number || T.type == Token::Type::Integer || T.type == Token::Type::Real)
+		return true;
+	else
+		return false;
 }
+
 bool f_opr_two(const Token& T) {
-	string p = T.value;
+	string p = get<string>(T.value);
 	if (operator_info_two.count(p) || func_info_two.count(p)) {
 		return true;
 	}
@@ -63,7 +152,7 @@ bool f_opr_two(const Token& T) {
 }
 
 bool f_opr_one(const Token& T) {
-	string p = T.value;
+	string p = get<string>(T.value);
 	if (operator_info_one.count(p) || func_info_one.count(p)) {
 		return true;
 	}
@@ -71,25 +160,90 @@ bool f_opr_one(const Token& T) {
 }
 
 bool f_opr_free(const Token& T) {
-	string p = T.value;
+	string p = get<string>(T.value);
 	if (func_info_free.count(p)) {
 		return true;
 	}
 	return false;
 }
 
-bool isliter(char p)
-{
-	if ((p >= 'A' && p <= 'Z') || (p >= 'a' && p <= 'z'))
-	{
+bool isliter(char p) {
+	if ((p >= 'A' && p <= 'Z') || (p >= 'a' && p <= 'z')) {
 		return true;
 	}
-	else return false;
+	else {
+		return false;
+	}
 }
 
 Token::~Token() {
 	// Destructor definition
 	// Add any necessary cleanup code here
+}
+
+/*
+template<typename T>
+bool CheckEquality(variant<string, int, double> value, T m)
+{
+	if constexpr (is_same_v<T, string>) {
+		if (holds_alternative<string>(value))
+		{
+			if (get<string>(value) == m) return true;
+			else return false;
+		}
+		else return false;
+	}
+	else if constexpr (is_same_v<T, int>) {
+		if (holds_alternative<int>(value))
+		{
+			if (get<int>(value) == m) return true;
+			else return false;
+		}
+		else return false;
+	}
+	else if constexpr (is_same_v<T, double>) {
+		if (holds_alternative<int>(value))
+		{
+			if (get<double>(value) == m) return true;
+			else return false;
+		}
+		else return false;
+	}
+	else {
+
+	}
+}
+*/
+
+// template
+bool CheckEquality(variant<string, int, double> value, string s) 
+{
+		if (holds_alternative<string>(value))
+		{
+			if (get<string>(value) == s) return true;
+			else return false;
+		}
+		else return false;
+}
+// template
+bool CheckEquality(variant<string, int, double> value, int m) 
+{
+	if (holds_alternative<string>(value))
+	{
+		if (get<int>(value) == m) return true;
+		else return false;
+	}
+	else return false;
+}
+// template
+bool CheckEquality(variant<string, int, double> value, double m)
+{
+	if (holds_alternative<string>(value))
+	{
+		if (get<double>(value) == m) return true;
+		else return false;
+	}
+	else return false;
 }
 
 deque<Token> exprToTokens(const string& expr) {
@@ -114,7 +268,16 @@ deque<Token> exprToTokens(const string& expr) {
 				++p;
 			}
 			const auto s = std::string(b, p);
-			tokens.push_back(Token{ t, s });
+			if (t == Token::Type::Integer)
+			{
+				int m = stoi(s);
+				tokens.push_back(Token{ t, m });
+			}
+			else if (t == Token::Type::Real)
+			{
+				double m = stod(s);
+				tokens.push_back(Token{ t, m });
+			}
 			--p;
 		}
 		else
@@ -246,7 +409,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 		Token& T_1 = *(iter[1]);
 		if (T_0.type == Token::Type::LeftParen)
 			if (T_1.type == Token::Type::Operator)
-				if (T_1.value == "-") entries.push_back(i);
+				if (get<string>(T_1.value) == "-") entries.push_back(i);
 		iter[0] = iter[1];
 		iter[1]++;
 		i++;
@@ -266,7 +429,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 			{
 				if (T_1.type == Token::Type::Number)
 				{  
-					int q = stoi(T_1.value);
+					int q = stoi(get<string>(T_1.value));
 					q = (-1) * q;
 					Token T_2 = SetToken(q);
 					fh.erase(fh.begin() + p, fh.begin() + p + 4); // Функция странно удаляет
@@ -293,13 +456,13 @@ void Tokenize_u_minus(deque<Token>& fh) {
 	}
 	Token& T_0 = fh.front();
 	Token& T_1 = fh[1];
-	if (T_0.value == "-")  // Этот случай не пересекается с предыдущим случаем.
+	if (get<string>(T_0.value) == "-")  // Этот случай не пересекается с предыдущим случаем.
 	{   // Случай когда унарный минус стоит в начале строки.
 		string f, r;
 		if (T_1.type == Token::Type::Number)
 		{
 			fh.pop_front();
-			int m = stoi(T_1.value);
+			int m = stoi(get<string>(T_1.value));
 			m = (-1) * m;
 			T_1.value = to_string(m);
 			if (DEBUG) r = TokensToStr(fh);
@@ -326,7 +489,7 @@ string TokensToStr(deque<Token> fh)
 	string s = "";
 	for (Token T : fh)
 	{
-		s = s + T.value;
+		s = s + get<string>(T.value);
 	}
 	return s;
 }
