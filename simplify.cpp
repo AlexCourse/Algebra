@@ -4,15 +4,14 @@
 class GarbegeCollector
 {
 public:  
-    std::deque<Algebra_Node*> deletedNode;
+    std::deque<Algebra_Node*> ExposedBranches;
+    std::deque<Algebra_Node*> ExposedNodes;
 };
 
 
-SM::SM(const int level, Algebra_Node* const parent, Algebra_Node* const branche, const char direcect) : level(level) , parent(parent) , branche(branche) , direct(direct) {}
-    
 
 
-bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_Node*& root, char& c, GarbegeCollector& G)
+bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_Node*& root, char& c, int level ,GarbegeCollector& G)
 { // ['*']
     // Последний параметр содержит то: последний или предпоследний элемент в стеке содержит указатель на освобожденный из памяти элемент. 'L' - предпоследний , 'R' - последний., 'Z' - удаление обоих.
     // В трех последних аргументах значения возвращаются.
@@ -55,7 +54,7 @@ bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
         }
         else root = W;
         // RecursiveDestructor(currentNode);
-        G.deletedNode.push_back(currentNode);
+        G.ExposedBranches.push_back(currentNode);
         c = 'Z';
     }
     else if (!(k == -1))
@@ -93,8 +92,8 @@ bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
         else root = P[k];
         k = (k + 1) % 2; // 1-> 0 , 0 -> 1
         // delete P[k]; // Удаление одного узла нулевого слагаемого.
-        RecursiveDestructor(P[k]);
-        free(R);
+        G.ExposedBranches.push_back(P[k]);
+        G.ExposedNodes.push_back(R);
         while (0);
         switch (k)
         {
@@ -105,40 +104,7 @@ bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
     return match;
 }
 
-bool func_1a(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, int level)
-{
-    Algebra_Node& C = *currentNode;
-    Algebra_Node* P[2];
-    P[0] = currentNode->left;
-    P[1] = currentNode->right;
-    bool B = false;
-    bool match = false;
-    int k = -1;
-
-    for (int i = 0; i < 2; i++)
-    {
-        if (CE(P[i]->data.value, 0)) B = true; // Если один из множителй равен нулю.
-        else if (CE(P[i]->data.value, 1)) k = i; // Сохраняем номер единичного операнда.
-    }
-    if (B)
-    {
-        Algebra_Node* W = SetNode(0);
-        Algebra_Node& K = *parent;
-        SM Q = SM(level, parent, W, p);
-        
-    }
-    else if (!(k == -1))
-    {
-        Algebra_Node* R = currentNode;
-        match = true;
-        Algebra_Node& K = *parent;
-        k = (k + 1) % 2; // 1-> 0 , 0 -> 1
-        SM Q = SM(level, parent, P[k], p);
-    }
-    return match;
-}
-
-bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_Node*& root, char& c, GarbegeCollector& G)
+bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_Node*& root, char& c, int level ,GarbegeCollector& G)
 { // ['^']
     Algebra_Node& C = *currentNode;
     Algebra_Node* P[2];
@@ -173,7 +139,7 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
         }
         else root = W;
         // RecursiveDestructor(currentNode);
-        G.deletedNode.push_back(currentNode);
+        G.ExposedBranches.push_back(currentNode);
         c = 'Z';
     }
     else if (CE(P[1]->data.value, 1)) // Сокращение первой степени.
@@ -208,9 +174,9 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
             std::cout << "func_2 : AFTER" << std::endl;
             Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
         }
-        free(prev_node);
-        // delete P[1]; // Удаление одного узла -показатель первой степени.
-        RecursiveDestructor(P[1]);
+        G.ExposedNodes.push_back(prev_node);
+        // Удаление одного узла -показатель первой степени.
+        G.ExposedBranches.push_back(P[1]);
         match = true;
         c = 'R';
         while (0);
@@ -242,7 +208,7 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
         match = true;
         c = 'Z';
         // RecursiveDestructor(currentNode);
-        G.deletedNode.push_back(currentNode);
+        G.ExposedBranches.push_back(currentNode);
     }
     else if (CE(P[0]->data.value, 0)) // Ноль в любой положительной степени.
     {
@@ -274,7 +240,7 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
                 c = 'Z';
                 match = true;
                 // RecursiveDestructor(currentNode);
-                G.deletedNode.push_back(currentNode);
+                G.ExposedBranches.push_back(currentNode);
                 if (DEBUG)
                 {
                     std::cout << "func_2 : AFTER" << std::endl;
@@ -287,7 +253,7 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
     return match;
 }
 
-bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, GarbegeCollector& G) {
+bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level ,GarbegeCollector& G) {
     // ['/']
     Algebra_Node& C = *currentNode;
     Algebra_Node* P[2];
@@ -326,8 +292,7 @@ bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
             root = W;
         }
         c = 'Z';
-        // RecursiveDestructor(currentNode);
-        G.deletedNode.push_back(currentNode);
+        G.ExposedBranches.push_back(currentNode);
     }
     else if (CE(P[1]->data.value, 1)) {
         Algebra_Node* R = currentNode;
@@ -350,7 +315,7 @@ bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
             }
             }
             // delete P[1]; // Удаление одного узла - единичного делителя.
-            RecursiveDestructor(P[1]);
+            G.ExposedBranches.push_back(P[1]);
             c = 'R';
             if (DEBUG)
             {
@@ -362,12 +327,13 @@ bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
             root = P[0];
         }
         match = true;
-        free(R);
+        G.ExposedNodes.push_back(R);
+        R = nullptr;
     }
     return match;
 }
 
-bool func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, GarbegeCollector& G) {
+bool func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level ,GarbegeCollector& G) {
     // ['+']
     Algebra_Node& C = *currentNode;
     Algebra_Node* P[2];
@@ -415,19 +381,20 @@ bool func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
         }
         k = (k + 1) % 2;
         // delete P[k];
-        RecursiveDestructor(P[k]);
+        G.ExposedBranches.push_back(P[k]);
         switch (k)
         {
         case 0: { c = 'L'; break; }
         case 1: { c = 'R'; break; }
         }
-        free(R);
+        G.ExposedNodes.push_back(R);
+        R = nullptr;
     }
 
     return match;
 }
 
-bool func_5(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, GarbegeCollector& G)
+bool func_5(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level ,GarbegeCollector& G)
 {
     Algebra_Node& C = *currentNode;
     Algebra_Node* P[2];
@@ -489,11 +456,38 @@ bool func_5(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
             else {
                 root = W;
             }
-            // RecursiveDestructor(currentNode);
-            G.deletedNode.push_back(currentNode);
+            G.ExposedBranches.push_back(currentNode);
         }
     }
     return match;
+}
+
+void GoDown(std::stack<Algebra_Node*> st , std::stack<Algebra_Node*> parents, Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level ,GarbegeCollector& G)
+{
+
+    switch (c)
+    {
+    case 'L': { Algebra_Node* topNode = st.top(); st.pop(); st.pop(); st.push(topNode); break; } // Удаление предпоследнего элемента из стека.
+    case 'R': { st.pop();  break;  } // потому-что будет повтороное добавление узла , что ведет к лишнему обходу дерева.
+    case 'Z': { st.pop(); st.pop(); }
+    }
+    if (level)
+    {
+        st.push(parent);
+        if (f_opr_two(parent->data))
+        {
+            parents.pop();
+            parents.pop();
+        }
+        else if (f_opr_one(parent->data)) parents.pop();
+    }
+    else
+    {
+        while (!st.empty()) st.pop();
+        while (!parents.empty()) parents.pop();
+        st.push(root);
+        parents.push(root);
+    }
 }
 
 
@@ -522,6 +516,9 @@ void simplify_F(Algebra_Node*& root)
     int j = 0;
     Algebra_Node* const r = root;
     bool match = false;
+    std::stack<int> st_depth;
+    st_depth.push(0);
+    int level = 0;
     GarbegeCollector G = GarbegeCollector();
 
     while (!st.empty()) {
@@ -535,6 +532,8 @@ void simplify_F(Algebra_Node*& root)
         st.pop();
         if(!lr_st.empty()) lr_st.pop();
         parents.pop();
+        level = st_depth.top();
+        st_depth.pop();
         match = false;
 
         Algebra_Node* R = root;
@@ -543,12 +542,14 @@ void simplify_F(Algebra_Node*& root)
             lr_st.push('L');
             parents.push(currentNode);
             st.push(currentNode->left);
+            st_depth.push(level + 1);
         }
         if (currentNode->right != nullptr)
         {
             lr_st.push('R');
             parents.push(currentNode);
             st.push(currentNode->right);
+            st_depth.push(level + 1);
         }
         if (DEBUG)
         {
@@ -556,37 +557,13 @@ void simplify_F(Algebra_Node*& root)
             Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
         }
         char c = '0';
-        if (CE(currentNode->data.value, '*')) match = match || func_1(currentNode, parent, p, root, c, G); // Правила 1 , 4.
-        if (CE(currentNode->data.value, '^')) match = match || func_2(currentNode, parent, p, root, c, G); // Правила 2 , 7 , 8.
-        if (CE(currentNode->data.value, '/')) match = match || func_3(currentNode, parent, p, root, c, G); // Правило 3 , 6.
-        if (CE(currentNode->data.value, '+') || CE(currentNode->data.value, '-')) match = match || func_4(currentNode, parent, p, root, c, G); // Правило 5.
+        if (CE(currentNode->data.value, '*')) match = match || func_1(currentNode, parent, p, root, c, level ,G); // Правила 1 , 4.
+        if (CE(currentNode->data.value, '^')) match = match || func_2(currentNode, parent, p, root, c, level ,G); // Правила 2 , 7 , 8.
+        if (CE(currentNode->data.value, '/')) match = match || func_3(currentNode, parent, p, root, c, level ,G); // Правило 3 , 6.
+        if (CE(currentNode->data.value, '+') || CE(currentNode->data.value, '-')) match = match || func_4(currentNode, parent, p, root, c, level ,G); // Правило 5.
         if (match)
         {   
-
-            switch (c)
-            {
-            case 'L': { Algebra_Node* topNode = st.top(); st.pop(); st.pop(); st.push(topNode); break; } // Удаление предпоследнего элемента из стека.
-            case 'R': { st.pop();  break;  } // потому-что будет повтороное добавление узла , что ведет к лишнему обходу дерева.
-            case 'Z': { st.pop(); st.pop(); }
-            }
-            currentNode = parent;
-            if (st.empty()){}
-            else {
-                Algebra_Node* topNode = st.top();
-                topNode = st.top();
-                if (currentNode == parent && topNode != root) st.push(root);
-                else if (currentNode != root)
-                {
-                    topNode = st.top();
-                    st.push(parent);
-                    if (f_opr_two(parent->data))
-                    {
-                        parents.pop();
-                        parents.pop();
-                    }
-                    else if (f_opr_one(parent->data)) parents.pop();
-                }
-            }
+            GoDown(st, parents, currentNode, parent, p, root, c, level, G);
         }
         if (DEBUG)
         {
@@ -595,10 +572,11 @@ void simplify_F(Algebra_Node*& root)
         }
         j++;
     }
-    for (Algebra_Node* D : G.deletedNode)
+    for (Algebra_Node* D : G.ExposedBranches )
     {
-        // if (D != nullptr) RecursiveDestructor(D);
+        RecursiveDestructor(D);
     }
+    for (Algebra_Node* D : G.ExposedNodes) delete D;
 }
 
 void simplify_D(Algebra_Node*& root)
