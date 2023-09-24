@@ -1,4 +1,6 @@
 #include "Algebra_Node.h"
+#include "Shanting_yard.h"
+#include <ratio>
 
 
 Algebra_Node* DerivateFunc(Algebra_Node* root);

@@ -9,6 +9,8 @@
 #include <unordered_set>
 #include <variant>
 
+// #include "vector_cl.h"
+
 using namespace std;
 
 
@@ -19,6 +21,7 @@ public:
         Number,
         Integer,
         Real,
+        LongArithmetic,
         Operator,
         LeftParen,
         RightParen,
@@ -26,7 +29,7 @@ public:
         Ration,
         ComplexNumber,
         Function,
-        Comma
+        Comma,
     };
 
     const Type type;
@@ -60,20 +63,17 @@ bool f_opr_free(const Token& T);
 
 string ToString(const variant<string, int, double>& value);
 
-template<typename T>
-bool _CheckEquality(variant<string, int, double> value, T m);
+bool CE(const variant<string, int, double>, const string m); // #
+bool CE(const variant<string, int, double>, const int m); // #
+bool CE(const variant<string, int, double>, const double m); // #
 
-bool CheckEquality(variant<string, int, double>, string m); // #
-bool CheckEquality(variant<string, int, double>, int m); // #
-bool CheckEquality(variant<string, int, double>, double m); // #
-
-Token SetToken(const string& expr);
-Token SetToken(int m);
-Token SetToken(double m);
+Token SetToken(const variant<int, double, string> value);
 
 string TokensToStr(deque<Token> fh);
 deque<Token> exprToTokens(const string& expr);
 void Tokenize_u_minus(deque<Token>& fh);
 deque<Token> shuntingYard(const deque<Token>& tokens);
 double PolishCalculation(deque<Token> es);
+double PolishCalculation(vector<Token> es);
+
 #endif

@@ -183,22 +183,7 @@ Token::~Token() {
 	// Add any necessary cleanup code here
 }
 
-template<typename T>
-bool _CheckEquality(variant<string, int, double> value, T m) {
-	if (holds_alternative<string>(value)) {
-		return get<string>(value) == m;
-	}
-	else if (holds_alternative<int>(value)) {
-		return get<int>(value) == m;
-	}
-	else if (holds_alternative<double>(value)) {
-		return get<double>(value) == m;
-	}
-	return false;
-}
-
-// template
-bool CheckEquality(variant<string, int, double> value, string s) 
+bool CE(const variant<string, int, double> value, const string s) 
 {
 		if (holds_alternative<string>(value))
 		{
@@ -207,8 +192,8 @@ bool CheckEquality(variant<string, int, double> value, string s)
 		}
 		else return false;
 }
-// template
-bool CheckEquality(variant<string, int, double> value, int m) 
+
+bool CE(const variant<string, int, double> value, const int m) 
 {
 	if (holds_alternative<string>(value))
 	{
@@ -217,8 +202,8 @@ bool CheckEquality(variant<string, int, double> value, int m)
 	}
 	else return false;
 }
-// template
-bool CheckEquality(variant<string, int, double> value, double m)
+
+bool CE(const variant<string, int, double> value, const double m)
 {
 	if (holds_alternative<string>(value))
 	{
@@ -305,21 +290,20 @@ deque<Token> exprToTokens(const string& expr) {
 	return tokens;
 }
 
-Token SetToken(int m) // На основе этой функции создать шаблон.
+Token _SetToken(const int m) // На основе этой функции создать шаблон.
 {
 	Token T = Token{ Token::Type::Integer, m };
 	return T;
 }
 
-Token SetToken(double m) // На основе этой функции создать шаблон.
+Token _SetToken(const double m) // На основе этой функции создать шаблон.
 {
 	Token T = Token{ Token::Type::Real, m };
 	return T;
 }
 
 
-
-Token SetToken(const string& expr) // фунция возвращает первый токен , если их несколько.
+Token _SetToken(const string& expr) // фунция возвращает первый токен , если их несколько.
 { // Или можно передать одно отрицательное число.
 	int n = expr.size();
 	if (n == 1)
@@ -334,7 +318,7 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 				if (c == '.')
 				{
 					int pr = -1;
-					Token T = Token{ Token::Type::Unknown, std::string(p, p), pr,  false };
+					Token T = Token{ Token::Type::Unknown, string(p, p), pr,  false };
 					return T;
 				}
 				const auto* b = p;
@@ -342,10 +326,21 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 				while (isdigit(c) || c == '.') {
 					if (c == '.') t = Token::Type::Real;
 					++p;
+					c = *p;
 				}
-				const auto s = std::string(b, p);
-				Token T = Token{ t, s };
-				return T;
+				const string s = string(b, p);
+				if (t == Token::Type::Integer)
+				{
+					int m = stoi(s);
+					Token T = Token{ t, m };
+					return T;
+				}
+				else if (t == Token::Type::Real)
+				{
+					double m = stod(s);
+					Token T = Token{ t, m };
+					return T;
+				}
 				--p;
 			}
 			else
@@ -398,6 +393,25 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 		Tokenize_u_minus(fs);
 		Token T = fs.front();
 		fs.pop_front();
+		return T;
+	}
+}
+
+Token SetToken(const variant<int, double, string> value)
+{
+	if (holds_alternative<string>(value)) {
+		string f = get<string>(value);
+		Token T = _SetToken(f);
+		return T;
+	}
+	else if (holds_alternative<int>(value)) {
+		int m = get<int>(value);
+		Token T = _SetToken(m);
+		return T;
+	}
+	else if (holds_alternative<double>(value)) {
+		double m = get<double>(value);
+		Token T = _SetToken(m);
 		return T;
 	}
 }
@@ -586,3 +600,4 @@ string TokensToStr(deque<Token> fh)
 	}
 	return s;
 }
+

@@ -134,6 +134,7 @@
     <ClCompile Include="Derivate.cpp" />
     <ClCompile Include="Shunting_yard.cpp" />
     <ClCompile Include="Token.cpp" />
+    <ClCompile Include="vector_cl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algebra.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Derivate.h" />
     <ClInclude Include="Shanting_yard.h" />
     <ClInclude Include="Token.h" />
+    <ClInclude Include="vector_cl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
