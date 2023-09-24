@@ -18,9 +18,12 @@ using namespace std;
 
 void test_1() // Тестирование функций exprToTokens() , shuntingYard().
 {
-	// string s = "(1-5*(1/2+5/6-7*(5+8/9*4^3)))";
-	// string s = "(x^2-1)*(x-4/5)*(7/8+3*x)^2 + 3*x*(x-1)"
-	string s;
+	string fh[4] = { "(1-5*(1/2+5/6-7*(5+8/9*4^3)))" // +
+		        , "(x^2-1)*(x-4/5)*(7/8+3*x)^2 + 3*x*(x-1)" ,  // +
+		             "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2" , // + 
+		                  "cos(x^2)" // -
+	};
+	string s = fh[3];
 	getline(cin, s);
 
 	deque<Token> fs, es;
@@ -66,7 +69,7 @@ void test_1() // Тестирование функций exprToTokens() , shuntingYard().
 	third_tree.Print_Tree_T();
 }
 
-void test_2() // Тестирование функции PolishToTree()
+void test_2() // Тестирование перегруженного оператора для класса AlgebraTree.
 {
 	string s , f;
 	deque<Token> fs, es, fh, eh;
@@ -74,6 +77,8 @@ void test_2() // Тестирование функции PolishToTree()
 	getline(cin, f);
 	fh = exprToTokens(s);
 	eh = exprToTokens(f);
+	Tokenize_u_minus(fh);
+	Tokenize_u_minus(eh);
 	fs = shuntingYard(fh);
 	es = shuntingYard(eh);
 	Algebra_Node* first_node;
@@ -201,6 +206,8 @@ void test_4() // Тестирование функции CompareTrees()
 	getline(cin, f);
 	fh = exprToTokens(s);
 	eh = exprToTokens(f);
+	Tokenize_u_minus(fh);
+	Tokenize_u_minus(eh);
 	fs = shuntingYard(fh);
 	es = shuntingYard(eh);
 	Algebra_Node* first_node;
@@ -214,15 +221,25 @@ void test_4() // Тестирование функции CompareTrees()
 }
 
 void test_5() // Тестирование функции PostfixToInfix()
-{
+{ // Лишние скобки.
 	string s , f;
 	deque<Token> fh, fs;
 	vector<Token> es;
 	Token T;
-	getline(cin, s);
+	string eh[7] = { "x" , // +
+		             "3" , // +
+		             "5.0" , // +
+		             "-5.0" , // +
+		             "-2" , // +
+		             "4+(1/7-6/9+5*(4-7/8))" , // +
+		             "x/2+ x*x*(x+2*x^2)-3*x - 2*x^2" // +
+	};
+	// getline(cin, s);
+	s = eh[4];
 	fh = exprToTokens(s);
+	Tokenize_u_minus(fh);
 	fs = shuntingYard(fh);
-	f = PostfixToInfix(es);
+	f = PostfixToInfix(fs);
 	while (!fs.empty())
 	{
 		Token T = fs.front();
@@ -233,7 +250,7 @@ void test_5() // Тестирование функции PostfixToInfix()
 }
 
 void test_6() // Тестирование функции TreeToPolish_T()
-{
+{ // Лишние скобки.
 	string s, f;
 	deque<Token> fh, fs;
 	vector<Token> es;
@@ -274,39 +291,65 @@ void test_7() // Тестирование функции DerivateFunc()
 
 void test_8() // Тестирование фунции SetToken()
 {
-	// Token T = SetToken("*");
-	Token T = SetToken("1");
+	string fh[6] = { "*" , // +
+		            "1" ,  // +
+		            "-1" ,  // +
+		            "-2" ,   // +
+		            "3.0" ,  // +
+		            "-3.0"   // +
+	                 }; 
+	string s = fh[5];
+	Token T = SetToken(s);
 	cout << T << endl;
 
 }
 
 void test_9()  // Тестирование функции SetNode()
 {
-	Algebra_Node* node = SetNode("1");
-	node = SetNode("-1"); // fail
+	string fh[6] = { "x" , // +
+					"1" ,  // +
+					"-1" ,  // +
+					"-2" ,   // +
+					"3.0" ,  // +
+					"-3.0"   // +
+	};
+	string s = fh[5];
+	Algebra_Node* node = SetNode(s);
 	vector<Token> es;
 	TreeToPolish(node , es);
 	vector<Token>::iterator iter;
 	for (iter = es.begin(); iter != es.end(); iter++) cout << *iter << " ";
 	cout << endl;
-	string s = PostfixToInfix(es);
+	s = PostfixToInfix(es);
 	cout << s << endl;
 }
 
-void test_10()
+void test_10() // Тестирование функции PolishCalculation()
 {
-	string s = "-1+x";  // функция не обрабатывает минус впереди
+	string fh[7] = { "0.5*0.25" , // +
+		            "0.5*0.7*(1.5+1)"  , // +
+		            "1+0.7*(3-4+5*0.5*0.25*(1-4*3))", // +
+		             "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2", // +
+		              "sin(1-4/7+3/13*(1+4/9)^2)*cos(1-(4/11)^2)", // +
+		               "3/4*sin(1+11/157)", // -
+					   "(3/4)*sin(1+11/157)" // + , Token error.
+	};
+	string s = fh[5];
 	deque<Token> fs, es;
 	fs = exprToTokens(s); 
+	Tokenize_u_minus(fs);
 	es = shuntingYard(fs);
+	double r = PolishCalculation(es);
 	while (0);
 }
 
 void test_11() // Тестирование функции Tokenize_u_minus()
 {
-	string s = "(-1)+x+(-1)*x^2*((-1)+3*x))";
-	// s = "(-1)";
-	s = "-1+x";
+	string fh[3] = { "(-1)+x+(-1)*x^2*((-1)+3*x))" // -
+		              , "-1+x" , // +
+		               "(-1)" // +
+	};
+	string s = fh[0];
 	deque<Token> fs, es;
 	fs = exprToTokens(s);
 	Tokenize_u_minus(fs);
@@ -317,8 +360,8 @@ void test_11() // Тестирование функции Tokenize_u_minus()
 
 void test_12() // Тестирование функции SetToken()
 {
-	string s;
-	s = "-1";
+	string fh[1] = { "-1" };
+	string s = fh[0];
 	Token T = SetToken(s);
 	cout << T << endl;
 }
@@ -380,7 +423,7 @@ void test_16()
 	
 }
 
-void test_17()
+void test_17() 
 {
 	Token T(Token::Type::Unknown, "");
 	T = Token(Token::Type::Number, "2");
@@ -393,7 +436,7 @@ void test_17()
 
 }
 
-void test_18()
+void test_18() // Тестирование функции SetToken()
 {
 	Token T = SetToken("2");
 	Algebra_Node* node = new Algebra_Node(T);
@@ -440,21 +483,31 @@ void test_20()
 	*/
 }
 
+void test_21() // Тестирование шаблонной версии функции: FindValueD
+{
+	const string s[2] = { "3*x^2*(x+1)-x+x^2" , "(-1)*x+(-1)" };
+	const string t = s[1];
+	Algebra_Node* root = SetOperatorTree(t);
+	vector<vector<char>> paths;
+	// _FindValueD(root, 5 , paths);
+	while (0);
+}
+
 
 int main() {
 
-	const int n = 1;
+	const int n = 1; 
 	switch (n)
 	{
-	case 1: { test_1(); break; } // 3*x - минимальный неработающий пример.
-	case 2: { test_2(); break; }
-	case 3: { test_3(); break; }
-	case 4: { test_4(); break; }
-	case 5: {test_5(); break; }
-	case 6: { test_6(); break; }
+	case 1: { test_1(); break; } // +
+	case 2: { test_2(); break; } // +
+	case 3: { test_3(); break; } // +
+	case 4: { test_4(); break; } // +
+	case 5: {test_5(); break; } // +
+	case 6: { test_6(); break; } // +
 	case 7: { test_7(); break; }
-	case 8: { test_8(); break; }
-	case 9: { test_9(); break; }
+	case 8: { test_8(); break; } // +
+	case 9: { test_9(); break; } // +
 	case 10: { test_10(); break; }
 	case 11: { test_11(); break; }
 	case 12: { test_12(); break; }
@@ -466,5 +519,6 @@ int main() {
 	case 18: { test_18(); break; }
 	case 19: { test_19(); break; }
 	case 20: { test_20(); break; }
+	case 21: { test_21(); break; }
 	}	
 }

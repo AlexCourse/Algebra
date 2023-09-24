@@ -73,6 +73,7 @@ Algebra_Node* GetOperand(Algebra_Node* root, LR lr);
 
 Algebra_Node* PolishToTree(deque<Token> fh);
 string PostfixToInfix(vector<Token>& fs);
+string PostfixToInfix(deque<Token>& fs);
 void TreeToPolish(Algebra_Node* root, vector<Token>& kh);
 void TreeToPolish(Algebra_Node* root, deque<Token>& kh);
 Algebra_Node* SetNode(int m);
@@ -88,5 +89,9 @@ double FunctionValue(vector<Token> fh, double value, string symbol);
 
 template<typename T> // Для типов int , double , string.
 Algebra_Node* TreeExprReplaceRT(Algebra_Node* root, const string c, const T s);
+
+
+template<typename T>
+void _FindValueD(Algebra_Node* root, T c, vector<vector<char>>& paths);
 
 #endif

@@ -14,16 +14,13 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 		// Читать токен
 		switch (T.type) {
 		case Token::Type::Number:
-			// Если токен представляет собой число, то добавьте его в очередь вывода
-			queue.push_back(T);
+			queue.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
 			break;
 		case Token::Type::Integer:
-			// Если токен представляет собой число, то добавьте его в очередь вывода
-			queue.push_back(T);
+			queue.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
 			break;
 		case Token::Type::Real:
-			// Если токен представляет собой число, то добавьте его в очередь вывода
-			queue.push_back(T);
+			queue.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
 			break;
 		case Token::Type::Algebra:
 			queue.push_back(T);
@@ -103,25 +100,26 @@ double PolishCalculation(deque<Token> es)
 {
 	vector<double> stack;
 	vector<string> cst;
+	string s;
 
 	while (!es.empty()) {
 		string op;
 
-		const auto T = es.front();
+		Token T = es.front();
 		es.pop_front();
 		switch (T.type) {
 		case Token::Type::Integer:
 			stack.push_back(get<int>(T.value));
-			if (DEBUG) op = "Push " + get<string>(T.value);
+			if (DEBUG) op = "Push " + T.ToString();
 			break;
 		case Token::Type::Real:
 			stack.push_back(get<double>(T.value));
-			if (DEBUG) op = "Push " + get<string>(T.value);
+			if (DEBUG) op = "Push " + T.ToString();
 			break;
 		case Token::Type::Algebra:
 		{
 			cst.push_back(get<string>(T.value));
-			if (DEBUG) op = "Push" + get<string>(T.value);
+			if (DEBUG) op = "Push" + T.ToString();
 
 		}
 		case Token::Type::Operator:
@@ -135,7 +133,7 @@ double PolishCalculation(deque<Token> es)
 				switch (get<string>(T.value)[0]) {
 				default:
 					printf("Operator error [%s]\n", get<string>(T.value));
-					exit(0);
+					// exit(0);
 					break;
 				case '^':
 					stack.push_back(static_cast<int>(pow(lhs, rhs)));
@@ -213,7 +211,7 @@ double PolishCalculation(deque<Token> es)
 
 		default:
 			printf("Token error\n");
-			exit(0);
+			// exit(0);
 		}
 	}
 	return stack.back();

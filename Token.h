@@ -57,10 +57,9 @@ bool f_opr_one(const Token& T);
 bool f_opr_free(const Token& T);
 
 string ToString(const variant<string, int, double>& value);
-/*
+
 template<typename T>
-bool CheckEquality(variant<string, int, double>, T m); 
-*/
+bool _CheckEquality(variant<string, int, double> value, T m);
 
 bool CheckEquality(variant<string, int, double>, string m); // #
 bool CheckEquality(variant<string, int, double>, int m); // #
@@ -68,6 +67,8 @@ bool CheckEquality(variant<string, int, double>, double m); // #
 
 Token SetToken(const string& expr);
 Token SetToken(int m);
+Token SetToken(double m);
+
 string TokensToStr(deque<Token> fh);
 deque<Token> exprToTokens(const string& expr);
 void Tokenize_u_minus(deque<Token>& fh);

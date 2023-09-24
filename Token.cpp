@@ -126,6 +126,8 @@ unordered_set<string> func_info_one = { "sin", "cos", "tg", "ctg", "ln", "exp", 
 "sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" };
 unordered_set<string> func_info_two = { "log" , "pow" , "S" , "Integral" };
 unordered_set<string> func_info_free = { "D" , "Z" , "P" , "Derivate" };
+unordered_set<string> func_info = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
+"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" , "log" , "pow" };
 
 
 
@@ -181,39 +183,19 @@ Token::~Token() {
 	// Add any necessary cleanup code here
 }
 
-/*
 template<typename T>
-bool CheckEquality(variant<string, int, double> value, T m)
-{
-	if constexpr (is_same_v<T, string>) {
-		if (holds_alternative<string>(value))
-		{
-			if (get<string>(value) == m) return true;
-			else return false;
-		}
-		else return false;
+bool _CheckEquality(variant<string, int, double> value, T m) {
+	if (holds_alternative<string>(value)) {
+		return get<string>(value) == m;
 	}
-	else if constexpr (is_same_v<T, int>) {
-		if (holds_alternative<int>(value))
-		{
-			if (get<int>(value) == m) return true;
-			else return false;
-		}
-		else return false;
+	else if (holds_alternative<int>(value)) {
+		return get<int>(value) == m;
 	}
-	else if constexpr (is_same_v<T, double>) {
-		if (holds_alternative<int>(value))
-		{
-			if (get<double>(value) == m) return true;
-			else return false;
-		}
-		else return false;
+	else if (holds_alternative<double>(value)) {
+		return get<double>(value) == m;
 	}
-	else {
-
-	}
+	return false;
 }
-*/
 
 // template
 bool CheckEquality(variant<string, int, double> value, string s) 
@@ -258,8 +240,8 @@ deque<Token> exprToTokens(const string& expr) {
 			if ((*p) == '.')
 			{
 				int pr = -1;
-				tokens.push_back(Token{ Token::Type::Unknown, std::string(p, p), pr,  false });
-				cout << "Неверная запись десятичного числа" << std::endl;
+				tokens.push_back(Token{ Token::Type::Unknown, string(p, p), pr,  false });
+				cout << "Неверная запись десятичного числа" << endl;
 			}
 			Token::Type t = Token::Type::Integer;
 			const auto* b = p;
@@ -267,7 +249,7 @@ deque<Token> exprToTokens(const string& expr) {
 				if ((*p) == '.') t = Token::Type::Real;
 				++p;
 			}
-			const auto s = std::string(b, p);
+			const string s = string(b, p);
 			if (t == Token::Type::Integer)
 			{
 				int m = stoi(s);
@@ -283,8 +265,13 @@ deque<Token> exprToTokens(const string& expr) {
 		else
 			if (isliter(*p))
 			{
-				const auto s = string(p, p + 1);
-				tokens.push_back(Token{ Token::Type::Algebra, s });
+				const auto* b = p;
+				while (isliter(*p)) {
+					++p;
+				}
+				const string s = string(b, p);
+				if (func_info.count(s)) tokens.push_back(Token{ Token::Type::Function, s });
+				else tokens.push_back(Token{ Token::Type::Algebra, s });
 				continue;
 			}
 			else {
@@ -305,6 +292,7 @@ deque<Token> exprToTokens(const string& expr) {
 				tokens.push_back(Token{ t, s, pr, ra });
 			}
 
+
 	}
 
 	return tokens;
@@ -312,7 +300,13 @@ deque<Token> exprToTokens(const string& expr) {
 
 Token SetToken(int m) // На основе этой функции создать шаблон.
 {
-	Token T = Token{ Token::Type::Number, to_string(m) };
+	Token T = Token{ Token::Type::Integer, m };
+	return T;
+}
+
+Token SetToken(double m) // На основе этой функции создать шаблон.
+{
+	Token T = Token{ Token::Type::Real, m };
 	return T;
 }
 
@@ -320,7 +314,6 @@ Token SetToken(int m) // На основе этой функции создать шаблон.
 
 Token SetToken(const string& expr) // фунция возвращает первый токен , если их несколько.
 { // Или можно передать одно отрицательное число.
-	Token T;
 	int n = expr.size();
 	if (n == 1)
 	{
@@ -343,16 +336,28 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 					++p;
 				}
 				const auto s = std::string(b, p);
-				Token T = Token{ Token::Type::Number, s };
+				Token T = Token{ t, s };
 				return T;
 				--p;
 			}
 			else
 				if (isliter(*p))
 				{
-					const auto s = string(p, p + 1);
-					T = Token{ Token::Type::Algebra, s };
-					return T;
+					const auto* b = p;
+					while (isliter(*p)) {
+						++p;
+					}
+					const string s = string(b, p);
+					if (func_info.count(s))
+					{
+						Token T = Token{ Token::Type::Function, s };
+						return T;
+					}
+					else
+					{
+						Token T = Token{ Token::Type::Algebra, s };
+						return T;
+					}
 				}
 				else {
 					Token::Type t = Token::Type::Unknown;
@@ -374,6 +379,7 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 				}
 
 		}
+		Token T;
 		return T;
 	}
 	else // Случай одного отрицательного числа.
@@ -414,7 +420,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 		iter[1]++;
 		i++;
 	}
-	while (0);
+	while (0); // Для точки останова.
 
 	if (n >= 4) // Ищем (-a) и заменяем на результат (-1)*a , где а - число.
 	{
@@ -427,21 +433,71 @@ void Tokenize_u_minus(deque<Token>& fh) {
 			Token& T_1 = fh[p + 2];
 			if (T_0.type == Token::Type::RightParen)
 			{
-				if (T_1.type == Token::Type::Number)
+				if (T_1.type == Token::Type::Number || T_1.type == Token::Type::Integer || T_1.type == Token::Type::Real )
 				{  
-					int q = stoi(get<string>(T_1.value));
-					q = (-1) * q;
+					double q = -1;
+					if (holds_alternative<int>(T_1.value))
+					{
+						int q = get<int>(T_1.value);
+						q = (-1) * q;
+					}
+					else if (holds_alternative<double>(T_1.value))
+					{
+						double q = get<double>(T_1.value);
+						q = (-1) * q;
+					}
+					const deque<Token>::iterator start = fh.begin();
 					Token T_2 = SetToken(q);
-					fh.erase(fh.begin() + p, fh.begin() + p + 4); // Функция странно удаляет
 					if (DEBUG) r = TokensToStr(fh);
 					f = r;
-					fh.insert(fh.begin() + p, T_2);
+					if (DEBUG){  
+						const Token T_3 = *(start + p);
+						const Token T_4 = *(start + p + 4);
+						deque<Token> eh = fh;
+						while (0); // Для точки останова.
+					}
+					if (DEBUG)
+					{
+						deque<Token> ls;
+						copy(fh.begin(), fh.end(), back_inserter(ls));
+						deque<Token>::iterator iter;
+						int i , j;
+						int m = fh.size();
+						for (iter = fh.begin(), i = 0; iter != fh.end(); iter++, i++) { cout << i << ":" << *(iter) << endl; }
+						r = TokensToStr(fh);
+						tie(i, j) = make_pair(16, 19); // Данные для настройки.
+						Token T_5 = *(start + i);
+						Token T_6 = *(start + j);
+						ls.erase(start + i , start + j); // Функция странно удаляет
+						string f = TokensToStr(ls);
+						int l = 5;
+						for (i = 0; i < m - l - 1; i++)
+						{
+							deque<Token> lh;
+							copy(fh.begin(), fh.end(), back_inserter(lh));
+							lh.erase(start + i, start + i + l);
+							f = TokensToStr(lh);
+							cout << f << endl;
+						}
+						while (0);
+					}
+					fh.erase(start + p - 1, start + p + 4 - 1); // Функция странно удаляет
+					if (DEBUG) r = TokensToStr(fh);
+					f = r;
+					fh.insert(start + p, T_2);
 					if (DEBUG) r = TokensToStr(fh);
 					f = r;
 				}
 				else if (T_1.type == Token::Type::Algebra)
 				{
-					fh.erase(fh.begin() + p, fh.begin() + p + 4);
+					const deque<Token>::iterator start = fh.begin();
+					if (DEBUG) {
+						const Token T_3 = *(start + p);
+						const Token T_4 = *(start + p + 4);
+						deque<Token> eh = fh;
+						while (0); // Для точки останова.
+					}
+					fh.erase(start + p - 1, start + p + 4 - 1);
 					if (DEBUG) r = TokensToStr(fh);
 					f = r;
 					deque<Token> es = exprToTokens("(-1)*a");
@@ -454,29 +510,46 @@ void Tokenize_u_minus(deque<Token>& fh) {
 			}
 		}
 	}
-	Token& T_0 = fh.front();
-	Token& T_1 = fh[1];
-	if (get<string>(T_0.value) == "-")  // Этот случай не пересекается с предыдущим случаем.
-	{   // Случай когда унарный минус стоит в начале строки.
-		string f, r;
-		if (T_1.type == Token::Type::Number)
+	n = fh.size();
+	if (n >= 2)
+	{
+		Token& T_0 = fh.front();
+		Token& T_1 = fh[1];
+		if (T_0.type == Token::Type::Operator)
 		{
-			fh.pop_front();
-			int m = stoi(get<string>(T_1.value));
-			m = (-1) * m;
-			T_1.value = to_string(m);
-			if (DEBUG) r = TokensToStr(fh);
-			f = r;
-	    }
-		else if (T_1.type == Token::Type::Algebra)
-		{
-			fh.pop_front();
-			deque<Token> es = exprToTokens("(-1)*a");
-			es.pop_back();
-			es.push_back(T_1);
-			fh.insert(fh.begin(), T_1);
-			if (DEBUG) r = TokensToStr(fh);
-			f = r;
+			if (get<string>(T_0.value) == "-")  // Этот случай не пересекается с предыдущим случаем.
+			{   // Случай когда унарный минус стоит в начале строки.
+				string f, r;
+				if (T_1.type == Token::Type::Number || T_1.type == Token::Type::Integer || T_1.type == Token::Type::Real)
+				{
+					fh.pop_front();
+					fh.pop_front();
+					double m = -1;
+					if (holds_alternative<int>(T_1.value))
+					{
+						m = get<int>(T_1.value);
+					}
+					else if (holds_alternative<double>(T_1.value))
+					{
+						m = get<double>(T_1.value);
+					}
+					m = (-1) * m;
+					Token T_2 = SetToken(m);
+					fh.insert(fh.begin(), T_2); // Добавление вперед очереди.
+					if (DEBUG) r = TokensToStr(fh);
+					f = r;
+				}
+				else if (T_1.type == Token::Type::Algebra)
+				{
+					fh.pop_front();
+					deque<Token> es = exprToTokens("(-1)*a");
+					es.pop_back();
+					es.push_back(T_1); // Замена символа a вставка в начало.
+					fh.insert(fh.begin(), T_1);
+					if (DEBUG) r = TokensToStr(fh);
+					f = r;
+				}
+			}
 		}
 	}
 }
@@ -487,9 +560,20 @@ void Tokenize_u_minus(deque<Token>& fh) {
 string TokensToStr(deque<Token> fh)
 {
 	string s = "";
-	for (Token T : fh)
+	for (Token t : fh)
 	{
-		s = s + get<string>(T.value);
+		if (holds_alternative<string>(t.value)) {
+			string f = get<string>(t.value);
+			s = s + f;
+		}
+		else if (holds_alternative<int>(t.value)) {
+			int m = get<int>(t.value);
+			s = s + to_string(m);
+		}
+		else if (holds_alternative<double>(t.value)) {
+			double m = get<double>(t.value);
+			s = s + to_string(m);
+		}
 	}
 	return s;
 }

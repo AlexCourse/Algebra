@@ -216,6 +216,64 @@ void FindValueD(Algebra_Node* root, string c, vector<vector<char>>& paths) { //
     }
 }
 
+
+template<typename T>
+void _FindValueD(Algebra_Node* root, T c, vector<vector<char>>& paths) { // 
+    // Первая переменная - корень дерева. с - искомое значение, paths - все найденные пути для этого значения.
+    if (root == nullptr) {
+        return;
+    }
+
+    stack<Algebra_Node*> st;
+    stack<vector<char>> k_st;
+    vector<char> track;
+    st.push(root);
+    track.push_back('0');
+    Algebra_Node* currentNode = st.top();
+    st.pop();
+
+    while (true) {
+
+        if (CheckEquality(currentNode->data.value, c))
+        {
+            bool B = false;
+            if (track.empty())
+            {
+                track.push_back('0');
+                B = true;
+            }
+            paths.push_back(track);
+            if (B)  track.pop_back();
+        }
+        if (currentNode->left != nullptr) {
+            st.push(currentNode->left);
+            track.push_back('L');
+            vector<char> es;
+            es.assign(track.begin(), track.end());
+            k_st.push(es);
+            track.pop_back();
+        }
+        if (currentNode->right != nullptr) {
+            st.push(currentNode->right);
+            track.push_back('R');
+            vector<char> es;
+            es.assign(track.begin(), track.end());
+            k_st.push(es);
+            track.pop_back();
+        }
+        while (0);
+        if (!st.empty())
+        {
+            currentNode = st.top();
+            st.pop();
+            track = k_st.top();
+            k_st.pop();
+        }
+        else break;
+    }
+}
+
+
 void FindValueW(Algebra_Node* root , string c , vector<vector<char>>& paths) { // 
     // Первая переменная - корень дерева. с - искомое значение, paths - все найденные пути для этого значения.
     if (root == nullptr) {
@@ -618,34 +676,34 @@ void Algebra_Tree::Print_Tree_T()
 string PostfixToInfix(vector<Token>& fs)
 { // В первом параметре выражение в формате Обратной Польской нотации.
   // Результат возвращается во втором параметре в форме Инфиксной Записи.
-    string p, q, s , t;
+    string p, q, s, t;
     reverse(fs.begin(), fs.end());
     stack<string> st;
-    stack<int> st_opr;
-    int m , n;
+    stack<int> st_opr; // Здесь сохраняются приоритеты операторов.
+    int m, n;
     while (!fs.empty())
     {
         Token T = fs.back();
-        string f = get<string>(T.value);
         fs.pop_back();
         st_opr.push(0); // Для балансировки стека.
         if (T.type == Token::Type::Algebra)
         {
-            t = get<string>(T.value);
-            st.push(t);
+            s = T.ToString();
+            st.push(s);
         }
         else if (T.type == Token::Type::Integer)
         {
-            t = get<int>(T.value);
-            st.push(t);
+            s = T.ToString();
+            st.push(s);
         }
         else if (T.type == Token::Type::Real)
         {
-            t = get<double>(T.value);
-            st.push(t);
+            s = T.ToString();
+            st.push(s);
         }
         else if (f_opr_two(T))
         {
+            string f = T.ToString();
             p = st.top();
             st.pop();
             q = st.top();
@@ -657,12 +715,12 @@ string PostfixToInfix(vector<Token>& fs)
             bool B = false;
             if (n < m && ra) B = true;
             if (n <= m && !ra) B = true;
-            
-            if (B) s = "(" + q + f + p + ")";
-            else s = q + f + p;
+
+            if (B) s = "(" + p + f + q + ")";
+            else s = p + f + q;
             st.push(s);
             st_opr.push(m);
-            
+
         }
         else if (f_opr_one(T))
         {
@@ -673,7 +731,66 @@ string PostfixToInfix(vector<Token>& fs)
         }
 
     }
-    
+
+    s = st.top();
+    st.pop();
+    return s;
+}
+
+string PostfixToInfix(deque<Token>& fs)
+{ // В первом параметре выражение в формате Обратной Польской нотации.
+  // Результат возвращается во втором параметре в форме Инфиксной Записи.
+    string p, q, s, t;
+    // reverse(fs.begin(), fs.end());
+    stack<string> st;
+    stack<int> st_opr; // Здесь сохраняются приоритеты операторов.
+    int m, n;
+    while (!fs.empty())
+    {
+        Token T = fs.front();
+        fs.pop_front();
+        st_opr.push(0); // Для балансировки стека.
+        if (T.type == Token::Type::Algebra)
+        {
+            s = T.ToString();
+            st.push(s);
+        }
+        else if (T.type == Token::Type::Integer || T.type == Token::Type::Real || T.type == Token::Type::Number )
+        {
+            s = T.ToString();
+            st.push(s);
+        }
+        else if (f_opr_two(T))
+        {
+            string f = T.ToString();
+            p = st.top();
+            st.pop();
+            q = st.top();
+            st.pop();
+            n = st_opr.top();
+            m = T.precedence;
+            bool ra = T.rightAssociative;
+            st_opr.pop();
+            bool B = false;
+            if (n < m && ra) B = true;
+            if (n <= m && !ra) B = true;
+
+            if (B) s = "(" + q + f + p + ")";
+            else s = q + f + p;
+            st.push(s);
+            st_opr.push(m);
+
+        }
+        else if (f_opr_one(T))
+        {
+            p = st.top();
+            st.pop();
+            s = "(" + p + ")";
+            st.push(s);
+        }
+
+    }
+
     s = st.top();
     st.pop();
     return s;
