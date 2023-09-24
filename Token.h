@@ -1,0 +1,35 @@
+#ifndef TOKEN_H
+#define TOKEN_H
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+class Token {
+public:
+    enum class Type {
+        Unknown,
+        Number, // [0-9]
+        Operator, // +,-,*,/,^,
+        LeftParen, //'('
+        RightParen, //')'
+        Algebra,  //[a-z][A-Z]
+        Ration,  // =,>=,<=,<,>
+        Function, // sin(x), cos(x)
+    };
+
+    Token();
+    Token(Type t, const string& s, int prec = -1, bool ra = false);
+    Token(const Token& other);
+    Token operator=(const Token other);
+    friend ostream& operator<<(ostream& os, const Token& token);
+
+    const Type type;
+    string str;
+    const int precedence;
+    const bool rightAssociative;
+};
+
+#endif
