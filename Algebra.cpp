@@ -4,6 +4,7 @@
 #include "Shanting_yard.h"
 #include "Algebra.h"
 #include "Derivate.h"
+#include "simplify.h"
 #define M_PI 3.1415926535897932384626
 
 #define DEBUG 1
@@ -731,10 +732,52 @@ void test_23()
 	while (0);
 }
 
+void test_24()
+{
+	string fh[] = { "1+x*0" , // 0
+		             "7+0*(x+1)+1*0" , 
+		              "0*(x-7)" , // -
+		              "(x+4)*0" ,
+		               "11/17 + x*0*(x+1)", 
+		              "11/15 + (x+4)*0", // +
+		              "11/23 + x^2*0 - 6*x*0*(x-2)*(x+1)", // -
+		              "11/23 + 7*x*0*(x+1)*(x-2)", 
+		              "3/7+ 0*(x+4)", // +
+		            "(1+x*(x+1))^1" , 
+		             "0.25 + (1+x*(x+1))^1", // - , 10
+		              "(x+(x+1)^1+7)^1" , //
+		            "(sin(x)^0+x)^0" , // 
+		            "7/11+ (x^2+1/4)^0", // 
+		            "(x^2+x+1)/1", //
+		            "cos(x)/1" , // 
+		            "sin(x^2+1)*1", // 
+		            "1*(1+(1+x^2))^2", // 
+		            "(x*(x-1)*(x+3)+1)^2+0",
+		            "4+0+x+0",
+		            "x+1-0-5-1/x-0" , // 20
+		            "0/(x^2+1)" , // 
+		            "3 + 0/(x^2+1)", // + 
+		            "1^(x+1)" , // 
+		            "0.5 + 1^(x+1)", // + 
+		            "3+1^(x+1)", // + , 
+		            "0^(x^2*cos(x)-4)" //
+	             };
+	string s = fh[4];
+	Algebra_Node* first_node = SetOperatorTree(s);
+	Algebra_Node* second_node = simplify_F(first_node);
+	Algebra_Tree A = Algebra_Tree(second_node);
+	A.Print_Tree_T();
+}
+
+void test_25() // Вывод цветного текста
+{
+	std::cout << "\e[1;31m This is red text \e[0m" << std::endl;
+}
+
 
 int main() {
 
-	const int n = 7;  // 7 , 1 PostfixToInfix()
+	const int n = 25;  // 7 , 1 PostfixToInfix()
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +
@@ -760,5 +803,7 @@ int main() {
 	case 21: { test_21(); break; } // +
 	case 22: { test_22(); break; } // +
 	case 23: { test_23(); break; }
+	case 24: { test_24(); break;  }
+	case 25: { test_25(); break;  }
 	}
 }

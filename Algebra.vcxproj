@@ -132,7 +132,9 @@
     <ClCompile Include="Algebra.cpp" />
     <ClCompile Include="Algebra_Node.cpp" />
     <ClCompile Include="Derivate.cpp" />
+    <ClCompile Include="PrintColourConsole.cpp" />
     <ClCompile Include="Shunting_yard.cpp" />
+    <ClCompile Include="simplify.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="vector_cl.cpp" />
   </ItemGroup>
@@ -140,7 +142,9 @@
     <ClInclude Include="Algebra.h" />
     <ClInclude Include="Algebra_Node.h" />
     <ClInclude Include="Derivate.h" />
+    <ClInclude Include="PrintColourConsole.h" />
     <ClInclude Include="Shanting_yard.h" />
+    <ClInclude Include="simplify.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="vector_cl.h" />
   </ItemGroup>

@@ -34,10 +34,6 @@ void Algebra_Node::addRightNode(Algebra_Node* Q) {
 }
 
 
-static string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
-
-
-
 void Print_Tree_R(Algebra_Node const* node, string const& prefix = " ", bool root = true, bool last = true) {
     cout << prefix << (root ? "" : (last ? ch_udia_hor : ch_ver_hor));
     cout << (node ? ToString(node->data.value) : "") << endl;
@@ -992,5 +988,21 @@ string Algebra_Tree::TreeToInfix_T()
     Algebra_Node* root = this->root;
     string s = TreeToInfix(root);
     return s;
+}
+
+void deleteBinaryTree(Algebra_Node* node) {
+    if (node == nullptr) {
+        return;
+    }
+    // Рекурсивно удаляем левое и правое поддерево
+    if ( node->left != nullptr) deleteBinaryTree(node->left);
+    if ( node->right != nullptr) deleteBinaryTree(node->right);
+    // Удаляем текущий узел
+    delete node;
+}
+
+void RecursiveDestructor(Algebra_Node* root)
+{
+    deleteBinaryTree(root);
 }
 

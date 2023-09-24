@@ -5,8 +5,11 @@
 #include <stack>
 #include <iterator>
 #include "token.h"
+// #include <windows.h> // Для цветного консольного вывода.
 
 using namespace std;
+
+static string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
 
 enum LR {
     LEFT, //левый потомок добавить
@@ -64,6 +67,7 @@ void BypassTreeD(Algebra_Node* root);
 void BypassTreeW(Algebra_Node* root);
 void Print_Tree_R(Algebra_Node const* node, string const& prefix, bool root, bool last);
 void Print_Tree(Algebra_Node const* node, string const& prefix, bool root, bool last);
+void Print_Tree_R_ColoredSelectNode(Algebra_Node const* node, Algebra_Node* const selectedNode, string const& prefix, bool root, bool last);
 void FindValueW(Algebra_Node* root, string c, vector<vector<char>>& paths);
 void FindValueD(Algebra_Node* root, string c, vector<vector<char>>& paths);
 Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const string c, const variant<int, double, string> s);
@@ -93,5 +97,6 @@ template<typename T>
 void _FindValueD(Algebra_Node* root, T c, vector<vector<char>>& paths);
 
 string TreeToInfix(Algebra_Node* root);
+void RecursiveDestructor(Algebra_Node* root);
 
 #endif
