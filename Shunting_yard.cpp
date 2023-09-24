@@ -7,7 +7,7 @@
 
 deque<Token> shuntingYard(const deque<Token>& tokens) {
 	deque<Token> eh;
-	stack<Token> st; 
+	stack<Token> st;
 
 	// Пока есть токены для чтения:
 	for (auto T : tokens) {
@@ -29,7 +29,7 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 			eh.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
 			break;
 		case Token::Type::Ration:
-			eh.push_back(T); 
+			eh.push_back(T);
 			break;
 		case Token::Type::ComplexNumber:
 			eh.push_back(T);
@@ -47,7 +47,7 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 			{
 				Token T_1 = st.top();
 				if (T_1.type == Token::Type::LeftParen) { B = true; break; }
-				else 
+				else
 				{
 					eh.push_back(T_1);
 					st.pop();
@@ -123,7 +123,7 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 	return eh;
 }
 
-double PolishCalculation(deque<Token> es) 
+double PolishCalculation(deque<Token> es)
 {
 	stack<double> st;
 	vector<string> cst;
@@ -221,14 +221,14 @@ double PolishCalculation(deque<Token> es)
 				st.pop();
 				string c = get<string>(T.value);
 				if (c == "pow") { st.push(pow(q, p)); }
-				if (c == "log") { st.push(log(p)/log(q)); }
+				if (c == "log") { st.push(log(p) / log(q)); }
 			}
 		}
 		default:
 			printf("Token error\n");
 			// exit(0);
 		}
-		
+
 	}
 	return st.top();
 
@@ -343,7 +343,7 @@ double PolishCalculation(const vector<Token> es)
 		}
 
 	}
-    return st.top();
+	return st.top();
 
 }
 
@@ -365,12 +365,12 @@ double FunctionValue(deque<Token> fh, double x, string symbol)
 	deque<Token> kh;
 	for (iter = fh.begin(); iter != fh.end(); iter++)
 	{
-		if (CE(iter->value , symbol))
+		if (CE(iter->value, symbol))
 		{
 			Token T = SetToken(x);
 			kh.push_back(T);
 		}
-		else 
+		else
 		{
 			Token T = *iter;
 			kh.push_back(T);

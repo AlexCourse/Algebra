@@ -9,9 +9,9 @@
 * Обозначения : Символы для замены строке : p - первый операнд ,  q - второй операнд , D - производная первого операнда , d - производная второго операнда.
 */
 
-Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
+Algebra_Node* func_1(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['+' , '-' ]
-	if (!(CE(D[0]->data.value , 0)) && !(CE(D[1]->data.value , 0)))
+	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
 		Algebra_Node* Q;
 		Q = SetNode("+");
@@ -61,15 +61,15 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		{
 			const string s = "D+d";
 			T = SetOperatorTree(s);
-			T = TreeRExprReplaceOnSubTreeD(T ,"D", D[0]);
-			T = TreeRExprReplaceOnSubTreeD(T ,"d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
 		}
 		else if (c == "-")
 		{
 			const string s = "D-d";
 			T = SetOperatorTree(s);
-			T = TreeRExprReplaceOnSubTreeD(T ,"D", D[0]);
-			T = TreeRExprReplaceOnSubTreeD(T ,"d", D[1]);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
 		}
 
 	}
@@ -77,7 +77,7 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 	{
 		const string s = "D";
 		T = SetOperatorTree(s);
-		T = TreeRExprReplaceOnSubTreeD(T ,"D", D[0]);
+		T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
 	}
 	else if (!(CE(D[0]->data.value, 0)) && (CE(D[1]->data.value, 0)))
 	{
@@ -85,14 +85,14 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		{
 			const string s = "d";
 			T = SetOperatorTree(s);
-			T = TreeRExprReplaceOnSubTreeD(T ,"d", D[0]); // При выходе из функции параметр T остался прежним.
-			if(DEBUG) while(0);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0]); // При выходе из функции параметр T остался прежним.
+			if (DEBUG) while (0);
 		}
 		else if (c == "-")
 		{
 			const string s = "(-1)*d";
 			T = SetOperatorTree(s);
-			T = TreeRExprReplaceOnSubTreeD(T ,"d", D[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0]);
 			if (DEBUG) while (0);
 		}
 	}
@@ -105,7 +105,7 @@ Algebra_Node* func_1a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 	return T;
 }
 
-Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
+Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['*']
 
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
@@ -234,13 +234,13 @@ Algebra_Node* func_2(Algebra_Node* P[2], Algebra_Node* D[2] , string c)
 		Algebra_Node* Q = SetNode("0");
 		return Q;
 	}
-	
+
 }
 
 Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['*']
 	Algebra_Node* T = SetNode("0");
-  // Символы для замены строке : p - первый операнд ,  q - второй операнд , D - производная первого операнда , d - производная второго операнда.
+	// Символы для замены строке : p - первый операнд ,  q - второй операнд , D - производная первого операнда , d - производная второго операнда.
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
 		if (!(CE(D[0]->data.value, 1)) && !(CE(D[1]->data.value, 1)))
@@ -339,7 +339,7 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 				string r = PostfixToInfix(kh); // В виде строки лучше обозримо.
 				while (0); // Для точки останова.
 			}
-		}	
+		}
 	}
 	if (!(CE(D[0]->data.value, 0)) && (CE(D[1]->data.value, 0)))
 	{
@@ -927,8 +927,8 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			if (T.type == Token::Type::Integer || T.type == Token::Type::Real)
 			{
 				int n = 0;
-				if ( T.type == Token::Type::Integer)  n = get<int>(T.value); // Извлекаем константный показатель степени.
-				else if(T.type == Token::Type::Real ) n = get<double>(T.value);
+				if (T.type == Token::Type::Integer)  n = get<int>(T.value); // Извлекаем константный показатель степени.
+				else if (T.type == Token::Type::Real) n = get<double>(T.value);
 				Algebra_Node* Q[4];
 				Q[0] = SetNode("*");
 				Q[1] = SetNode("*");
@@ -1236,7 +1236,7 @@ Algebra_Node* func_4(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 { // ['^']
-	Algebra_Node* T =  SetNode("0");
+	Algebra_Node* T = SetNode("0");
 
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{
@@ -1395,7 +1395,7 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 
 
 
-Algebra_Node* func_5(Algebra_Node* P[2] , Algebra_Node* D[2], string c)
+Algebra_Node* func_5(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 {
 	if (!(CE(D[0]->data.value, 0)) && !(CE(D[1]->data.value, 0)))
 	{ //  f(y) = log(y , x) = ln(y)/ln(x) ,  P[1] = x , P[0] = y
@@ -1660,7 +1660,7 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		{
 			const string s = "(D/p*ln(q)-ln(p)/q)/(ln(q))^2";
 			T = SetOperatorTree(s);
-			T =TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
 			if (DEBUG)
@@ -1762,7 +1762,7 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 		}
 	}
 	if ((CE(D[0]->data.value, 0)) && (CE(D[1]->data.value, 0)))
-    { // Логарифм постоянного числа по постоянной степени.
+	{ // Логарифм постоянного числа по постоянной степени.
 		const string s = "0";
 		T = SetOperatorTree(s);
 		if (DEBUG)
@@ -1962,7 +1962,7 @@ Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	else
 	{
 		const string s = "cos(p)";
-		T = SetOperatorTree(s);	
+		T = SetOperatorTree(s);
 		T = TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		if (DEBUG)
 		{
@@ -2198,7 +2198,7 @@ Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 			string r = PostfixToInfix(kh); // В виде строки лучше обозримо.
 			while (0); // Для точки останова.
 		}
-		
+
 	}
 	else
 	{
@@ -2260,7 +2260,7 @@ Algebra_Node* func_12a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		while (0); // Для точки останова.
 	}
 
-	return T;	
+	return T;
 }
 
 Algebra_Node* func_13a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
@@ -2317,7 +2317,7 @@ Algebra_Node* func_14a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		string r = PostfixToInfix(kh); // В виде строки лучше обозримо.
 		while (0); // Для точки останова.
 	}
-	
+
 	return T;
 }
 
@@ -2450,7 +2450,7 @@ Algebra_Node* func_18a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		string r = PostfixToInfix(kh); // В виде строки лучше обозримо.
 		while (0); // Для точки останова.
 	}
-	
+
 	return T;
 }
 
@@ -2508,7 +2508,7 @@ Algebra_Node* func_20a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		string r = PostfixToInfix(kh); // В виде строки лучше обозримо.
 		while (0); // Для точки останова.
 	}
-	
+
 	return T;
 }
 
@@ -2585,8 +2585,8 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 		Algebra_Node* node = SetNode(m);
 		return node;
 	}
-	else if (T.type == Token::Type::Number || T.type == Token::Type::Real || T.type == Token::Type::Integer )
-	{ 
+	else if (T.type == Token::Type::Number || T.type == Token::Type::Real || T.type == Token::Type::Integer)
+	{
 		Algebra_Node* node = SetNode(0);
 		return node;
 	}
@@ -2609,14 +2609,14 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 				vector<Token> es(V[0].rbegin(), V[0].rend());
 				r[i] = PostfixToInfix(es);
 				while (0); // Для точки останова.
-				
+
 			}
 			TreeToPolish(root, V[0]);
 			reverse(V[0].begin(), V[0].end()); // Не работает reverse()
 			vector<Token> ks(V[0].rbegin(), V[0].rend());
 			v = PostfixToInfix(ks); // Все поддерево.
 			while (0); // Для точки останова.
-			
+
 		}
 		string c = T.ToString();
 		Algebra_Node* node = SetNode(0);
@@ -2626,7 +2626,7 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 		if (c == "^") node = func_4a(P, D, c);
 		if (c == "log") node = func_5a(P, D, c);
 		return node;
-		
+
 	}
 	else if (f_opr_one(T))
 	{
@@ -2673,7 +2673,7 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 		Algebra_Node* node = SetNode(0);
 		return node;
 	}
-		
+
 }
 
 
@@ -2681,11 +2681,11 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 double Numerical_Differentiation(Algebra_Tree& treeExpr, double t, double h, string x) {
 	// 
 	// x - символ переменных для численного дифееренцирования
-    // t - точка для численного дифференцирования.
-    // h - шаг для численного дифференцирования.
+	// t - точка для численного дифференцирования.
+	// h - шаг для численного дифференцирования.
 	const bool LOCAL_DEBUG = false;
 	double dy = 0;
-	double P[] = { -1./12 , 8./ 12 , -8./ 12 , 1./ 12};
+	double P[] = { -1. / 12 , 8. / 12 , -8. / 12 , 1. / 12 };
 	int Q[] = { 2 , 1 , -1 , -2 };
 	int m = 1;
 	for (int i = 0; i < 4; i++) {
@@ -2705,5 +2705,6 @@ double Numerical_Differentiation(Algebra_Tree& treeExpr, double t, double h, str
 	}
 	return dy;
 }
+
 
 

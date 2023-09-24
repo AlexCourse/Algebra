@@ -33,7 +33,7 @@ public:
     };
 
     const Type type;
-    variant<string, int, double> value; 
+    variant<string, int, double> value;
     const int precedence;
     const bool rightAssociative;
 

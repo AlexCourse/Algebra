@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <deque>
 #include "algebra_node.h"
@@ -20,12 +19,12 @@ void test_1() // Тестирование функций exprToTokens() , shuntingYard() , CopyTree
 {
 	const int MODE = 0;
 	string fh[7] = { "(1-5*(1/2+5/6-7*(5+8/9*4^3)))" // +
-		        , "(x^2-1)*(x-4/5)*(7/8+3*x)^2 + 3*x*(x-1)" ,  // +
-		             "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2" , // + 
-		                  "cos(x^2)", // +
-		                  "sin(3)*cos(1)", // - , не работает PolishToTree()
-		                  "sin(x^2-3*x+2)*sin(7/4)",
-		                  "log(x , 2)"
+				, "(x^2-1)*(x-4/5)*(7/8+3*x)^2 + 3*x*(x-1)" ,  // +
+					 "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2" , // + 
+						  "cos(x^2)", // +
+						  "sin(3)*cos(1)", // - , не работает PolishToTree()
+						  "sin(x^2-3*x+2)*sin(7/4)",
+						  "log(x , 2)"
 	};
 	string s = fh[4];
 	if (MODE == 1) getline(cin, s);
@@ -75,7 +74,7 @@ void test_1() // Тестирование функций exprToTokens() , shuntingYard() , CopyTree
 
 void test_2() // Тестирование перегруженного оператора для класса AlgebraTree.
 {
-	string s , f;
+	string s, f;
 	deque<Token> fs, es, fh, eh;
 	getline(cin, s);
 	getline(cin, f);
@@ -220,23 +219,23 @@ void test_4() // Тестирование функции CompareTrees()
 	first_node = PolishToTree(fs);
 	second_node = PolishToTree(es);
 	bool B = false;
-    B = CompareTrees(first_node , second_node);
+	B = CompareTrees(first_node, second_node);
 	cout << B << endl;
 }
 
 void test_5() // Тестирование функции PostfixToInfix()
 { // Лишние скобки.
-	string s , f;
+	string s, f;
 	deque<Token> fh, fs;
 	vector<Token> es;
 	Token T;
 	string eh[7] = { "x" , // +
-		             "3" , // +
-		             "5.0" , // +
-		             "-5.0" , // +
-		             "-2" , // +
-		             "4+(1/7-6/9+5*(4-7/8))" , // +
-		             "x/2+ x*x*(x+2*x^2)-3*x - 2*x^2" // +
+					 "3" , // +
+					 "5.0" , // +
+					 "-5.0" , // +
+					 "-2" , // +
+					 "4+(1/7-6/9+5*(4-7/8))" , // +
+					 "x/2+ x*x*(x+2*x^2)-3*x - 2*x^2" // +
 	};
 	// getline(cin, s);
 	s = eh[4];
@@ -272,29 +271,29 @@ void test_6() // Тестирование функции TreeToPolish_T()
 }
 
 void test_7() // Тестирование функции DerivateFunc()
-{   
+{
 	vector<tuple<double, double>> ph;
 	string eh[20] = { "2*(x-1)" ,
-		              "x-2-x" , 
-		                "sin(x)" , 
-		               "cos(x^2)" ,
-		                 "x+2" , // +
-		                  "x-2-x+5+x+x+x-3-x+6+x+4+x" , // - , падает tokenize_u_minus()
-		                  "x*x", // +
-		                  "x*x*x", // -
-		                  "3*x*x*(x-3)*(x-3)+7*(x-1)*x+5-9*x",
-		                   "x^3", // +
-		                    "5*x^7", // -
-		                    "2*(x+1)", // +
-		                     "0.5*x*(x+1)", // -
-		                     "x+4+x+7+x+5+x", // +
-		                     "5+x+3", // -
-		                     "x+1+x+0.5", // -
-		                     "x+1+x", // +
-		                     "1+x+x", // -
-		                     "x+x+x", // -
-		                     "sin(x^2)"
-	                       };
+					  "x-2-x" ,
+						"sin(x)" ,
+					   "cos(x^2)" ,
+						 "x+2" , // +
+						  "x-2-x+5+x+x+x-3-x+6+x+4+x" , // - , падает tokenize_u_minus()
+						  "x*x", // +
+						  "x*x*x", // -
+						  "3*x*x*(x-3)*(x-3)+7*(x-1)*x+5-9*x",
+						   "x^3", // +
+							"5*x^7", // -
+							"2*(x+1)", // +
+							 "0.5*x*(x+1)", // -
+							 "x+4+x+7+x+5+x", // +
+							 "5+x+3", // -
+							 "x+1+x+0.5", // -
+							 "x+1+x", // +
+							 "1+x+x", // -
+							 "x+x+x", // -
+							 "sin(x^2)"
+	};
 	double x = 2.0;
 	double Q[2];
 	string s = eh[18];
@@ -316,19 +315,19 @@ void test_7() // Тестирование функции DerivateFunc()
 	Algebra_Tree& T = *d_tree;
 	T.Print_Tree_T();
 	Q[1] = T.FunctionValue_T(x, "x");
-	ph.push_back(make_tuple(Q[0] , Q[1]));
+	ph.push_back(make_tuple(Q[0], Q[1]));
 	while (0);
 }
 
 void test_8() // Тестирование фунции SetToken()
 {
 	string fh[6] = { "*" , // +
-		            "1" ,  // +
-		            "-1" ,  // +
-		            "-2" ,   // +
-		            "3.0" ,  // +
-		            "-3.0"   // +
-	                 }; 
+					"1" ,  // +
+					"-1" ,  // +
+					"-2" ,   // +
+					"3.0" ,  // +
+					"-3.0"   // +
+	};
 	string s = fh[5];
 	Token T = SetToken(s);
 	cout << T << endl;
@@ -347,7 +346,7 @@ void test_9()  // Тестирование функции SetNode()
 	string s = fh[5];
 	Algebra_Node* node = SetNode(s);
 	vector<Token> es;
-	TreeToPolish(node , es);
+	TreeToPolish(node, es);
 	vector<Token>::iterator iter;
 	for (iter = es.begin(); iter != es.end(); iter++) cout << *iter << " ";
 	cout << endl;
@@ -359,36 +358,36 @@ void test_10() // Тестирование функции PolishCalculation()
 {
 	vector< tuple<double, double>> ph;
 	string fh[30] = { "0.5*0.25" , // + , + , 0
-		            "0.5*0.7*(1.5+1)"  , // + , +
-		            "1+0.7*(3-4+5*0.5*0.25*(1-4*3))", // + , +
-		             "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2", // + , +
-		              "sin(1-4/7+3/13*(1+4/9)^2)*cos(1-(4/11)^2)", // + , +
-		               "3/4*sin(1+11/157)", // + , +
+					"0.5*0.7*(1.5+1)"  , // + , +
+					"1+0.7*(3-4+5*0.5*0.25*(1-4*3))", // + , +
+					 "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2", // + , +
+					  "sin(1-4/7+3/13*(1+4/9)^2)*cos(1-(4/11)^2)", // + , +
+					   "3/4*sin(1+11/157)", // + , +
 					   "(3/4)*sin(1+11/157)", // + , +
-		               "sin(2*5)", // + , +
-		               "tg(3-0.6^2*(1+3/4)^3)", // + , +
-		               "tg(17/23)", // + , +
-		               "ctg(2-0.6^2)", // + , + , 10
-		               "arcsin((5/7)^2)", // + , +
-		               "arcsin(3/4)", // + , +
-		               "arccos(11/19)", // + , +
-		               "arctg(2/(2^2+1/17)^2)", // + , +
-		               "2/(2^2+1/17)^2", // + , +
-		               "arcctg(13/17)", // + , +
-		               "sh(1+0.5^2*(1-7/9)^3)", // + , +
-		               "ch(1+0.35^2)", // + , +
-		               "th(1+0.5*0.4^2)", // + , +
-		               "cth(19^2*7/51^2)", // + , + , 20
-		               "arsh(1-0.5*(2+4/7))", // + , +
-		               "arch(1+0.9^2)", // + , +
-		               "pow(2 , 3)",  // + , +
-		               "log(16 , 2)", // + , +
-		               "1-2", // + , +
-		               "5/7", // + , +
-		               "sin(3)*cos(1)", // + , +
-		               "2*(2-1)",
-		               "abs(-3)", // - , не проходит tokenize_u_minus.
-		               
+					   "sin(2*5)", // + , +
+					   "tg(3-0.6^2*(1+3/4)^3)", // + , +
+					   "tg(17/23)", // + , +
+					   "ctg(2-0.6^2)", // + , + , 10
+					   "arcsin((5/7)^2)", // + , +
+					   "arcsin(3/4)", // + , +
+					   "arccos(11/19)", // + , +
+					   "arctg(2/(2^2+1/17)^2)", // + , +
+					   "2/(2^2+1/17)^2", // + , +
+					   "arcctg(13/17)", // + , +
+					   "sh(1+0.5^2*(1-7/9)^3)", // + , +
+					   "ch(1+0.35^2)", // + , +
+					   "th(1+0.5*0.4^2)", // + , +
+					   "cth(19^2*7/51^2)", // + , + , 20
+					   "arsh(1-0.5*(2+4/7))", // + , +
+					   "arch(1+0.9^2)", // + , +
+					   "pow(2 , 3)",  // + , +
+					   "log(16 , 2)", // + , +
+					   "1-2", // + , +
+					   "5/7", // + , +
+					   "sin(3)*cos(1)", // + , +
+					   "2*(2-1)",
+					   "abs(-3)", // - , не проходит tokenize_u_minus.
+
 	};
 	for (int i = 0; i < 29; i++)
 	{
@@ -415,8 +414,8 @@ void test_10() // Тестирование функции PolishCalculation()
 void test_11() // Тестирование функции Tokenize_u_minus()
 {
 	string fh[3] = { "(-1)+x+(-1)*x^2*((-1)+3*x))" // -
-		              , "-1+x" , // +
-		               "(-1)" // +
+					  , "-1+x" , // +
+					   "(-1)" // +
 	};
 	string s = fh[0];
 	deque<Token> fs, es;
@@ -429,7 +428,7 @@ void test_11() // Тестирование функции Tokenize_u_minus()
 
 void test_12() // Тестирование функции SetToken()
 {
-	string fh[2] = { "-1" , "0"};
+	string fh[2] = { "-1" , "0" };
 	string s = fh[1];
 	Token T = SetToken(s);
 	cout << T << endl;
@@ -449,24 +448,24 @@ void test_14()
 	const int X = 5;
 	vector<tuple<double, double>> ph;
 	string fh[11] = { "3*(x+c)+c*x^2*(x-c)+8*x*c", // +
-		             "4*x^2*(x^2-c^2)+3*x*(x-c/x)" , // +
-		                "(x-c)^2" , // +
-		                  "x-c" , // +
-		              "c*(x-c)+3*c*x" , // +
-		               "c*(x+c)" , // +
-		                 "c" , // +
-		                 "2" ,  // +
-		                 "x", // +
-		                 "x+c" , // +
-		                 "c+x" // +
-	                       };
-	string s ,r, f;
+					 "4*x^2*(x^2-c^2)+3*x*(x-c/x)" , // +
+						"(x-c)^2" , // +
+						  "x-c" , // +
+					  "c*(x-c)+3*c*x" , // +
+					   "c*(x+c)" , // +
+						 "c" , // +
+						 "2" ,  // +
+						 "x", // +
+						 "x+c" , // +
+						 "c+x" // +
+	};
+	string s, r, f;
 	tie(s, f, r) = make_tuple(fh[10], "c", "x+3"); // A , B , C , 104
 	Algebra_Tree& A = SetAlgebricTree(s);
-	Algebra_Node*  node = SetOperatorTree(r);
+	Algebra_Node* node = SetOperatorTree(r);
 	cout << "A:" << endl;
 	A.Print_Tree_T();
-	Algebra_Tree B = A.TreeExprReplaceD_T("x" , X); // Здесь ошибка.
+	Algebra_Tree B = A.TreeExprReplaceD_T("x", X); // Здесь ошибка.
 	for (int i = 0; i < 42; i++) cout << "=";
 	cout << endl;
 	cout << "B:" << endl;
@@ -478,7 +477,7 @@ void test_14()
 	A.Print_Tree_T();
 	deque<Token> ks = FToPolish(r);
 	deque<Token> es = FToPolish(r);
-	double y = FunctionValue(es ,  double(X) , "x");
+	double y = FunctionValue(es, double(X), "x");
 	map<string, double> ds;
 	ds["x"] = double(X);
 	ds["c"] = y;
@@ -490,7 +489,7 @@ void test_14()
 	eh = C.polish;
 	double y_3 = PolishCalculation(eh);
 	double y_1 = FunctionValueM(s, ds);
-	double y_2 = A.FunctionValue_T(double(X) , "x");
+	double y_2 = A.FunctionValue_T(double(X), "x");
 	while (0);
 	vector<tuple<double, double>>::iterator iter;
 	ph.push_back(make_tuple(y_2, y_3));
@@ -500,7 +499,7 @@ void test_14()
 		tuple<double, double> Q = *iter;
 	}
 
-	
+
 }
 
 
@@ -532,10 +531,10 @@ void test_16()
 	T = SetToken("3.5");
 	cout << T << endl;
 	while (0);
-	
+
 }
 
-void test_17() 
+void test_17()
 {
 	Token T(Token::Type::Unknown, "");
 	T = Token(Token::Type::Number, "2");
@@ -578,10 +577,10 @@ void test_19() // Тестирование функции TreeExprReplaceRT()
 
 void test_20() // Тестирование шаблонной версии функции: SetOperatorTree()
 {
-	const string fh[3] = { "3*x^2*(x+1)-x+x^2" , "(-1)*x+(-1)" , "3*x^2*(x-1)+5/3*x*(1-4/5)"};
+	const string fh[3] = { "3*x^2*(x+1)-x+x^2" , "(-1)*x+(-1)" , "3*x^2*(x-1)+5/3*x*(1-4/5)" };
 	const string s = fh[2];
 	Algebra_Node* root = SetOperatorTree(s);
-	Print_Tree_R(root , "" , true , true);
+	Print_Tree_R(root, "", true, true);
 	while (0);
 }
 
@@ -599,12 +598,12 @@ void test_22() // Тестирование функции FunctionValueM()
 {
 	vector<tuple<double, double>> ph;
 	string fh[6] = { "3*(x+c)+c*x^2*(x-c)+8*x*c", // +
-		             "4*x^2*(x^2-c^2)+3*x*(x-c/x)" , // +
-		               "(x-c)^2" ,  // +
-		               "x-c" ,  // +
-		             "c*(x-c)+3*c*x" ,  // +
-		               "c*(x+c)" // +
-	                    };
+					 "4*x^2*(x^2-c^2)+3*x*(x-c/x)" , // +
+					   "(x-c)^2" ,  // +
+					   "x-c" ,  // +
+					 "c*(x-c)+3*c*x" ,  // +
+					   "c*(x+c)" // +
+	};
 	for (string s : fh)
 	{
 		map <string, double> ds;
@@ -627,23 +626,23 @@ void test_22() // Тестирование функции FunctionValueM()
 
 void test_23()
 {
-	vector<tuple<double, double , double>> ph;
-	string fh[] = { "3*(1-1/4)*(3+17/33)-2*(3+3/4)^2" , "0.5*(2-1)" , "2-3"};
+	vector<tuple<double, double, double>> ph;
+	string fh[] = { "3*(1-1/4)*(3+17/33)-2*(3+3/4)^2" , "0.5*(2-1)" , "2-3" };
 	string s = fh[2];
 	deque<Token> eh = FToPolish(s);
 	double y_0 = PolishCalculation(eh);
 	Algebra_Node* root = PolishToTree(eh);
 	deque<Token> kh;
 	vector<Token> ks;
-	TreeToPolish(root , kh);
-	TreeToPolish(root,  ks);
+	TreeToPolish(root, kh);
+	TreeToPolish(root, ks);
 	double y_1 = PolishCalculation(kh);
 	double y_2 = PolishCalculation(ks);
 	ph.push_back(make_tuple(y_0, y_1, y_2));
 	cout << "BEFORE : " << y_0 << endl;
 	cout << "DEQUE : " << y_1 << endl;
 	cout << "VECTOR : " << y_2 << endl;
-	while (0); 
+	while (0);
 }
 
 
@@ -675,5 +674,5 @@ int main() {
 	case 21: { test_21(); break; } // +
 	case 22: { test_22(); break; } // +
 	case 23: { test_23(); break; }
-	}	
+	}
 }

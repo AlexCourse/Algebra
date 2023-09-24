@@ -17,45 +17,45 @@ enum LR {
 
 
 class Algebra_Node {
-    public:
-        Token data;
-        Algebra_Node* left;
-        Algebra_Node* right;
+public:
+    Token data;
+    Algebra_Node* left;
+    Algebra_Node* right;
 
-        Algebra_Node();
-        ~Algebra_Node();
-        Algebra_Node(const Token& data, Algebra_Node* left = nullptr, Algebra_Node* right = nullptr);
-        string toString();
-        void addLeftNode(Algebra_Node* Q);
-        void addRightNode(Algebra_Node* Q);
+    Algebra_Node();
+    ~Algebra_Node();
+    Algebra_Node(const Token& data, Algebra_Node* left = nullptr, Algebra_Node* right = nullptr);
+    string toString();
+    void addLeftNode(Algebra_Node* Q);
+    void addRightNode(Algebra_Node* Q);
 
 };
 
 class Algebra_Tree {
-    private:
-        Algebra_Node* root;
-        Algebra_Node* CloneTree(Algebra_Node* root);
-    public:
-        vector<Token> polish;
-        bool Is_Algebric(); // ¬ дереве могут присутсвовать алгебраические выражени€.
-        bool Is_Numeric(); // ¬ дереве присутствуют только числа.
-        Algebra_Tree() { this->root = nullptr; }
-        Algebra_Tree(Algebra_Node* node);
-        Algebra_Tree& CopyTree();
-        Algebra_Tree& AddSubtree(Algebra_Node* node, LR lr);
-        void FindValueD_T(string c, vector<vector<char>>& paths);
-        void FindValueW_T(string c, vector<vector<char>>& paths);
-        void Print_Tree_T();
-        void TreeToPolish_T();
-        Algebra_Tree& TreeExprReplaceD_T(const string c, const variant<int, double, string> s); // ƒальше перегрузки заменить на шаблоны.
-        Algebra_Tree& TreeExprReplaceW_T(const string c, const variant<int, double, string> s);
-        void TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* second);
-        void TreeRExprReplaceOnSubTreeW_T(const string c, Algebra_Node* second);
-        double FunctionValue_T(double value, string symbol);
-        typedef Algebra_Tree iterator;
-        // ~Algebra_Tree(); // chat 
+private:
+    Algebra_Node* root;
+    Algebra_Node* CloneTree(Algebra_Node* root);
+public:
+    vector<Token> polish;
+    bool Is_Algebric(); // ¬ дереве могут присутсвовать алгебраические выражени€.
+    bool Is_Numeric(); // ¬ дереве присутствуют только числа.
+    Algebra_Tree() { this->root = nullptr; }
+    Algebra_Tree(Algebra_Node* node);
+    Algebra_Tree& CopyTree();
+    Algebra_Tree& AddSubtree(Algebra_Node* node, LR lr);
+    void FindValueD_T(string c, vector<vector<char>>& paths);
+    void FindValueW_T(string c, vector<vector<char>>& paths);
+    void Print_Tree_T();
+    void TreeToPolish_T();
+    Algebra_Tree& TreeExprReplaceD_T(const string c, const variant<int, double, string> s); // ƒальше перегрузки заменить на шаблоны.
+    Algebra_Tree& TreeExprReplaceW_T(const string c, const variant<int, double, string> s);
+    void TreeRExprReplaceOnSubTreeD_T(const string c, Algebra_Node* second);
+    void TreeRExprReplaceOnSubTreeW_T(const string c, Algebra_Node* second);
+    double FunctionValue_T(double value, string symbol);
+    typedef Algebra_Tree iterator;
+    // ~Algebra_Tree(); // chat 
 
-    
+
 };
 
 

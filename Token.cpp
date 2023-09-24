@@ -17,7 +17,7 @@ Token Token::operator=(const Token& other) {
 }
 
 bool Token::operator==(const Token& other) {
-	return (type == other.type  && value == other.value && precedence == other.precedence && rightAssociative == other.rightAssociative);
+	return (type == other.type && value == other.value && precedence == other.precedence && rightAssociative == other.rightAssociative);
 }
 
 bool Token::operator == (const int m)
@@ -72,7 +72,7 @@ ostream& operator<<(ostream& os, const Token& token) {
 
 string Token::ToString()
 {
-	string s ="";
+	string s = "";
 	auto value = this->value;
 	if (holds_alternative<string>(value)) {
 		s = get<string>(value);
@@ -183,17 +183,17 @@ Token::~Token() {
 	// Add any necessary cleanup code here
 }
 
-bool CE(const variant<string, int, double> value, const string s) 
+bool CE(const variant<string, int, double> value, const string s)
 {
-		if (holds_alternative<string>(value))
-		{
-			if (get<string>(value) == s) return true;
-			else return false;
-		}
+	if (holds_alternative<string>(value))
+	{
+		if (get<string>(value) == s) return true;
 		else return false;
+	}
+	else return false;
 }
 
-bool CE(const variant<string, int, double> value, const int m) 
+bool CE(const variant<string, int, double> value, const int m)
 {
 	if (holds_alternative<string>(value))
 	{
@@ -416,7 +416,7 @@ Token SetToken(const variant<int, double, string> value)
 	}
 }
 
-bool operator == (Token& C , Token& S) 
+bool operator == (Token& C, Token& S)
 {
 	if (C.value == S.value) return true;
 	else return false;
@@ -433,7 +433,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 	int i = 0;
 	while (iter[1] != fh.end())
 	{
-		
+
 		Token& T_0 = *(iter[0]);
 		Token& T_1 = *(iter[1]);
 		if (T_0.type == Token::Type::LeftParen)
@@ -447,7 +447,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 
 	if (n >= 4) // Ищем (-a) и заменяем на результат (-1)*a , где а - число.
 	{
-		string f , r;
+		string f, r;
 		if (DEBUG) f = TokensToStr(fh);
 		reverse(entries.begin(), entries.end()); // Начинаем с последнего , чтобы не корректировать индексы при удалении.
 		for (int p : entries)
@@ -456,8 +456,8 @@ void Tokenize_u_minus(deque<Token>& fh) {
 			Token& T_1 = fh[p + 2];
 			if (T_0.type == Token::Type::RightParen)
 			{
-				if (T_1.type == Token::Type::Number || T_1.type == Token::Type::Integer || T_1.type == Token::Type::Real )
-				{  
+				if (T_1.type == Token::Type::Number || T_1.type == Token::Type::Integer || T_1.type == Token::Type::Real)
+				{
 					double q = -1;
 					if (holds_alternative<int>(T_1.value))
 					{
@@ -473,7 +473,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 					Token T_2 = SetToken(q);
 					if (DEBUG) r = TokensToStr(fh);
 					f = r;
-					if (DEBUG){  
+					if (DEBUG) {
 						const Token T_3 = *(start + p);
 						const Token T_4 = *(start + p + 4);
 						deque<Token> eh = fh;
@@ -484,14 +484,14 @@ void Tokenize_u_minus(deque<Token>& fh) {
 						deque<Token> ls;
 						copy(fh.begin(), fh.end(), back_inserter(ls));
 						deque<Token>::iterator iter;
-						int i , j;
+						int i, j;
 						int m = fh.size();
 						for (iter = fh.begin(), i = 0; iter != fh.end(); iter++, i++) { cout << i << ":" << *(iter) << endl; }
 						r = TokensToStr(fh);
 						tie(i, j) = make_pair(16, 19); // Данные для настройки.
 						Token T_5 = *(start + i);
 						Token T_6 = *(start + j);
-						ls.erase(start + i , start + j); // Функция странно удаляет
+						ls.erase(start + i, start + j); // Функция странно удаляет
 						string f = TokensToStr(ls);
 						int l = 5;
 						for (i = 0; i < m - l - 1; i++)
@@ -600,4 +600,3 @@ string TokensToStr(deque<Token> fh)
 	}
 	return s;
 }
-
