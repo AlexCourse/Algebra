@@ -81,6 +81,8 @@
         bool operator == (const int m);
         bool operator == (const double m);
         bool operator == (const std::string m);
+        bool operator == (const char c);
+        bool operator == (const Token::Function f_able);
         friend std::ostream& operator << (std::ostream& os, const Token& token);
         std::string ToString();
 

@@ -2,7 +2,7 @@
 #include "Derivate.h"
 
 
-#define DEBUG 1
+#define DEBUG 0
 #define X "x" // опеределение глобальной переменной типа char, переменная по которой дифференцируем.
 
 /*
@@ -1752,13 +1752,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 	  // f'(y) = (D(y) / y * ln(x) - D(x) / x * ln(y)) / ln^2(x)
 		if (!(CE(D[0]->data.value, 1)) && !(CE(D[1]->data.value, 1)))
 		{
-			const string s = "(D/p*ln(q)-d/q*ln(p))/(ln(q))^2";
+			const string s = "(d/q*ln(p)-D/p*ln(q))/(ln(p))^2"; // log(sin(x) , cos(x) ) 'sin(x)*(-1)*(ln(sin(x)))/(cos(x))-cos(x)*(ln(cos(x)))/(sin(x))/(ln(sin(x)))^2'
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1770,12 +1770,12 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 		}
 		if (!(CE(D[0]->data.value, 1)) && (CE(D[1]->data.value, 1)))
 		{
-			const string s = "(ln(q)/p-d/q*ln(p))/(ln(q))^2";
+			const string s = "(ln(p)/q-D/p*ln(q))/(ln(p))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1787,12 +1787,12 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 		}
 		if ((CE(D[0]->data.value, 1)) && !(CE(D[1]->data.value, 1)))
 		{
-			const string s = "(D/p*ln(q)-ln(p)/q)/(ln(q))^2";
+			const string s = "(d/q*ln(p)-ln(q)/p)/(ln(p))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "D", D[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1804,11 +1804,11 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 		}
 		if ((CE(D[0]->data.value, 1)) && (CE(D[1]->data.value, 1)))
 		{
-			const string s = "(ln(q)/p-ln(p)/q)/(ln(q))^2";
+			const string s = "(ln(p)/q-ln(q)/p)/(ln(p))^2";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1829,8 +1829,9 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 			const string s = "d/(q*ln(p))";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "d", D[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1846,8 +1847,8 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 			const string s = "1/(q*ln(p))";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1861,14 +1862,14 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 	}
 	if (!(CE(D[0]->data.value, 0)) && (CE(D[1]->data.value, 0)))
 	{ // Логарифм от постоянного числа по переменному основнию.
-		if (!(CE(D[1]->data.value, 1)))
+		if (!(CE(D[0]->data.value, 1)))
 		{
-			const string s = "(-1)*d*ln(p)/(q*ln(q))^2";
+			const string s = "(-1)*D*ln(q)/(p*(ln(p))^2)";  
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "d", D[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "D", D[0], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1880,11 +1881,11 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 		}
 		else
 		{
-			const string s = "(-1)*ln(p)/(q*ln(q))^2";
+			const string s = "(-1)*ln(q)/(p*(ln(p))^2)";
 			T = SetOperatorTree(s);
 			if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
-			T = TreeRExprReplaceOnSubTreeD(T, "p", P[1], W);
-			T = TreeRExprReplaceOnSubTreeD(T, "q", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
+			T = TreeRExprReplaceOnSubTreeD(T, "q", P[1], W);
 			if (DEBUG)
 			{
 				vector<Token> V;
@@ -1916,7 +1917,7 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_conc
 
 Algebra_Node* func_5b(Algebra_Node* P[2], Algebra_Node* D[2], char c, Debug_concept& W)
 {
-	const string s = "(d/q*ln(p)-D/p*ln(q))/(ln(p))^2"; // 'sin(x)*(-1)*(ln(sin(x)))/(cos(x))-cos(x)*(ln(cos(x)))/(sin(x))/(ln(sin(x)))^2'
+	const string s = "(d/q*ln(p)-D/p*ln(q))/(ln(p))^2"; // log(sin(x) , cos(x) ) 'sin(x)*(-1)*(ln(sin(x)))/(cos(x))-cos(x)*(ln(cos(x)))/(sin(x))/(ln(sin(x)))^2'
 	Algebra_Node* T = SetOperatorTree(s);
 	if (DEBUG) { int index = W.index;  T = SetOperatorTree(s, index);  W.index = index; }
 	T = TreeRExprReplaceOnSubTreeD(T, "p", P[0], W);
@@ -2802,10 +2803,11 @@ Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept& W) // Следить , ч
 			while (0); // Для точки останова.
 
 		}
-		char  c = get<char>(T.value);
-		Algebra_Node* node = SetNode(0);
+		char c = '0';
+		Algebra_Node* node;
 		if (T.type == Token::Type::Operator)
 		{
+			c = get<char>(T.value);
 			switch (c)
 			{
 			    case '+': { node = func_1a(P, D, c, W); break; }
@@ -2813,11 +2815,12 @@ Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept& W) // Следить , ч
 			    case '*': { node = func_2a(P, D, c, W); break; }
 			    case '/': { node = func_3a(P, D, c, W); break;  }
 			    case '^': { node = func_4a(P, D, c, W); break;  }
+				default:  { node = SetNode(0);  }
 			}
 		}
 		else if (T.type == Token::Type::Function)
 		{
-			if ( get<Token::Function>(T.value) == Token::Function::LOG ){ node = func_5a(P, D, c, W); }
+			if ( get<Token::Function>(T.value) == Token::Function::LOG ){ node = func_5a(P, D, c, W); } // func_5b не работает.
 		}
 		if (DEBUG) { 
 			deque<Token> fs; 
@@ -2895,6 +2898,7 @@ Algebra_Node* DerivateFunc(Algebra_Node* root , Debug_concept& W) // Следить , ч
 			case Token::Function::ARCH: { node = func_21a(P, D, W); break;  }
 			case Token::Function::ARTH: { node = func_22a(P, D, W); break;  }
 			case Token::Function::ARCTH: { node = func_23a(P, D, W); break;  }
+			default: { node = SetNode(0);  }
 			}
 			if (DEBUG)
 			{
@@ -2965,6 +2969,12 @@ Algebra_Node* DerivateFunction(Algebra_Node* root , Debug_concept& W)
 	return second_root;
 }
 
+Algebra_Node* DerivateFunction(Algebra_Node* root)
+{
+	Debug_concept W = Debug_concept();
+	Algebra_Node* second_root = DerivateFunction(root, W);
+	return second_root;
+}
 
 
 double Numerical_Differentiation(Algebra_Tree& treeExpr, double t, double h, string x) {

@@ -130,7 +130,7 @@ bool Token::operator==(const Token& other) {
 	return (type == other.type && value == other.value && precedence == other.precedence && rightAssociative == other.rightAssociative);
 }
 
-bool Token::operator == (const int m)
+bool Token::operator == (const int m) 
 {
 	auto t = this->value;
 	if (holds_alternative<int>(t)) {
@@ -141,7 +141,7 @@ bool Token::operator == (const int m)
 	else return false;
 }
 
-bool Token::operator == (const double m)
+bool Token::operator == (const double m) 
 {
 	auto t = this->value;
 	if (holds_alternative<double>(t)) {
@@ -158,6 +158,28 @@ bool Token::operator == (const string s)
 	if (holds_alternative<string>(t)) {
 		string p = get<string>(t);
 		if (p == s) return true;
+		else return false;
+	}
+	else return false;
+}
+
+bool Token::operator == (const char c)
+{
+	auto t = this->value;
+	if (holds_alternative<char>(t)) {
+		char p = get<char>(t);
+		if (p == c) return true;
+		else return false;
+	}
+	else return false;
+}
+
+bool Token::operator == (const Token::Function f_able)
+{
+	auto t = this->value;
+	if (holds_alternative<Token::Function>(t)) {
+		Token::Function g_able = get<Token::Function>(t);
+		if (g_able == f_able) return true;
 		else return false;
 	}
 	else return false;
@@ -581,6 +603,19 @@ Token _SetToken(const char c)
 	return token;
 }
 
+Token _SetToken(const Token::Function f_able)
+{
+	int index = 0;
+	Token token = Token(Token::Type::Function, f_able, index);
+	return token;
+}
+
+Token _SetToken(const Token::Function f_able, int& index)
+{
+	Token token = Token(Token::Type::Function, f_able, index);
+	return token;
+}
+
 Token SetToken(const variant<string, char, int, double, Token::Function> value)
 {
 	if (holds_alternative<string>(value)) {
@@ -602,6 +637,12 @@ Token SetToken(const variant<string, char, int, double, Token::Function> value)
 	{
 		char c = get<char>(value);
 		Token T = _SetToken(c);
+		return T;
+	}
+	else if (holds_alternative<Token::Function>(value))
+	{
+		Token::Function f_able = get<Token::Function>(value);
+		Token T = _SetToken(f_able);
 		return T;
 	}
 }
@@ -627,6 +668,12 @@ Token SetToken(const variant<string, char, int, double, Token::Function> value, 
 	{
 		char c = get<char>(value);
 		Token T = _SetToken(c, index);
+		return T;
+	}
+	else if (holds_alternative<Token::Function>(value))
+	{
+		Token::Function f_able = get<Token::Function>(value);
+		Token T = _SetToken(f_able, index);
 		return T;
 	}
 }

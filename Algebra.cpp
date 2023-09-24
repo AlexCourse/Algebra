@@ -335,9 +335,9 @@ void test_7() // Тестирование функции DerivateFunc()
 		                   "5*(x+5)", // +
 		                   "(x-3)*7", // +
 		                   "6*11", // +
-		                   "sin(x)-cos(x)", // - , func_1a  , минимальный неработающий пример. , неверное копирование дерева выражения в функции func_1a
-		                   "sin(x)-x", // - , 40
-		                   "x-tg(x)", // -
+		                   "sin(x)-cos(x)", // + , func_1a  , минимальный неработающий пример. , неверное копирование дерева выражения в функции func_1a
+		                   "sin(x)-x", // + , 40
+		                   "x-tg(x)", // +
 		                   "sin(x)/cos(x)", // + , func_3a
 		                   "sin(x)/(x+4)", // +
 		                   "(x+5)/sin(x)", // +
@@ -366,61 +366,85 @@ void test_7() // Тестирование функции DerivateFunc()
 						   "arcth(1+(x^5 + x^4 + x^3 + x^2 + 1)^2)" , // +
 						   "arccth(1+(x^5 + x^4 + x^3 + x^2 + 1)^2)" ,// +
 		                   "log(sin(x) , cos(x))" , // + , func_5a
-		                   "log( cos(x) , sin(x) )" ,// - , 70
+		                   "log( cos(x) , sin(x) )" ,// + , 70 
 		                   "log( x+1 , cos(x))" , // + 
-		                   "log( sin(x) , x+5)" ,// +
+		                   "log( sin(x) , x+5)" ,// + 
 		                   "log( x+1 , x + 9 )" ,// +
-		                   "log( x+1 , x+7 )" , // +
-		                   "ln(x)" , // +
-		                   "sin(x^2)*(x^2 + 1/(3-cos(x^2)) + x )*x+sin(x)*(x^2-3*x+1-x)^2+7", // -
-		                   "3*x*(x-1)*cos(4*x)+(x-7)^2*(x+4)*tg(x)", // - 
+		                   "log( x+1 , x+7 )" , // + 
+		                   "log(2 , x+4 )",  // + 
+		                   "log( 2 , sin(x))",   // +
+		                   "log( x+3 , 2)",     // +
+	                       "log( cos(x) , 2)",  // +
+		                   "log(4 , 32)",   // + 
+		                   "ln(x)" , // + , 80
+		                   "sin(x^2)*(x^2 + 1/(3-cos(x^2)) + x )*x+sin(x)*(x^2-3*x+1-x)^2+7", // +
+		                   "3*x*(x-1)*cos(4*x)+(x-7)^2*(x+4)*tg(x)", // + 
 		                   "3*x*(x-1)*cos(4*x)", // +
-		                   "(x-7)^2*(x+4)*tg(x)", // -
-		                   "x*tg(x)", // +  , 80
+		                   "(x-7)^2*(x+4)*tg(x)", // +
+		                   "x*tg(x)", // +  
 		                   "(x+4)*tg(x)", // +
-		                   "(x-7)^2*tg(x)", // - ,минимальный неработающий пример
-		               	   "sin(x)^cos(x)", // - , func_5a
-		                   "sin(x)^(x+1)" , // -
-		                   "(x+5)^cos(x)" , // -
+		                   "(x-7)^2*tg(x)", // + 
+		               	   "sin(x)^cos(x)", // + , func_5a
+		                   "sin(x)^(x+1)" , // + 
+		                   "(x+5)^cos(x)" , // + , 90
 		                   "(x+1)^(x+7)" , // +
 		                   "sin(x)^4" , // +
 		                   "(x+3)^4" , // +
 		                   "3^(x+1)" , // +
-		                   "2^(cos(x))" , // 90. - , exception.
+		                   "2^(cos(x))" , // +
 		                   "5^7"  , // +
-		                   "x^4+x^2+1", // n[+]
+		                   "x^4+x^2+1", // +
 		                   "x^4",  // +
 		                   "x^2" , // +
-						   "3*x*x*(x-1)*(x-1)" , // +
+						   "3*x*x*(x-1)*(x-1)" , // + , 100
 		                   "3*x*x*(x-1)", // +
 		                   "3*x*x", // +
 		                   "x*x*x", // + 
 		                   "x*(x+2)*(x-3)*(x+4)*(x-5)/(1+x^2*(x+1)^2)", // +
-		                   "5*x^2*(x+3)^2*(x^2+1)*(1-1/x)^2" , // 100 , +
+		                   "5*x^2*(x+3)^2*(x^2+1)*(1-1/x)^2" , //  +
 						   "(1-1/x)^2", // +
 						   "(1/x)^2", // +
 						   "1/x", // +
 						   "x*(x^2+1)*x*(x-1)*(x+2)^5*(x-3)^2*(x+4)^(3/2)*(x-5)^3", // +
-						   "x^(sin(x))*(1+x*cos(x^2))*x*(x^2+1)^2*x^(cos(x))", // - , exception
-						   "x^(sin(x))*(1+x*cos(x^2))",
-						   "x^(sin(x))", // - неверный ответ , не пропечатываются функции.
-						   "sin(x)",
+						   "x^(sin(x))*(1+x*cos(x^2))*x*(x^2+1)^2*x^(cos(x))", // + , 110
+						   "x^(sin(x))*(1+x*cos(x^2))", // +
+						   "x^(sin(x))", // +
+						   "sin(x)", // +
 						   "x^x", // +
-						   "(x^2+1)^(x+3/2)" , //  + , 110
+						   "(x^2+1)^(x+3/2)" , //  + 
 						   "(x-1)^2*(x^2*(x+3*(x+1))+3*x*(x-1)/(x+4*x^2+1+1/x))/((x-1)^2*(x+3)^2*(x-5)*(x+7)^2)", // +
-						   "sin(x)*cos(x)", // - , минимальный неработающий пример.
+						   "sin(x)*cos(x)", // +
 						   "sin(x^2)", // +
 						   "(x^2+3*x+7+1/x)^(1/(1+x^2))", // +
-						   "x*sin(x)", // +
-						   "cos(x)*x" // -
+						   "x*sin(x)", // + 
+						   "cos(x)*x", // + , 120
+						   "sin(x+3*x^2/(x^3+1))*cos(3*x)*( x^4/(x^7+sin(x)*x^10) + 2*x^2+ln(x)*x*sin(7*x) )", // +
+						   "log(2 , x)", // +
+						   "log(x , 2)", // +
+						   "x+4" , // +
+						   "x-4" , // +
+						   "4+x" , // +
+						   "4-x" , // +
+                           "sin(x) + 4", // +
+							"sin(x) - 4" , // +
+						   "4 + cos(x)", // + , 130
+						   "4 - cos(x)" , // +
+						   "x + cos(x)" , // +
+							"x - cos(x)", // +
+							"sin(x) + x" , // +
+							"sin(x) - x" , // +
+							"x^2*sin(x^2)*(cos(x))^2*( 1 + 1/(x+1)*sin(3*x) - 3/(x+3)*cos(5*x) + 5/(x+5)*sin(7*x) - 7/(x+7)*cos(7*x)  )^2*x + x^2*sin(x+2)*x + tg(x^2)", // +
+							"cos( 1 / ( 4+cos(x) )^2  )", // +
+							"sin(x-1)*cos(x^2-1)*sin(x^3-1)",
+							"sin(x)*cos(2*x)/(1+x*(x^2+1)^2)"
 
 	};
 	// Два раза один и тот же символ в строке - причина повторения индекса.
-	const double x = 2;
+	const double x = M_PI / 4;
 	const int MODE = 0;
 	// x = M_PI/4;
 	double Q[2];
-	string s = eh[39];
+	string s = eh[139];
 	deque<Token> fh, fs, es;
 	// getline(cin, s);
 	int index = 0;
@@ -809,16 +833,16 @@ void test_23() // Тестирование обоих перегрузок PolishCalculation()
 	while (0);
 }
 
-void test_24() // Тестирование функции simplify_E()
+void test_24() // Тестирование функции simplify_F()
 {
 	string fh[] = { "1+x*0" , // 0 , +
-		             "7+0*(x+1)+1*0" ,  // +
+		             "7+0*(x+1)+1*0" ,  // +  -
 		              "0*(x-7)" , // +
 		              "(x+4)*0" , // +
-		               "11/17 + x*0*(x+1)", // +
-		              "11/15 + (x+4)*0", // + 
-		              "11/23 + x^2*0 - 6*x*0*(x-2)*(x+1)", // + 
-		              "11/23 + 7*x*0*(x+1)*(x-2)", // +
+		               "11/17 + x*0*(x+1)", // + , +
+		              "11/15 + (x+4)*0", // + , +
+		              "11/23 + x^2*0 - 6*x*0*(x-2)*(x+1)", // + , -
+		              "11/23 + 7*x*0*(x+1)*(x-2)", // + , -
 		              "3/7+ 0*(x+4)", // +
 		            "(1+x*(x+1))^1" , // +
 		             "3/4 + (1+x*(x+1))^1", // + ,10
@@ -842,16 +866,24 @@ void test_24() // Тестирование функции simplify_E()
 		            "0^2", // +
 		            "1*(1+3*(x^2+1)/1*x/1*1 +0*x^2-0*sin(x)+(x+1)^1*x^0)", // -
 		            "(1/2+(x+1)^1*x^0)", // + , 30
-		            "(x^2+4*5*6*(x+1)^(1/2*2)+4*2*x-9*4/5*(x-1))*x+(x-3/4*7/11)",
+		            "(x^2+4*5*6*(x+1)^(1/2*2)+4*2*x-9*4/5*(x-1))*x+(x-3/4*7/11)", // -
 		            "x^2+4*5",
 		            "3/4+(x+1)*1", // +
-		            "4/5+1*(x+1)" // +
+		            "4/5+1*(x+1)", // +
+					"11/15 + (x+4)*0" , 
+		            "11/15 + (0 + (x+4))",
+		            "11/15 + ((x+4) + 0)"
 	             };
-	string s = fh[29];
-	Algebra_Node* first_node = SetOperatorTree(s);
-	Algebra_Node* second_node = simplify_E(first_node);
-	Algebra_Tree A = Algebra_Tree(second_node);
-	A.Print_Tree_T();
+	for (int i = 0; i < 1; i++)
+	{
+		string s = fh[1];
+		Algebra_Node* first_node = SetOperatorTree(s);
+		simplify_F(first_node);
+		Algebra_Tree A = Algebra_Tree(first_node);
+		A.Print_Tree_T();
+	}
+	char c;
+	cin >> c;
 }
 
 void test_25() // Тестирование функции simplify_D()
@@ -859,15 +891,15 @@ void test_25() // Тестирование функции simplify_D()
 	string fh[] = { "1", // +
 		            "x+4*3", // +
 					"x^2+4*5",
-		            "1^2+4*5",
+		            "1^2+4*5", // - , к числу прививается
 		            "4*(3+1)", // +
-		            "4*(3+7/9)", // -
+		            "4*(3+7/9)", // +
 		            "3*(1+5/7+6/11*7/41)^2+0.25", // -
 	};
-	string s = fh[5];
+	string s = fh[6];
 	Algebra_Node* first_node = SetOperatorTree(s);
-	Algebra_Node* second_node = simplify_D(first_node);
-	Algebra_Tree A = Algebra_Tree(second_node);
+	simplify_D(first_node);
+	Algebra_Tree A = Algebra_Tree(first_node);
 	A.Print_Tree_T();
 }
 
@@ -931,18 +963,55 @@ void test_27() // Тестирование функции PostfixToInfix() , TokensToStr() , ToStri
 
 void test_28() // Тестирование функции _CloneTree()
 {
-	string fh[] = { "sin(x)*x+0.25*x^2" // +
+	string fh[] = { 
+		"sin(x)*x+0.25*x^2" , // + , + , -
+		"sin(x)"
 	};
-	string s = fh[0];
+	string s = fh[1];
+	Debug_concept W = Debug_concept();
 	Algebra_Node* A = SetOperatorTree(s);
-	Algebra_Node* B = _CloneTree(A);
+	// Algebra_Node* B = _CloneTree(A);
+	Algebra_Node* C = _CloneTree(A , W); // Ошибка в копировании функций.
 	Print_Tree_R(A , "", false , false);
-	Print_Tree_R(B, "", false, false);
+	// Print_Tree_R(B, "", false, false);
+	Print_Tree_R(C, "", false, false);
+}
+
+void test_29() // Тестирование метода Token::GetValue()
+{
+	string fh[] = { "sin(x)" };
+	string s = fh[0];
+	deque<Token> fs = exprToTokens(s);
+	for (auto token : fs)
+	{
+		variant<string, char, int, double, Token::Function> value = token.GetValue();
+		string f = ToString(value);
+		cout << f << " ";
+	}
+	cout << endl;
+}
+
+void test_30()
+{
+	string fh[] = { "sin(x)*cos(2*x)/(1+x*(x^2+1)^2)" , "sin(x)/x"};
+	string s = fh[1];
+	Algebra_Node* node = SetOperatorTree(s);
+	Algebra_Node* second_root = node;
+	for (int i = 0; i < 8; i++)
+	{
+		second_root = DerivateFunction(node);
+		node = second_root;
+	}
+	Print_Tree_R(second_root, "", false , false);
+	vector<Token> eh;
+	TreeToPolish(second_root , eh);
+	int n = eh.size();
+	cout << n << endl;
 }
 
 int main() {
 
-	const int n = 28;  // 7 , 1 PostfixToInfix()
+	const int n = 24;  // 7 , 1 PostfixToInfix()
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +
@@ -973,6 +1042,8 @@ int main() {
 	case 26: { test_26(); break;  }
 	case 27: { test_27(); break;  }
 	case 28: { test_28(); break;  }
+	case 29: { test_29(); break;  }
+	case 30: { test_30(); break;  }
 	}
 	char c;
 	cin >> c;
