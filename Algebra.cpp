@@ -25,7 +25,7 @@ void test_1() // Тестирование функций exprToTokens() , shuntingYard().
 		                  "sin(x^2-3*x+2)*sin(7/4)",
 		                  "log(x , 2)"
 	};
-	string s = fh[4];
+	string s = fh[3];
 	getline(cin, s);
 
 	deque<Token> fs, es;
@@ -328,20 +328,40 @@ void test_9()  // Тестирование функции SetNode()
 
 void test_10() // Тестирование функции PolishCalculation()
 {
-	string fh[7] = { "0.5*0.25" , // +
+	string fh[26] = { "0.5*0.25" , // +
 		            "0.5*0.7*(1.5+1)"  , // +
 		            "1+0.7*(3-4+5*0.5*0.25*(1-4*3))", // +
 		             "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2", // +
 		              "sin(1-4/7+3/13*(1+4/9)^2)*cos(1-(4/11)^2)", // +
-		               "3/4*sin(1+11/157)", // -
-					   "(3/4)*sin(1+11/157)" // + , Token error.
+		               "3/4*sin(1+11/157)", // +
+					   "(3/4)*sin(1+11/157)", // + 
+		               "sin(2*5)", // +
+		               "tg(3-0.6^2*(1+3/4)^3)", // +
+		               "tg(17/23)", // +
+		               "ctg(2-0.6^2)", // +
+		               "arcsin((5/7)^2)", // +
+		               "arcsin(3/4)", // +
+		               "arccos(11/19)", // +
+		               "arctg(2/(2^2+1/17)^2)", // +
+		               "2/(2^2+1/17)^2", // +
+		               "arcctg(13/17)", // +
+		               "sh(1+0.5^2*(1-7/9)^3)", // +
+		               "ch(1+0.35^2)", // +
+		               "th(1+0.5*0.4^2)", // +
+		               "cth(19^2*7/51^2)", // +
+		               "arsh(1-0.5*(2+4/7))", // +
+		               "arch(1+0.9^2)", // +
+		               "pow(4 , 2)",  // + 
+		               "log(16 , 2)", // + 
+		               "abs(-3)" // - , не проходит tokenize_u_minus.
 	};
-	string s = fh[5];
+	string s = fh[24];
 	deque<Token> fs, es;
 	fs = exprToTokens(s); 
 	Tokenize_u_minus(fs);
 	es = shuntingYard(fs);
 	double r = PolishCalculation(es);
+	cout << r << endl;
 	while (0);
 }
 
@@ -378,20 +398,20 @@ void test_13() // Тестирование функции SetAlgebricTree()
 
 void test_14()
 {  // Тестирование функции TreeRExprReplaceOnSubTreeD()
-	string s;
-	s = "3*(x+c)+c*x^2*(x-c)+8*x*c"; 
-	s = "4*x^2*(x^2-c^2)+3*x*(x-c/x)";
-	s = "(x-c)^2";
-	// s = "x-c";
+	/*
+	const int N = 5;
+	string fh[4] = { "3*(x+c)+c*x^2*(x-c)+8*x*c" , "4*x^2*(x^2-c^2)+3*x*(x-c/x)" , "(x-c)^2" , "x-c"};
+	string s ,r, f;
+	tie(s, f, r) = make_tuple(fh[0], "c", "x+3");
 	Algebra_Tree& first_tree = SetAlgebricTree(s);
-	s = "x+3";
-	Algebra_Node*  node = SetOperatorTree(s);
-	string f = "c";
+	Algebra_Node*  node = SetOperatorTree(r);
 	first_tree.Print_Tree_T();
+	Algebra_Tree& second_tree = first_tree.TreeExprReplaceD_T("x" , to_string(N));
 	first_tree.TreeRExprReplaceOnSubTreeD_T(f, node);
 	for (int i = 0; i < 42; i++) cout << '=';
 	cout << endl;
 	first_tree.Print_Tree_T();
+	*/
 }
 
 void test_15()
@@ -498,7 +518,7 @@ void test_21() // Тестирование шаблонной версии функции: FindValueD
 
 int main() {
 
-	const int n = 1; 
+	const int n = 10; 
 	switch (n)
 	{
 	case 1: { test_1(); break; } // +

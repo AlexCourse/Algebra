@@ -232,12 +232,13 @@ deque<Token> exprToTokens(const string& expr) {
 	deque<Token> tokens;
 
 	for (const auto* p = expr.c_str(); *p; ++p) {
-		if (isblank(*p)) {
+		char c = *p;
+		if (isblank(c)) {
 			// do nothing
 		}
-		else if (isdigit(*p))
+		else if (isdigit(c))
 		{
-			if ((*p) == '.')
+			if (c == '.')
 			{
 				int pr = -1;
 				tokens.push_back(Token{ Token::Type::Unknown, string(p, p), pr,  false });
@@ -245,9 +246,10 @@ deque<Token> exprToTokens(const string& expr) {
 			}
 			Token::Type t = Token::Type::Integer;
 			const auto* b = p;
-			while (isdigit(*p) || (*p) == '.') {
-				if ((*p) == '.') t = Token::Type::Real;
+			while (isdigit(c) || c == '.') {
+				if (c == '.') t = Token::Type::Real;
 				++p;
+				c = *p;
 			}
 			const string s = string(b, p);
 			if (t == Token::Type::Integer)
@@ -263,11 +265,12 @@ deque<Token> exprToTokens(const string& expr) {
 			--p;
 		}
 		else
-			if (isliter(*p))
+			if (isliter(c))
 			{
 				const auto* b = p;
-				while (isliter(*p)) {
+				while (isliter(c)) {
 					++p;
+					c = *p;
 				}
 				const string s = string(b, p);
 				if (func_info.count(s)) tokens.push_back(Token{ Token::Type::Function, s });
@@ -276,7 +279,7 @@ deque<Token> exprToTokens(const string& expr) {
 				continue;
 
 			}
-			else if ((*p) == ',')
+			else if (c == ',')
 			{
 				string s = string(p, p + 1);
 				tokens.push_back(Token{ Token::Type::Comma , s });
@@ -285,7 +288,7 @@ deque<Token> exprToTokens(const string& expr) {
 				Token::Type t = Token::Type::Unknown;
 				int pr = -1;            // приоритет
 				bool ra = false;        // rightAssociative
-				switch (*p) {
+				switch (c) {
 				default:                                    break;
 				case '(':   t = Token::Type::LeftParen;     break;
 				case ')':   t = Token::Type::RightParen;    break;
@@ -295,13 +298,10 @@ deque<Token> exprToTokens(const string& expr) {
 				case '+':   t = Token::Type::Operator;      pr = 2; break;
 				case '-':   t = Token::Type::Operator;      pr = 2; break;
 				}
-				const auto s = std::string(1, *p);
+				const auto s = string(1, c);
 				tokens.push_back(Token{ t, s, pr, ra });
 			}
-
-
 	}
-
 	return tokens;
 }
 
@@ -325,12 +325,13 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 	if (n == 1)
 	{
 		for (const auto* p = expr.c_str(); *p; ++p) {
-			if (isblank(*p)) {
+			char c = *p;
+			if (isblank(c)) {
 				// do nothing
 			}
 			else if (isdigit(*p))
 			{
-				if ((*p) == '.')
+				if (c == '.')
 				{
 					int pr = -1;
 					Token T = Token{ Token::Type::Unknown, std::string(p, p), pr,  false };
@@ -338,8 +339,8 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 				}
 				const auto* b = p;
 				Token::Type t = Token::Type::Integer;
-				while (isdigit(*p) || (*p) == '.') {
-					if ((*p) == '.') t = Token::Type::Real;
+				while (isdigit(c) || c == '.') {
+					if (c == '.') t = Token::Type::Real;
 					++p;
 				}
 				const auto s = std::string(b, p);
@@ -348,11 +349,12 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 				--p;
 			}
 			else
-				if (isliter(*p))
+				if (isliter(c))
 				{
 					const auto* b = p;
-					while (isliter(*p)) {
+					while (isliter(c)) {
 						++p;
+						c = *p;
 					}
 					const string s = string(b, p);
 					if (func_info.count(s))
@@ -370,7 +372,7 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 					Token::Type t = Token::Type::Unknown;
 					int pr = -1;            // приоритет
 					bool ra = false;        // rightAssociative
-					switch (*p) {
+					switch (c) {
 					default:                                    break;
 					case '(':   t = Token::Type::LeftParen;     break;
 					case ')':   t = Token::Type::RightParen;    break;
@@ -380,7 +382,7 @@ Token SetToken(const string& expr) // фунция возвращает первый токен , если их н
 					case '+':   t = Token::Type::Operator;      pr = 2; break;
 					case '-':   t = Token::Type::Operator;      pr = 2; break;
 					}
-					const auto s = std::string(1, *p);
+					const auto s = string(1, c);
 					Token T = Token{ t, s, pr, ra };
 					return T;
 				}
