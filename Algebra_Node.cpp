@@ -59,7 +59,7 @@ bool f_opr_free(const Token& T) {
 }
 
 
-void Print_Tree_R(Algebra_Node const* node, string const& prefix, bool root, bool last) {
+void Print_Tree_R(Algebra_Node const* node, string const& prefix = " ", bool root = true, bool last = true) {
     cout << prefix << (root ? "" : (last ? ch_udia_hor : ch_ver_hor)) << (node ? node->data.str : "") << endl;
     if (!node || (!node->left && !node->right))
         return;
@@ -210,7 +210,17 @@ void TreeExprReplaceW(Algebra_Node* root ,const string c , const string s) { // 
         Algebra_Node* currentNode = fs.front();
         fs.pop();
 
-        if (currentNode->data.str == c) currentNode->data.str = s;
+        if (currentNode->data.str == c)
+        {
+            /*
+            deque<Token> es = exprToTokens(s);
+            if (es.size() > 1) return; // заменить на вызов исключения.
+            else 
+            {
+                currentNode->data = es.front();
+            }
+            */
+        }
 
         if (currentNode->left != nullptr) {
             fs.push(currentNode->left);
@@ -239,7 +249,6 @@ Algebra_Tree& operator + (Algebra_Tree& other)
 {
     const Token& T = Token(Token::Type::Operator, "+", 2, false);
     Algebra_Node* first = new Algebra_Node(T);
-    delete first;
     return other;
 }
 
@@ -274,3 +283,51 @@ Algebra_Tree& operator ^ (Algebra_Tree& object, Algebra_Tree& other)
     return other;
 }
 */
+Algebra_Tree& Algebra_Tree::AddSubtree(Algebra_Node* node, LR lr)
+{ // Добавление поддерева к выбранному узлу:
+  // Параметры - node выбранный узел. lr - какого направления потомок заменяется поддеревом.
+  // Добавляемое поддерево содержится в текущем классе.
+    Algebra_Tree& second_tree = CopyTree(this->root);
+    Algebra_Node* second = this->root;
+    this->root = node;
+    if (lr == LR::LEFT)
+    {
+        node->left = second;
+    }
+    if (lr == LR::RIGHT)
+    {
+        node->right = second;
+    }
+    return *this;
+}
+
+
+Algebra_Node* Algebra_Tree::CloneTree(Algebra_Node* root) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    Algebra_Node* newNode = new Algebra_Node(root->data);
+    newNode->left = CloneTree(root->left);
+    newNode->right = CloneTree(root->right);
+
+    return newNode;
+}
+
+Algebra_Tree& Algebra_Tree::CopyTree(Algebra_Node* node) {
+    Algebra_Tree* clonedTree = new Algebra_Tree();
+    clonedTree->root = CloneTree(node);
+    return *clonedTree;
+}
+
+void Algebra_Tree::Print_Tree_T()
+{
+    Algebra_Node* node = this->root;
+    Print_Tree_R(node);
+}
+
+void Algebra_Tree::TreeExprReplaceD_T(const string c, const string s)
+{
+    Algebra_Node* node = this->root;
+    TreeExprReplaceD(node , c , s);
+}

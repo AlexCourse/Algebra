@@ -16,3 +16,4 @@ std::ostream& operator<<(std::ostream& os, const Token& token) {
     os << token.str;
     return os;
 }
+

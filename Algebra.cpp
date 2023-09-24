@@ -34,12 +34,12 @@ int main() {
 		for (iter = es.begin(); iter != es.end(); iter++) cout << *iter << " ";
 		cout << endl;
 	}
-	double r = PolishCalculation(es);
+	// double r = PolishCalculation(es);
 
-	cout << r << endl;
+	// cout << r << endl;
 
     Algebra_Node* tree = PolishToTree(es);
-	Algebra_Tree* operator_tree = new Algebra_Tree(tree);
+	Algebra_Tree* first_tree = new Algebra_Tree(tree);
 	if (DEBUG)
 	{
 		Print_Tree_R(tree, "", true, true);
@@ -51,8 +51,10 @@ int main() {
 		ByPassTreeD(tree);
 		cout << endl;
 	}
-
-
+	Algebra_Tree second_tree = first_tree->CopyTree(tree);
+	second_tree.TreeExprReplaceD_T("x", "5");
+	second_tree.Print_Tree_T();
+	// Algebra_Tree third_tree = second_tree.AddSubtree();
 
     return 0;
 }

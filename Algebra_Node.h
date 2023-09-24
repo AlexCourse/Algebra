@@ -29,12 +29,19 @@ class Algebra_Node {
 };
 
 class Algebra_Tree {
-    Algebra_Node* root;
-public:
-    Algebra_Tree(Algebra_Node* node);
-    Algebra_Tree& operator + (Algebra_Tree& other);
-    Algebra_Tree& operator - (Algebra_Tree& other);
-    Algebra_Tree& operator * (Algebra_Tree& other);
+    private:
+        Algebra_Node* root;
+        Algebra_Node* CloneTree(Algebra_Node* root);
+    public:
+        Algebra_Tree() { this->root = nullptr; }
+        Algebra_Tree(Algebra_Node* node);
+        Algebra_Tree& operator + (Algebra_Tree& other);
+        Algebra_Tree& operator - (Algebra_Tree& other);
+        Algebra_Tree& operator * (Algebra_Tree& other);
+        Algebra_Tree& CopyTree(Algebra_Node* node);
+        Algebra_Tree& AddSubtree(Algebra_Node* node, LR lr);
+        void TreeExprReplaceD_T(const string c , const string s);
+        void Print_Tree_T();
     
 };
 
