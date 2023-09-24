@@ -1,4 +1,6 @@
 #pragma once
+
+#pragma once
 #include "Algebra_Node.h"
 #include "PrintColourConsole.h"
 

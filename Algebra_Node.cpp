@@ -10,7 +10,7 @@ Algebra_Node::Algebra_Node(const Token& data, Algebra_Node* left, Algebra_Node* 
     : data(data), left(left), right(right) {}
 
 Algebra_Node::Algebra_Node(const Token& data, Debug_concept& W, Algebra_Node* left, Algebra_Node* right)
-    : data(SetToken(data.GetValue(), W.index)) , left(left) , right(right){}
+    : data(SetToken(data.GetValue(), W.index)), left(left), right(right) {}
 
 Algebra_Node::Algebra_Node()
 {
@@ -21,9 +21,11 @@ Algebra_Node::Algebra_Node()
 }
 
 Algebra_Node::~Algebra_Node() {
+    data.~Token();
     delete left;
     delete right;
 }
+
 
 string Algebra_Node::toString() {
     return get<string>(data.value);
@@ -454,20 +456,20 @@ Algebra_Node* _CloneTree(Algebra_Node* root) {
     return newNode;
 }
 
-Algebra_Node* _CloneTree(Algebra_Node* root , Debug_concept& W) {
+Algebra_Node* _CloneTree(Algebra_Node* root, Debug_concept& W) {
     if (root == nullptr) {
         return nullptr;
     }
 
-    Algebra_Node* newNode = new Algebra_Node(root->data , W);
+    Algebra_Node* newNode = new Algebra_Node(root->data, W);
     W.index++;
-    newNode->left = _CloneTree(root->left , W);
+    newNode->left = _CloneTree(root->left, W);
     newNode->right = _CloneTree(root->right, W);
 
     return newNode;
 }
 
-Algebra_Tree& Algebra_Tree::CopyTree() {
+Algebra_Tree& const Algebra_Tree::CopyTree() {
     Algebra_Node* node = this->root;
     Algebra_Tree* clonedTree = new Algebra_Tree();
     clonedTree->root = _CloneTree(node);
@@ -475,7 +477,7 @@ Algebra_Tree& Algebra_Tree::CopyTree() {
 }
 
 
-Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Algebra_Node* second , Debug_concept& W)
+Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Algebra_Node* second, Debug_concept& W)
 {
     if (first == nullptr)
         return nullptr;
@@ -498,10 +500,10 @@ Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const string c, Al
         if (CE(currentNode->data.value, c))
         {
             Algebra_Node& Q = *parent;
-            Algebra_Node*  C = _CloneTree(second, W);
+            Algebra_Node* C = _CloneTree(second, W);
             if (DEBUG)
             {
-                vector<Token> kh ,ks;
+                vector<Token> kh, ks;
                 TreeToPolish(C, ks);
                 TreeToPolish(second, kh);
                 vector<int> fs, es;
@@ -657,51 +659,67 @@ Algebra_Tree::Algebra_Tree(Algebra_Node* node)
     this->root = node;
 }
 
-
-Algebra_Tree& operator+(Algebra_Tree& first_tree, Algebra_Tree& second_tree)
+Algebra_Tree Algebra_Tree::operator+(const Algebra_Tree& other)
 {
-    const Token& T = Token(Token::Type::Operator, "+", 2, false);
-    Algebra_Node* top_node = new Algebra_Node(T);
-    first_tree = first_tree.AddSubtree(top_node, LR::LEFT);
-    second_tree = second_tree.AddSubtree(top_node, LR::RIGHT);
-    return second_tree;
+    Algebra_Node* top_node = SetNode('+');
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root = other.root;
+    Algebra_Node* A = _CloneTree(first_root);
+    Algebra_Node* B = _CloneTree(second_root);
+    top_node->addLeftNode(A);
+    top_node->addRightNode(B);
+    return Algebra_Tree(top_node);
 }
 
-Algebra_Tree& operator-(Algebra_Tree& first_tree, Algebra_Tree& second_tree)
+Algebra_Tree Algebra_Tree::operator-(const Algebra_Tree& other)
 {
-    const Token& T = Token(Token::Type::Operator, "-", 2, false);
-    Algebra_Node* top_node = new Algebra_Node(T);
-    first_tree = first_tree.AddSubtree(top_node, LR::LEFT);
-    second_tree = second_tree.AddSubtree(top_node, LR::RIGHT);
-    return second_tree;
+    Algebra_Node* top_node = SetNode('-');
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root = other.root;
+    Algebra_Node* A = _CloneTree(first_root);
+    Algebra_Node* B = _CloneTree(second_root);
+    top_node->addLeftNode(A);
+    top_node->addRightNode(B);
+    return  Algebra_Tree(top_node);
 }
 
-Algebra_Tree& operator*(Algebra_Tree& first_tree, Algebra_Tree& second_tree)
+Algebra_Tree Algebra_Tree::operator*(const Algebra_Tree& other)
 {
-    const Token& T = Token(Token::Type::Operator, "*", 3, false);
-    Algebra_Node* top_node = new Algebra_Node(T);
-    first_tree = first_tree.AddSubtree(top_node, LR::LEFT);
-    second_tree = second_tree.AddSubtree(top_node, LR::RIGHT);
-    return second_tree;
+    Algebra_Node* top_node = SetNode('*');
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root = other.root;
+    Algebra_Node* A = _CloneTree(first_root);
+    Algebra_Node* B = _CloneTree(second_root);
+    top_node->addLeftNode(A);
+    top_node->addRightNode(B);
+    return  Algebra_Tree(top_node);
 }
 
-Algebra_Tree& operator/(Algebra_Tree& first_tree, Algebra_Tree& second_tree)
+Algebra_Tree Algebra_Tree::operator/(const Algebra_Tree& other)
 {
-    const Token& T = Token(Token::Type::Operator, "/", 3, false);
-    Algebra_Node* top_node = new Algebra_Node(T);
-    first_tree = first_tree.AddSubtree(top_node, LR::LEFT);
-    second_tree = second_tree.AddSubtree(top_node, LR::RIGHT);
-    return second_tree;
+    Algebra_Node* top_node = SetNode('/');
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root = other.root;
+    Algebra_Node* A = _CloneTree(first_root);
+    Algebra_Node* B = _CloneTree(second_root);
+    top_node->addLeftNode(A);
+    top_node->addRightNode(B);
+    return  Algebra_Tree(top_node);
 }
 
-Algebra_Tree& operator^(Algebra_Tree& first_tree, Algebra_Tree& second_tree)
+Algebra_Tree Algebra_Tree::operator^(const Algebra_Tree& other)
 {
-    const Token& T = Token(Token::Type::Operator, "^", 4, true);
-    Algebra_Node* top_node = new Algebra_Node(T);
-    first_tree = first_tree.AddSubtree(top_node, LR::LEFT);
-    second_tree = second_tree.AddSubtree(top_node, LR::RIGHT);
-    return second_tree;
+    Algebra_Node* top_node = SetNode('^');
+    Algebra_Node* first_root = this->root;
+    Algebra_Node* second_root = other.root;
+    Algebra_Node* A = _CloneTree(first_root);
+    Algebra_Node* B = _CloneTree(second_root);
+    top_node->addLeftNode(A);
+    top_node->addRightNode(B);
+    return  Algebra_Tree(top_node);
 }
+
+
 
 Algebra_Tree& Algebra_Tree::AddSubtree(Algebra_Node* node, LR lr)
 { // Добавление поддерева к выбранному узлу:
@@ -798,6 +816,13 @@ bool Algebra_Tree::Is_Algebric() // Реализовать с использованием итератора по де
     return true;
 }
 
+Algebra_Node* SetNode(const char c)
+{
+    Token token = SetToken(c);
+    Algebra_Node* node = new Algebra_Node(token);
+    return node;
+}
+
 Algebra_Node* SetNode(const int m)
 {
     Token token = SetToken(m);
@@ -819,23 +844,23 @@ Algebra_Node* SetNode(const string s)
     return node;
 }
 
-Algebra_Node* SetNode(const int m , int& index)
+Algebra_Node* SetNode(const int m, int& index)
 {
-    Token token = SetToken(m , index);
+    Token token = SetToken(m, index);
     Algebra_Node* node = new Algebra_Node(token);
     return node;
 }
 
 Algebra_Node* SetNode(const double m, int& index)
 {
-    Token token = SetToken(m , index);
+    Token token = SetToken(m, index);
     Algebra_Node* node = new Algebra_Node(token);
     return node;
 }
 
 Algebra_Node* SetNode(const string s, int& index)
 {
-    Token token = SetToken(s , index);
+    Token token = SetToken(s, index);
     Algebra_Node* node = new Algebra_Node(token);
     return node;
 }
@@ -847,6 +872,7 @@ Algebra_Tree& SetAlgebricTree(const string s)
     deque<Token> fh, eh;
     fh = exprToTokens(s);
     Tokenize_u_minus(fh);
+    fh = ReplaceElementInPolish(fh, M_PI, "Pi");
     eh = shuntingYard(fh);
     Algebra_Node* root = PolishToTree(eh);
     Algebra_Tree* tree = new Algebra_Tree(root);
@@ -854,10 +880,10 @@ Algebra_Tree& SetAlgebricTree(const string s)
     return T;
 }
 
-Algebra_Node* SetOperatorTree(const string s , int& index)
+Algebra_Node* SetOperatorTree(const string s, int& index)
 {
     deque<Token> fh, eh;
-    fh = exprToTokens(s , index , "ORDERING");
+    fh = exprToTokens(s, index, "ORDERING");
     Tokenize_u_minus(fh);
     eh = shuntingYard(fh);
     Algebra_Node* root = PolishToTree(eh);
@@ -954,11 +980,9 @@ double FunctionValueM(string expr, map<string, double>& ds)
 
 string TreeToInfix(Algebra_Node* root)
 {
-    vector<Token> fh , eh;
+    deque<Token> fh, eh;
     TreeToPolish(root, fh);
-    vector<Token> kh(fh.rbegin(), fh.rend());
-    // reverse(fh.begin(), fh.end());
-    string s = PostfixToInfix(kh);
+    string s = PostfixToInfix(fh);
     return s;
 }
 
@@ -1002,11 +1026,12 @@ void deleteBinaryTree(Algebra_Node* node) {
         return;
     }
     // Рекурсивно удаляем левое и правое поддерево
-    if ( node->left != nullptr) deleteBinaryTree(node->left);
-    if ( node->right != nullptr) deleteBinaryTree(node->right);
+    if (node->left != nullptr) deleteBinaryTree(node->left);
+    if (node->right != nullptr) deleteBinaryTree(node->right);
     // Удаляем текущий узел
+    node->left = nullptr;
+    node->right = nullptr;
     delete node;
-    node = nullptr;
 }
 
 void RecursiveDestructor(Algebra_Node* root)
@@ -1014,3 +1039,9 @@ void RecursiveDestructor(Algebra_Node* root)
     deleteBinaryTree(root);
 }
 
+Algebra_Tree::~Algebra_Tree()
+{
+    Algebra_Node* root = this->root;
+    RecursiveDestructor(root);
+    root = nullptr;
+}

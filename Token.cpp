@@ -1,38 +1,51 @@
 #include "token.h"
 #include <regex>
-#define DEBUG 1
+
+#define DEBUG 0
 
 using namespace std;
 
-Token::Token() : type(Type::Unknown), value(""), precedence(-1), rightAssociative(false) , index(0) {}
+Token::Token() : type(Type::Unknown), value(""), index(0), start_pos(0), last_pos(0), precedence(-1), rightAssociative(false) {}
 
-Token::Token(Type t, const string& s, int prec, bool ra) : type(t), value(s), precedence(prec), rightAssociative(ra) , index(0) {}
+Token::Token(const Type t, const string& s, const int prec, bool ra) : type(t), value(s), precedence(prec), rightAssociative(ra), index(0), start_pos(0), last_pos(0) {}
 
-Token::Token(Type t, const int m) : type(t), value(m), precedence(-1), rightAssociative(false) , index(0) {}
+Token::Token(const Type t, const int m) : type(t), value(m), index(0), start_pos(0), last_pos(0), precedence(-1), rightAssociative(false) {}
 
-Token::Token(Type t, const double m) : type(t), value(m), precedence(-1), rightAssociative(false) , index(0) {}
+Token::Token(const Type t, const double m) : type(t), value(m), index(0), start_pos(0), last_pos(0), precedence(-1), rightAssociative(false) {}
 
-Token::Token(Type t, const Token::Function m) : type(t), value(m), precedence(1), rightAssociative(false), index(0) {}
+Token::Token(const Type t, const Token::Function m) : type(t), value(m), index(0), start_pos(0), last_pos(0), precedence(1), rightAssociative(false) {}
 
-Token::Token(Type t , char c , int prec , bool ra) : type(t) , value(c) , precedence(prec), rightAssociative(ra), index(0) {}
+Token::Token(const Type t, const char c, const int prec, bool ra) : type(t), value(c), index(0), start_pos(0), last_pos(0), precedence(prec), rightAssociative(ra) {}
 
-Token::Token(const Token& other) : type(other.type), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative) , index(other.index) {}
+Token::Token(const Token& other) : type(other.type), value(other.value), index(other.index), start_pos(other.start_pos), last_pos(other.last_pos), precedence(other.precedence), rightAssociative(other.rightAssociative) {}
 
 
+// string
+Token::Token(const Type t, const string& s, const int index, const int start_pos, const int last_pos, const int prec , const bool ra) : type(t), value(s),
+index(index), start_pos(start_pos), last_pos(last_pos), precedence(prec), rightAssociative(ra) {}
 
-Token::Token(Type t, const string& s, int index ,int prec, bool ra) : type(t), value(s), precedence(prec), rightAssociative(ra), index(index) {}
+Token::Token(const Type t, const string& s, const int index, const int start_pos, const int last_pos) : type(t), value(s), index(index),
+start_pos(start_pos), last_pos(last_pos), precedence(-1), rightAssociative(false) {}
+// char
+Token::Token(const Type t, const char c, const int index,  const int start_pos, const int last_pos, const int prec , const bool ra) : type(t), value(c), index(index),
+start_pos(start_pos), last_pos(last_pos), precedence(prec), rightAssociative(ra) {}
 
-Token::Token(Type t, const string& s, int index) : type(t), value(s), precedence(-1), rightAssociative(false), index(index) {}
+Token::Token(const Type t , const char c , const int index , int prec , bool ra) : type(t), value(c), index(index),
+start_pos(start_pos), last_pos(last_pos), precedence(prec), rightAssociative(ra) {}
 
-Token::Token(Type t, const int m, int index) : type(t), value(m), precedence(-1), rightAssociative(false), index(index) {}
+// int
+Token::Token(const Type t, const int m, const int index, const int start_pos, const int last_pos) : type(t), value(m), index(index),
+start_pos(start_pos), last_pos(last_pos), precedence(-1), rightAssociative(false) {}
+// double
+Token::Token(const Type t, const double m, const int index, const int start_pos, const int last_pos) : type(t), value(m), index(index),
+start_pos(start_pos), last_pos(last_pos), precedence(-1), rightAssociative(false) {}
 
-Token::Token(Type t, const double m, int index) : type(t), value(m), precedence(-1), rightAssociative(false), index(index) {}
+Token::Token(const Token& other, const int index, const int start_pos, const int last_pos) : type(other.type), value(other.value), index(index),
+start_pos(start_pos), last_pos(last_pos), precedence(other.precedence), rightAssociative(other.rightAssociative) {}
 
-Token::Token(const Token& other, int index) : type(other.type), value(other.value), precedence(other.precedence), rightAssociative(other.rightAssociative), index(index) {}
 
-Token::Token(Type t, char c , int index , int prec , bool ra) : type(t), value(c), precedence(prec), rightAssociative(ra), index(index) {}
-
-Token::Token(Type t, const Token::Function m, int index) : type(t), value(m), precedence(1), rightAssociative(false), index(index) {}
+Token::Token(const Type t, const Token::Function m, const int index, const int start_pos, const int last_pos) : type(t), value(m), index(index),
+start_pos(start_pos), last_pos(last_pos), precedence(1), rightAssociative(false) {}
 
 void Token::SetValue(const variant<string, char, int, double, Token::Function>& newValue) {
 	this->value = newValue;
@@ -43,55 +56,31 @@ variant<string, char, int, double, Token::Function> Token::GetValue() const {
 	return this->value;
 }
 
-struct Operator {
-	int precedence;
-	string associativity;
-};
-
-
-unordered_set<string> operator_info_two = { "+" , "-", "/", "*", "^" };
-unordered_set<string> operator_info_one = { "!" };
-unordered_set<string> func_info_one = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
-"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" };
-unordered_set<string> func_info_two = { "log" , "pow" , "S" , "Integral" };
-unordered_set<string> func_info_free = { "D" , "Z" , "P" , "Derivate" };
-unordered_set<string> func_info = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
-"sqrt", "sh", "ch", "th", "cth", "arsh", "arch", "arth", "arcth", "abs", "factorial" , "log" , "pow" };
-
-
-
-map<char, Operator> operator_info = { { '+' , { 2, "L" }} ,
-										{'-' , { 2, "L" }},
-										{'/' , { 3, "L" }},
-										{'*' , { 3, "L" }},
-										{'^' , { 4, "R" }},
-};
-
-map< string, Token::Function> func_name = 
-  { { "exp" , Token::Function::EXP },
-	{ "ln" , Token::Function::LN   } ,
-	  {"sin" , Token::Function::SIN} ,
-	  { "cos" , Token::Function::COS} ,
-	  { "tg"  , Token::Function::TG } ,
-	  { "ctg"  , Token::Function::CTG } ,
-	  { "arcsin"  , Token::Function::ARCSIN } ,
-	  { "arccos"  , Token::Function::ARCCOS } ,
-	  { "arctg"   , Token::Function::ARCTG } ,
-	  { "arcctg"  , Token::Function::ARCCTG } ,
-	  { "sh"      , Token::Function::SH } ,
-	  { "ch"      , Token::Function::CH } ,
-	  { "th"      , Token::Function::TH } ,
-	  { "cth"     , Token::Function::CTH } ,
-	  { "sh"      , Token::Function::SH } ,
-	  { "ch"      , Token::Function::CH } ,
-	  { "th"      , Token::Function::TH } ,
-	  { "arsh"     , Token::Function::ARSH } ,
-	  { "arch"     , Token::Function::ARCH } ,
-	  { "arth"     , Token::Function::ARTH } ,
-	  { "arcth"    , Token::Function::ARCTH } ,
-	  { "abs"      , Token::Function::ABS } ,
-	  { "log"      , Token::Function::LOG } ,
-	  { "pow"      , Token::Function::POW }
+map< string, Token::Function>  func_name =
+{ { "exp" , Token::Function::EXP },
+  { "ln" , Token::Function::LN   } ,
+	{"sin" , Token::Function::SIN} ,
+	{ "cos" , Token::Function::COS} ,
+	{ "tg"  , Token::Function::TG } ,
+	{ "ctg"  , Token::Function::CTG } ,
+	{ "arcsin"  , Token::Function::ARCSIN } ,
+	{ "arccos"  , Token::Function::ARCCOS } ,
+	{ "arctg"   , Token::Function::ARCTG } ,
+	{ "arcctg"  , Token::Function::ARCCTG } ,
+	{ "sh"      , Token::Function::SH } ,
+	{ "ch"      , Token::Function::CH } ,
+	{ "th"      , Token::Function::TH } ,
+	{ "cth"     , Token::Function::CTH } ,
+	{ "sh"      , Token::Function::SH } ,
+	{ "ch"      , Token::Function::CH } ,
+	{ "th"      , Token::Function::TH } ,
+	{ "arcsh"     , Token::Function::ARCSH } ,
+	{ "arcch"     , Token::Function::ARCCH } ,
+	{ "arcth"     , Token::Function::ARCTH } ,
+	{ "arccth"    , Token::Function::ARCCTH } ,
+	{ "abs"      , Token::Function::ABS } ,
+	{ "log"      , Token::Function::LOG } ,
+	{ "pow"      , Token::Function::POW }
 };
 
 map< Token::Function, string > rfunc_name =
@@ -113,13 +102,28 @@ map< Token::Function, string > rfunc_name =
 	  { Token::Function::SH  , "sh"} ,
 	  { Token::Function::CH  , "ch"} ,
 	  { Token::Function::TH  , "th"} ,
-	  { Token::Function::ARSH  , "arsh"} ,
-	  { Token::Function::ARCH  , "arch"} ,
-	  { Token::Function::ARTH  , "arth"} ,
-	  { Token::Function::ARCTH , "arcth" } ,
+	  { Token::Function::ARCSH  , "arcsh"} ,
+	  { Token::Function::ARCCH  , "arcch"} ,
+	  { Token::Function::ARCTH  , "arcth"} ,
+	  { Token::Function::ARCCTH , "arccth" } ,
 	  { Token::Function::ABS , "abs"} ,
 	  { Token::Function::LOG , "log"} ,
 	  { Token::Function::POW , "pow"}
+};
+
+map<Token::Type, string > type_token = { { Token::Type::Unknown , "Unknown"} ,
+										 { Token::Type::Number , "Number"} ,
+										 { Token::Type::Integer , "Integer" } ,
+										 { Token::Type::Real , "Real"} ,
+										 { Token::Type::LongArithmetic , "LongArithmetic"} ,
+										 { Token::Type::Operator , "Operator" } ,
+										 { Token::Type::LeftParen , "LeftParen" } ,
+										 { Token::Type::RightParen , "RightParen" } ,
+										 { Token::Type::Algebra , "Algebra" } ,
+										 { Token::Type::Ration, "Ration" } ,
+										 { Token::Type::ComplexNumber , "ComplexNumber"},
+										 { Token::Type::Function , "Function" },
+										 { Token::Type::Comma , "Comma" }
 };
 
 Token Token::operator=(const Token& other) {
@@ -130,7 +134,7 @@ bool Token::operator==(const Token& other) {
 	return (type == other.type && value == other.value && precedence == other.precedence && rightAssociative == other.rightAssociative);
 }
 
-bool Token::operator == (const int m) 
+bool Token::operator == (const int m)
 {
 	auto t = this->value;
 	if (holds_alternative<int>(t)) {
@@ -141,7 +145,7 @@ bool Token::operator == (const int m)
 	else return false;
 }
 
-bool Token::operator == (const double m) 
+bool Token::operator == (const double m)
 {
 	auto t = this->value;
 	if (holds_alternative<double>(t)) {
@@ -211,6 +215,35 @@ ostream& operator<<(ostream& os, const Token& token) {
 	return os;
 }
 
+ostream& operator<<(ostream& os, const Token::Type p)
+{
+	string s = type_token[p];
+	os << s;
+	return os;
+}
+
+unordered_set<string> operator_info_two = { "+" , "-", "/", "*", "^" };
+unordered_set<string> operator_info_one = { "!" };
+unordered_set<string> func_info_one = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
+"sqrt", "sh", "ch", "th", "cth", "arcsh", "arcch", "arcth", "arccth", "abs", "factorial" };
+unordered_set<string> func_info_two = { "log" , "pow" , "S" , "Integral" };
+unordered_set<string> func_info_free = { "D" , "Z" , "P" , "Derivate" };
+unordered_set<string> func_info = { "sin", "cos", "tg", "ctg", "ln", "exp", "sec", "cosec", "arcsin", "arccos", "arctg", "arcctg",
+"sqrt", "sh", "ch", "th", "cth", "arcsh", "arcch", "arcth", "arccth", "abs", "factorial" , "log" , "pow" };
+
+struct Operator {
+	int precedence;
+	char associativity;
+};
+
+map<char, Operator> operator_info = { { '+' , { 2, 'L'}} ,
+										{'-' , { 2, 'L'}},
+										{'/' , { 3, 'L'}},
+										{'*' , { 3, 'L'}},
+										{'^' , { 4, 'R'}},
+};
+
+
 string Token::ToString()
 {
 	string s = "";
@@ -263,7 +296,9 @@ string ToString(const variant<string, char, int, double, Token::Function>& value
 }
 
 bool f_arg(const Token& T) {
-	if (T.type == Token::Type::Algebra || T.type == Token::Type::Number || T.type == Token::Type::Integer || T.type == Token::Type::Real)
+	if (T.type == Token::Type::Algebra || T.type == Token::Type::Number || T.type == Token::Type::Integer ||
+		T.type == Token::Type::Real || T.type == Token::Type::Ration || T.type == Token::Type::LongArithmetic ||
+		T.type == Token::Type::ComplexNumber)
 		return true;
 	else
 		return false;
@@ -272,17 +307,18 @@ bool f_arg(const Token& T) {
 bool f_opr_two(const Token& T) {
 	Token token = T;
 	bool B = false;
-	if(T.type == Token::Type::Operator)
+	if (T.type == Token::Type::Operator)
 		B = true;
-	else if(T.type == Token::Type::Function)
+	else if (T.type == Token::Type::Function)
 	{
 		Token::Function p = get<Token::Function>(T.value);
 		switch (p)
 		{
-		    case Token::Function::LOG: { B = true; break; }
-			case Token::Function::POW : { B = true; break; }
+		case Token::Function::LOG: { B = true; break; }
+		case Token::Function::POW: { B = true; break; }
 		}
 	}
+	else return false;
 	return B;
 }
 
@@ -300,6 +336,7 @@ bool f_opr_one(const Token& T) {
 		case Token::Function::POW: { B = false; break; }
 		}
 	}
+	else return false;
 	return B;
 }
 
@@ -377,12 +414,45 @@ bool CE(const variant<string, char, int, double, Token::Function> value, Token::
 	else return false;
 }
 
-deque<Token> exprToTokens(const string& expr , int& index , string q ="DEFAULT") {
-	// q принимает 2 значения - DEFAULT и ORDERING.
-	deque<Token> tokens;
-	if (q == "DEFAULT") index = 0;
+template <typename T>
+T sign(T x)
+{
+	if (x > 0) return 1;
+	else if (x == 0) return 0;
+	else if (x < 0) return -1;
+}
 
-	for (const auto* p = expr.c_str(); *p; ++p) {
+int CompareString(string s, string f)
+{
+	int m, n, r;
+	n = s.size();
+	m = f.size();
+	if (n != m) return sign(m - n);
+	else
+	{
+		for (int i = 0; i < n; i++)
+		{
+			int t = int(s[i]) - int(f[i]);
+			if (t == 0) continue;
+			else if (t < 0) return -1;
+			else if (t > 0) return 1;
+		}
+		return 0;
+	}
+}
+
+deque<Token> exprToTokens(const string& expr, int& index, BW& C, string q = "DEFAULT") {
+	// q принимает 2 значения - DEFAULT и ORDERING.
+	// Ошибки генерируемые функцией - слишком большое целое или вещественное число.
+	deque<Token> tokens;
+	deque<tuple<int, int>> positions;
+	deque<tuple<int, int>> ks;
+	if (q == "DEFAULT") index = 0;
+	if (expr.empty()) return tokens;
+	const char* const c_begin = expr.c_str();
+	const char* b = &expr[0];
+	int i = 0, j = 0; // Заменители индексов.
+	for (const char* p = expr.c_str(); *p; ++p, i++) {
 		char c = *p;
 		if (isblank(c)) {
 			// do nothing
@@ -392,79 +462,150 @@ deque<Token> exprToTokens(const string& expr , int& index , string q ="DEFAULT")
 			if (c == '.')
 			{
 				int pr = -1;
-				tokens.push_back(Token{ Token::Type::Unknown, string(p, p), index++ ,pr,  false });
+				// tokens.push_back(Token{ Token::Type::Unknown, string(p, p), index++ , int(b-c_begin) , int(p-c_begin) , pr , false });
+				tokens.push_back(Token{ Token::Type::Unknown, string(p, p), index++ , j , i , pr , false });
+				positions.push_back(make_tuple(j, i));
 				cout << "Неверная запись десятичного числа" << endl;
 			}
 			Token::Type t = Token::Type::Integer;
-			const auto* b = p;
+			b = p;
+			j = i;
 			while (isdigit(c) || c == '.') {
 				if (c == '.') t = Token::Type::Real;
 				++p;
+				++i;
 				c = *p;
 			}
 			const string s = string(b, p);
 			if (t == Token::Type::Integer)
 			{
-				int m = stoi(s);
-				tokens.push_back(Token{ t, m , index++});
+				// tokens.push_back(Token{ t, m , index++ , int(b - c_begin) , int(p - c_begin) });
+				string f = to_string(INT_MAX);
+				int r = CompareString(s, f);
+				if (r >= 0)
+				{
+					int m = stoi(s);
+					tokens.push_back(Token{ t, m , index++ , j , i });
+					positions.push_back(make_tuple(j, i));
+				}
+				else // Ошибка слишком длинное число , нужна длинная арифметика.
+				{
+					ks.push_back(make_tuple(j, i));
+					break;
+				}
 			}
 			else if (t == Token::Type::Real)
 			{
-				double m = stod(s);
-				tokens.push_back(Token{ t, m , index++});
+				if (s.size() <= 308)
+				{
+					double m = stod(s);
+					// tokens.push_back(Token{ t, m , index++ , int(b - c_begin) , int(p - c_begin) });
+					tokens.push_back(Token{ t, m , index++ , j , i });
+					positions.push_back(make_tuple(j, i));
+				}
+				else // Ошибка слишком длинное число , нужна длинная арифметика.
+				{
+					ks.push_back(make_tuple(j, i));
+					break;
+				}
 			}
 			--p;
+			--i;
 		}
 		else
 			if (isliter(c))
 			{
-				const auto* b = p;
+				b = p;
+				j = i;
 				while (isliter(c)) {
 					++p;
+					++i;
 					c = *p;
 				}
 				const string s = string(b, p);
-				if (func_info.count(s)) tokens.push_back(Token{ Token::Type::Function, func_name[s] , index++});
-				else tokens.push_back(Token{ Token::Type::Algebra, s , index++ , -1 , false});
+				int u_start = b - c_begin;
+				int u_last = p - c_begin;
+				if (func_info.count(s))
+				{
+					// tokens.push_back(Token{ Token::Type::Function, func_name[s] , index++ , u_start , u_last });
+					tokens.push_back(Token{ Token::Type::Function, func_name[s] , index++ , j , i });
+					positions.push_back(make_tuple(j, i));
+				}
+				else
+				{
+					// tokens.push_back(Token{ Token::Type::Algebra, s , index++ , u_start , u_last , -1 , false });
+					tokens.push_back(Token{ Token::Type::Algebra, s , index++ , j , i , -1 , false });
+					positions.push_back(make_tuple(j, i));
+				}
 				p--;
+				i--;
 				continue;
 
 			}
 			else if (c == ',')
 			{
 				string s = string(p, p + 1);
-				tokens.push_back(Token{ Token::Type::Comma , c , index++ , -1 , false});
+				// tokens.push_back(Token{ Token::Type::Comma , c , index++ , int(p - c_begin) , int(p - c_begin + 1) , -1 , false });
+				tokens.push_back(Token{ Token::Type::Comma , c , index++ , i , i + 1, -1 , false });
+				positions.push_back(make_tuple(i, i + 1));
 			}
 			else {
 				Token::Type t = Token::Type::Unknown;
 				int pr = -1;            // приоритет
 				bool ra = false;        // rightAssociative
+				bool is_operator = false;
 				switch (c) {
 				default:                                    break;
 				case '(':   t = Token::Type::LeftParen;     break;
 				case ')':   t = Token::Type::RightParen;    break;
-				case '^':   t = Token::Type::Operator;      pr = 4; ra = true;  break;
-				case '*':   t = Token::Type::Operator;      pr = 3; break;
-				case '/':   t = Token::Type::Operator;      pr = 3; break;
-				case '+':   t = Token::Type::Operator;      pr = 2; break;
-				case '-':   t = Token::Type::Operator;      pr = 2; break;
+				case '^':   is_operator = true;   break;
+				case '*':   is_operator = true;    break;
+				case '/':   is_operator = true;    break;
+				case '+':   is_operator = true;    break;
+				case '-':   is_operator = true;    break;
 				}
-				// const auto s = string(1, c);
-				tokens.push_back(Token{ t, c, index++ , pr, ra });
+				if (is_operator)
+				{
+					t = Token::Type::Operator;
+					pr = operator_info[c].precedence;
+					ra = !(operator_info[c].associativity == 'L');
+				}
+				// tokens.push_back(Token{ t, c, index++ ,  u_start , u_last , pr, ra });
+				tokens.push_back(Token{ t, c, index++ , i , i + 1, pr , ra });
+				positions.push_back(make_tuple(i, i + 1));
 				while (0); // Для точки останова.
 			}
 	}
-	return tokens;
+	C.position = positions;
+	C.broken_pos = ks;
+	if (!ks.empty()) return {};
+	else return tokens;
+}
+
+deque<Token> exprToTokens(const string& expr, int& index, string q)
+{
+	BW C = BW();
+	deque<Token> fh = exprToTokens(expr, index, C, q);
+	return fh;
+}
+
+
+deque<Token> exprToTokens(const string& expr, BW& C)
+{
+	int index = 0;
+	deque<Token> fs = exprToTokens(expr, index, C, "DEFAULT");
+	return fs;
 }
 
 deque<Token> exprToTokens(const string& expr)
 {
 	int index = 0;
-	deque<Token> fs = exprToTokens(expr, index, "DEFAULT");
+	BW C = BW();
+	deque<Token> fs = exprToTokens(expr, index, C, "DEFAULT");
 	return fs;
 }
 
-Token _SetToken(const int m) 
+Token _SetToken(const int m)
 {
 	Token T = Token{ Token::Type::Integer, m };
 	return T;
@@ -472,23 +613,24 @@ Token _SetToken(const int m)
 
 Token _SetToken(const double m)
 {
-	Token T = Token{ Token::Type::Real, m};
+	Token T = Token{ Token::Type::Real, m };
 	return T;
 }
 
-Token _SetToken(const int m , int& index)
+Token _SetToken(const int m, int& index)
 {
-	Token T = Token{ Token::Type::Integer, m , index++};
+	Token T = Token{ Token::Type::Integer, m , index++ , 0 , 1 };
 	return T;
 }
 
-Token _SetToken(const double m , int& index)
+Token _SetToken(const double m, int& index)
 {
-	Token T = Token{ Token::Type::Real, m , index++};
+	Token T = Token{ Token::Type::Real, m , index++ , 0 , 1 };
 	return T;
 }
 
-Token _SetToken(const string& expr , int& index) // фунция возвращает первый токен , если их несколько.
+
+Token _SetToken(const string& expr, int& index) // фунция возвращает первый токен , если их несколько.
 { // Или можно передать одно отрицательное число.
 	int n = expr.size();
 	if (n == 1)
@@ -503,7 +645,7 @@ Token _SetToken(const string& expr , int& index) // фунция возвращает первый ток
 				if (c == '.')
 				{
 					int pr = -1;
-					Token T = Token{ Token::Type::Unknown, string(p, p), index++ , pr,  false };
+					Token T = Token{ Token::Type::Unknown, string(p, p), index++ , 0 , 1 ,pr,  false };
 					return T;
 				}
 				const auto* b = p;
@@ -517,13 +659,13 @@ Token _SetToken(const string& expr , int& index) // фунция возвращает первый ток
 				if (t == Token::Type::Integer)
 				{
 					int m = stoi(s);
-					Token T = Token{ t, m , index++};
+					Token T = Token{ t, m , index++ , 0 , 1 };
 					return T;
 				}
 				else if (t == Token::Type::Real)
 				{
 					double m = stod(s);
-					Token T = Token{ t, m ,index++};
+					Token T = Token{ t, m ,index++ , 0 , 1 };
 					return T;
 				}
 				--p;
@@ -539,12 +681,12 @@ Token _SetToken(const string& expr , int& index) // фунция возвращает первый ток
 					const string s = string(b, p);
 					if (func_info.count(s))
 					{
-						Token T = Token{ Token::Type::Function, func_name[s] , index++};
+						Token T = Token{ Token::Type::Function, func_name[s] , index++ , 0 , 1 };
 						return T;
 					}
 					else
 					{
-						Token T = Token{ Token::Type::Algebra, s , index++ , -1 , false};
+						Token T = Token{ Token::Type::Algebra, s , index++ , 0 , 1 , -1 , false };
 						return T;
 					}
 				}
@@ -552,15 +694,22 @@ Token _SetToken(const string& expr , int& index) // фунция возвращает первый ток
 					Token::Type t = Token::Type::Unknown;
 					int pr = -1;            // приоритет
 					bool ra = false;        // rightAssociative
+					bool is_operator = false;
 					switch (c) {
 					default:                                    break;
 					case '(':   t = Token::Type::LeftParen;     break;
 					case ')':   t = Token::Type::RightParen;    break;
-					case '^':   t = Token::Type::Operator;      pr = 4; ra = true;  break;
-					case '*':   t = Token::Type::Operator;      pr = 3; break;
-					case '/':   t = Token::Type::Operator;      pr = 3; break;
-					case '+':   t = Token::Type::Operator;      pr = 2; break;
-					case '-':   t = Token::Type::Operator;      pr = 2; break;
+					case '^':   is_operator = true;   break;
+					case '*':   is_operator = true;   break;
+					case '/':   is_operator = true;   break;
+					case '+':   is_operator = true;   break;
+					case '-':   is_operator = true;   break;
+					}
+					if (is_operator)
+					{
+						t = Token::Type::Operator;
+						pr = operator_info[c].precedence;
+						ra = !(operator_info[c].associativity == 'L');
 					}
 					// const auto s = string(1, c);
 					Token T = Token{ t, c, index++ , pr, ra };
@@ -574,7 +723,7 @@ Token _SetToken(const string& expr , int& index) // фунция возвращает первый ток
 	else // Случай одного отрицательного числа.
 	{
 		deque<Token> fs;
-		fs = exprToTokens(expr , index);
+		fs = exprToTokens(expr, index, "ORDERING");
 		Tokenize_u_minus(fs);
 		Token T = fs.front();
 		fs.pop_front();
@@ -606,13 +755,13 @@ Token _SetToken(const char c)
 Token _SetToken(const Token::Function f_able)
 {
 	int index = 0;
-	Token token = Token(Token::Type::Function, f_able, index);
+	Token token = Token(Token::Type::Function, f_able, index, 0, 1);
 	return token;
 }
 
 Token _SetToken(const Token::Function f_able, int& index)
 {
-	Token token = Token(Token::Type::Function, f_able, index);
+	Token token = Token(Token::Type::Function, f_able, index, 0, 1);
 	return token;
 }
 
@@ -656,7 +805,7 @@ Token SetToken(const variant<string, char, int, double, Token::Function> value, 
 	}
 	else if (holds_alternative<int>(value)) {
 		int m = get<int>(value);
-		Token T = _SetToken(m , index);
+		Token T = _SetToken(m, index);
 		return T;
 	}
 	else if (holds_alternative<double>(value)) {
@@ -724,12 +873,12 @@ void Tokenize_u_minus(deque<Token>& fh) {
 					double q = -1;
 					if (T_1.type == Token::Type::Integer)
 					{
-						int q = get<int>(T_1.value);
+						q = (double)get<int>(T_1.value);
 						q = (-1) * q;
 					}
 					else if (T_1.type == Token::Type::Real)
 					{
-						double q = get<double>(T_1.value);
+						q = get<double>(T_1.value);
 						q = (-1) * q;
 					}
 					const deque<Token>::iterator start = fh.begin();
@@ -803,7 +952,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 		Token& T_1 = fh[1];
 		if (T_0.type == Token::Type::Operator)
 		{
-			if (get<string>(T_0.value) == "-")  // Этот случай не пересекается с предыдущим случаем.
+			if (get<char>(T_0.value) == '-')  // Этот случай не пересекается с предыдущим случаем.
 			{   // Случай когда унарный минус стоит в начале строки.
 				string f, r;
 				if (T_1.type == Token::Type::Number || T_1.type == Token::Type::Integer || T_1.type == Token::Type::Real)
@@ -813,7 +962,7 @@ void Tokenize_u_minus(deque<Token>& fh) {
 					double m = -1;
 					if (T_1.type == Token::Type::Integer)
 					{
-						m = get<int>(T_1.value);
+						m = (double)get<int>(T_1.value);
 					}
 					else if (T_1.type == Token::Type::Real)
 					{
@@ -848,23 +997,23 @@ string TokensToStr(deque<Token> fh)
 	string s = "";
 	for (Token token : fh)
 	{
-		if (token.type == Token::Type::Algebra ) {
+		if (token.type == Token::Type::Algebra) {
 			string f = get<string>(token.value);
 			s = s + f;
 		}
-		else if (token.type == Token::Type::Integer ) {
+		else if (token.type == Token::Type::Integer) {
 			int m = get<int>(token.value);
 			s = s + to_string(m);
 		}
-		else if (token.type == Token::Type::Real ) {
+		else if (token.type == Token::Type::Real) {
 			double m = get<double>(token.value);
 			s = s + to_string(m);
 		}
-		else if (token.type == Token::Type::Operator ) {
+		else if (token.type == Token::Type::Operator) {
 			char c = get<char>(token.value);
 			s = s + c;
 		}
-		else if (token.type == Token::Type::Function )
+		else if (token.type == Token::Type::Function)
 		{
 			Token::Function p = get<Token::Function>(token.value);
 			string f = rfunc_name[p];

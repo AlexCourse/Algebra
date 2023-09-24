@@ -14,5 +14,26 @@ void Print_Tree_R_ColoredSelectNode(Algebra_Node const* node, Algebra_Node* cons
         return;
     std::vector<Algebra_Node*> v{ node->left, node->right };
     for (size_t i = 0; i < v.size(); ++i)
-        Print_Tree_R_ColoredSelectNode(v[i], selectedNode , prefix + (root ? "" : (last ? "  " : ch_ver_spa)), false, i + 1 >= v.size());
+        Print_Tree_R_ColoredSelectNode(v[i], selectedNode, prefix + (root ? "" : (last ? "  " : ch_ver_spa)), false, i + 1 >= v.size());
+}
+
+void PrintLineWithColorRed(std::string expr, std::set<int> f_box)
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Получаем дескриптор консоли
+    int n = expr.size();
+    for (int i = 0; i < n; i++)
+    {
+        if (f_box.count(i)) SetConsoleTextAttribute(hConsole, BACKGROUND_RED); // Устанавливаем красный фон
+        std::cout << expr[i];
+        SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Возвращаем обычные цвета
+    }
+    std::cout << std::endl;
+}
+
+void PrintColorText(std::string expr, int color)
+{ // Вывод цветного текста на экран.
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+    std::cout << expr << std::endl;
+    SetConsoleTextAttribute(hConsole, 7);
 }

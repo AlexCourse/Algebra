@@ -3,7 +3,7 @@
 
 class GarbegeCollector
 {
-public:  
+public:
     std::deque<Algebra_Node*> ExposedBranches;
     std::deque<Algebra_Node*> ExposedNodes;
 };
@@ -11,7 +11,7 @@ public:
 
 
 
-bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_Node*& root, char& c, int level ,GarbegeCollector& G)
+bool func_1(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level, GarbegeCollector& G)
 { // ['*']
     // Последний параметр содержит то: последний или предпоследний элемент в стеке содержит указатель на освобожденный из памяти элемент. 'L' - предпоследний , 'R' - последний., 'Z' - удаление обоих.
     // В трех последних аргументах значения возвращаются.
@@ -38,17 +38,17 @@ bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
             if (DEBUG)
             {
                 std::cout << "func_1 : DEFORE" << std::endl;
-                Print_Tree_R_ColoredSelectNode(root, currentNode,  "", false, false);
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
             switch (p)
             {
-                case 'L': { K.addLeftNode(W); break; }
-                case 'R': { K.addRightNode(W); break; }
+            case 'L': { K.addLeftNode(W); break; }
+            case 'R': { K.addRightNode(W); break; }
             }
             if (DEBUG)
             {
                 std::cout << "func_1 : AFTER" << std::endl;
-                Print_Tree_R_ColoredSelectNode(root, currentNode , "", false, false);
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
             }
             while (0);
         }
@@ -72,21 +72,21 @@ bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
                     std::cout << "func_1 : BEFORE" << std::endl;
                     Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
                 }
-                case 'L':
-                {
-                    K.addLeftNode(P[k]);
-                    break;
-                }
-                case 'R':
-                {
-                    K.addRightNode(P[k]);
-                    break;
-                }
-                if (DEBUG)
-                {
-                    std::cout << "func_1 : AFTER" << std::endl;
-                    Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
-                }
+            case 'L':
+            {
+                K.addLeftNode(P[k]);
+                break;
+            }
+            case 'R':
+            {
+                K.addRightNode(P[k]);
+                break;
+            }
+            if (DEBUG)
+            {
+                std::cout << "func_1 : AFTER" << std::endl;
+                Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
+            }
             }
         }
         else root = P[k];
@@ -97,14 +97,14 @@ bool func_1(Algebra_Node* currentNode , Algebra_Node* parent , char p , Algebra_
         while (0);
         switch (k)
         {
-           case 0: { c = 'L'; break; }
-           case 1: { c = 'R'; break; }
+        case 0: { c = 'L'; break; }
+        case 1: { c = 'R'; break; }
         }
     }
     return match;
 }
 
-bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_Node*& root, char& c, int level ,GarbegeCollector& G)
+bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level, GarbegeCollector& G)
 { // ['^']
     Algebra_Node& C = *currentNode;
     Algebra_Node* P[2];
@@ -127,8 +127,8 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
             }
             switch (p)
             {
-                case 'L': { K.addLeftNode(W); break; }
-                case 'R': { K.addRightNode(W); break; }
+            case 'L': { K.addLeftNode(W); break; }
+            case 'R': { K.addRightNode(W); break; }
             }
             if (DEBUG)
             {
@@ -194,8 +194,8 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
             }
             switch (p)
             {
-                case 'L': { K.addLeftNode(W); break; }
-                case 'R': { K.addRightNode(W); break; }
+            case 'L': { K.addLeftNode(W); break; }
+            case 'R': { K.addRightNode(W); break; }
             }
             while (0);
             if (DEBUG)
@@ -253,7 +253,7 @@ bool func_2(Algebra_Node* currentNode, Algebra_Node* parent, char p , Algebra_No
     return match;
 }
 
-bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level ,GarbegeCollector& G) {
+bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level, GarbegeCollector& G) {
     // ['/']
     Algebra_Node& C = *currentNode;
     Algebra_Node* P[2];
@@ -333,7 +333,7 @@ bool func_3(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
     return match;
 }
 
-bool func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level ,GarbegeCollector& G) {
+bool func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level, GarbegeCollector& G) {
     // ['+']
     Algebra_Node& C = *currentNode;
     Algebra_Node* P[2];
@@ -394,7 +394,7 @@ bool func_4(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
     return match;
 }
 
-bool func_5(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level ,GarbegeCollector& G)
+bool func_5(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level, GarbegeCollector& G)
 {
     Algebra_Node& C = *currentNode;
     Algebra_Node* P[2];
@@ -462,7 +462,7 @@ bool func_5(Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Nod
     return match;
 }
 
-void GoDown(std::stack<Algebra_Node*> st , std::stack<Algebra_Node*> parents, Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level ,GarbegeCollector& G)
+void GoDown(std::stack<Algebra_Node*> st, std::stack<Algebra_Node*> parents, Algebra_Node* currentNode, Algebra_Node* parent, char p, Algebra_Node*& root, char& c, int level, GarbegeCollector& G)
 {
 
     switch (c)
@@ -504,7 +504,7 @@ void simplify_F(Algebra_Node*& root)
      7) Возведение единицы в любую степень
      8) Возведение нуля в любую степень m > 0.
     * */
-    if ( root == nullptr)
+    if (root == nullptr)
         return;
 
     std::stack<Algebra_Node*> st;
@@ -530,7 +530,7 @@ void simplify_F(Algebra_Node*& root)
         if (lr_st.empty()) p = 'L'; // Заглушка для символа в корне.
         else p = lr_st.top();
         st.pop();
-        if(!lr_st.empty()) lr_st.pop();
+        if (!lr_st.empty()) lr_st.pop();
         parents.pop();
         level = st_depth.top();
         st_depth.pop();
@@ -557,12 +557,12 @@ void simplify_F(Algebra_Node*& root)
             Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
         }
         char c = '0';
-        if (CE(currentNode->data.value, '*')) match = match || func_1(currentNode, parent, p, root, c, level ,G); // Правила 1 , 4.
-        if (CE(currentNode->data.value, '^')) match = match || func_2(currentNode, parent, p, root, c, level ,G); // Правила 2 , 7 , 8.
-        if (CE(currentNode->data.value, '/')) match = match || func_3(currentNode, parent, p, root, c, level ,G); // Правило 3 , 6.
-        if (CE(currentNode->data.value, '+') || CE(currentNode->data.value, '-')) match = match || func_4(currentNode, parent, p, root, c, level ,G); // Правило 5.
+        if (CE(currentNode->data.value, '*')) match = match || func_1(currentNode, parent, p, root, c, level, G); // Правила 1 , 4.
+        if (CE(currentNode->data.value, '^')) match = match || func_2(currentNode, parent, p, root, c, level, G); // Правила 2 , 7 , 8.
+        if (CE(currentNode->data.value, '/')) match = match || func_3(currentNode, parent, p, root, c, level, G); // Правило 3 , 6.
+        if (CE(currentNode->data.value, '+') || CE(currentNode->data.value, '-')) match = match || func_4(currentNode, parent, p, root, c, level, G); // Правило 5.
         if (match)
-        {   
+        {
             GoDown(st, parents, currentNode, parent, p, root, c, level, G);
         }
         if (DEBUG)
@@ -572,7 +572,7 @@ void simplify_F(Algebra_Node*& root)
         }
         j++;
     }
-    for (Algebra_Node* D : G.ExposedBranches )
+    for (Algebra_Node* D : G.ExposedBranches)
     {
         RecursiveDestructor(D);
     }
@@ -638,7 +638,7 @@ void simplify_D(Algebra_Node*& root)
             Print_Tree_R_ColoredSelectNode(root, currentNode, "", false, false);
         }
         char c = '0';
-        match = match || func_5(currentNode, parent, p, root , c, G);
+        match = match || func_5(currentNode, parent, p, root, c, 0 ,G);
         if (match)
         {
             if (c == 'Z')
@@ -668,10 +668,11 @@ void simplify_D(Algebra_Node*& root)
         j++;
     }
 
-    for (Algebra_Node* D : G.deletedNode)
+    for (Algebra_Node* D : G.ExposedBranches )
     {
-        //if (D != nullptr) RecursiveDestructor(D);
+        RecursiveDestructor(D);
     }
+    for (Algebra_Node* D : G.ExposedNodes) delete D;
 
 }
 

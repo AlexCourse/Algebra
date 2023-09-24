@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef ALGEBRA_NODE_H
 #define ALGEBRA_NODE_H
 #include <deque>
@@ -41,7 +43,7 @@ public:
     Algebra_Node();
     ~Algebra_Node();
     Algebra_Node(const Token& data, Algebra_Node* left = nullptr, Algebra_Node* right = nullptr);
-    Algebra_Node(const Token& data, Debug_concept& W ,Algebra_Node* left = nullptr, Algebra_Node* right = nullptr);
+    Algebra_Node(const Token& data, Debug_concept& W, Algebra_Node* left = nullptr, Algebra_Node* right = nullptr);
     std::string toString();
     void addLeftNode(Algebra_Node* Q);
     void addRightNode(Algebra_Node* Q);
@@ -58,7 +60,7 @@ public:
     bool Is_Numeric(); // В дереве присутствуют только числа.
     Algebra_Tree() { this->root = nullptr; }
     Algebra_Tree(Algebra_Node* node);
-    Algebra_Tree& CopyTree();
+    Algebra_Tree& const CopyTree();
     Algebra_Tree& AddSubtree(Algebra_Node* node, LR lr);
     Algebra_Tree& SetIndexTree_T();
     void FindValueD_T(std::string c, std::vector<std::vector<char>>& paths);
@@ -69,12 +71,17 @@ public:
     Algebra_Tree& TreeExprReplaceW_T(const std::string c, const std::variant<std::string, char, int, double, Token::Function> s);
     void TreeRExprReplaceOnSubTreeD_T(const std::string c, Algebra_Node* second);
     void TreeRExprReplaceOnSubTreeW_T(const std::string c, Algebra_Node* second);
-    void TreeRExprReplaceOnSubTreeD_T(const std::string c, Algebra_Node* second , Debug_concept& W);
+    void TreeRExprReplaceOnSubTreeD_T(const std::string c, Algebra_Node* second, Debug_concept& W);
     void TreeRExprReplaceOnSubTreeW_T(const std::string c, Algebra_Node* second, Debug_concept& W);
     double FunctionValue_T(double value, std::string symbol);
     std::string TreeToInfix_T();
+    Algebra_Tree operator+(const Algebra_Tree& other);
+    Algebra_Tree operator-(const Algebra_Tree& other);
+    Algebra_Tree operator*(const Algebra_Tree& other);
+    Algebra_Tree operator/(const Algebra_Tree& other);
+    Algebra_Tree operator^(const Algebra_Tree& other);
     typedef Algebra_Tree iterator;
-    // ~Algebra_Tree(); // chat 
+    ~Algebra_Tree(); 
 
 
 };
@@ -98,21 +105,22 @@ Algebra_Node* PolishToTree(std::deque<Token> fh);
 void TreeToPolish(Algebra_Node* root, std::vector<Token>& kh);
 void TreeToPolish(Algebra_Node* root, std::deque<Token>& kh);
 
-Algebra_Node* SetNode(int m);
-Algebra_Node* SetNode(double m);
+Algebra_Node* SetNode(const char c);
+Algebra_Node* SetNode(const int m);
+Algebra_Node* SetNode(const double m);
 Algebra_Node* SetNode(const std::string s);
-Algebra_Node* SetNode(int m , int& index);
-Algebra_Node* SetNode(double m , int& index);
-Algebra_Node* SetNode(const std::string s , int& index);
+Algebra_Node* SetNode(const int m, int& index);
+Algebra_Node* SetNode(const double m, int& index);
+Algebra_Node* SetNode(const std::string s, int& index);
 
 
 Algebra_Tree& SetAlgebricTree(const std::string s);
 Algebra_Node* SetOperatorTree(const std::string s);
-Algebra_Node* SetOperatorTree(const std::string s , int& index);
+Algebra_Node* SetOperatorTree(const std::string s, int& index);
 
 Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const std::string c, Algebra_Node* second);
 Algebra_Node* TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const std::string c, Algebra_Node* second);
-Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const std::string c, Algebra_Node* second , Debug_concept& W);
+Algebra_Node* TreeRExprReplaceOnSubTreeD(Algebra_Node* first, const std::string c, Algebra_Node* second, Debug_concept& W);
 Algebra_Node* TreeRExprReplaceOnSubTreeW(Algebra_Node* first, const std::string c, Algebra_Node* second, Debug_concept& W);
 
 double FunctionValueM(std::string expr, std::map<std::string, double>& ds);
@@ -120,7 +128,7 @@ double FunctionValueM(std::string expr, std::map<std::string, double>& ds);
 Algebra_Node* TreeExprReplaceR(Algebra_Node* root, const std::string c, const std::variant<std::string, char, int, double, Token::Function> s);
 
 Algebra_Node* _CloneTree(Algebra_Node* root);
-Algebra_Node* _CloneTree(Algebra_Node* root , Debug_concept& W);
+Algebra_Node* _CloneTree(Algebra_Node* root, Debug_concept& W);
 
 template<typename T>
 void _FindValueD(Algebra_Node* root, T c, std::vector<std::vector<char>>& paths);
@@ -129,3 +137,4 @@ std::string TreeToInfix(Algebra_Node* root);
 void RecursiveDestructor(Algebra_Node* root);
 
 #endif
+

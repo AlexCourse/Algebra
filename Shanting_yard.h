@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 
 #include <deque>
 #include <set>
@@ -13,6 +14,7 @@ enum Enumerable
 	ORDERING
 };
 
+bool IsNumeric(std::deque<Token> fh);
 std::string PostfixToInfix(std::vector<Token>& fs);
 std::string PostfixToInfix(std::deque<Token>& fs);
 std::deque<Token> FToPolish(std::string expr);
@@ -21,4 +23,4 @@ double FunctionValue(std::deque<Token> fh, double value, std::string symbol);
 double FunctionValue(std::vector<Token> fh, double value, std::string symbol);
 std::vector<Token> ReplaceElementInPolish(std::vector<Token> fh, double x, std::string symbol);
 std::deque<Token> ReplaceElementInPolish(std::deque<Token> fh, double x, std::string symbol);
-
+void PrintTokensListInformation(std::deque<Token> fh);
