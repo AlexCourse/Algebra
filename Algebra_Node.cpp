@@ -695,12 +695,12 @@ void Algebra_Tree::TreeToPolish_T()
 
 
 
-bool Is_Numeric() // Реализовать с использованием итератора по дереву.
+bool Algebra_Tree::Is_Numeric() // Реализовать с использованием итератора по дереву.
 {
     return true;
 }
 
-bool Is_Algebric() // Реализовать с использованием итератора по дереву.
+bool Algebra_Tree::Is_Algebric() // Реализовать с использованием итератора по дереву.
 {
     return true;
 }
@@ -761,7 +761,7 @@ deque<Token> FToPolish(string expr)
     eh = shuntingYard(fh);
     return eh;
 }
-/*
+
 float FunctionValue(string expr, map<string, float> ds)
 { // Вычислить значение функции заданной строкой с параметрами заданными в словаре где ключ - имя переменной, а значение - ее значение.
     Algebra_Node* root = SetOperatorTree(expr);
@@ -789,4 +789,3 @@ float FunctionValue(string expr, map<string, float> ds)
 
 }
 
-*/

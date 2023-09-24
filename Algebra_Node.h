@@ -74,8 +74,6 @@ Algebra_Node* PolishToTree(deque<Token> fh);
 string PostfixToInfix(vector<Token>& fs);
 void TreeToPolish(Algebra_Node* root, vector<Token>& kh);
 void TreeToPolish(Algebra_Node* root, deque<Token>& kh);
-bool Is_Algebric();
-bool Is_Numeric();
 Algebra_Node* SetNode(int m);
 Algebra_Node* SetNode(const string s);
 Algebra_Tree& SetAlgebricTree(const string s);

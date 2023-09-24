@@ -249,6 +249,13 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		if ((D[0]->data.str == "1") && !(D[1]->data.str == "1"))
 		{
@@ -257,6 +264,13 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		if (!(D[0]->data.str == "1") && (D[1]->data.str == "1"))
 		{
@@ -265,6 +279,13 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 		if ((D[0]->data.str == "1") && (D[1]->data.str == "1"))
@@ -273,6 +294,13 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 	}
 	if ((D[0]->data.str == "0") && !(D[1]->data.str == "0"))
@@ -283,12 +311,26 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		else
 		{
 			const string s = "p";
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}	
 	}
 	if (!(D[0]->data.str == "0") && (D[1]->data.str == "0"))
@@ -299,18 +341,39 @@ Algebra_Node* func_2a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		else
 		{
 			const string s = "q";
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 	}
 	if ((D[0]->data.str == "0") && (D[1]->data.str == "0"))
 	{
 		const string s = "0";
 		T = SetOperatorTree(s);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 
 	return T;
@@ -565,6 +628,13 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		if ((D[0]->data.str == "1") && !(D[1]->data.str == "1"))
 		{
@@ -573,6 +643,13 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		if (!(D[0]->data.str == "1") && (D[1]->data.str == "1"))
 		{
@@ -581,6 +658,13 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 		if ((D[0]->data.str == "1") && (D[1]->data.str == "1"))
@@ -589,6 +673,13 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 	}
 	if ((D[0]->data.str == "0") && !(D[1]->data.str == "0"))
@@ -599,6 +690,13 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 		else
@@ -607,6 +705,13 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		};
 	}
 	if (!(D[0]->data.str == "0") && !(D[1]->data.str == "0"))
@@ -618,6 +723,13 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 		else
@@ -626,12 +738,26 @@ Algebra_Node* func_3a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		};
 	}
 	if ((D[0]->data.str == "0") && (D[1]->data.str == "0"))
 	{
 		const string s = "0";
 		T = SetOperatorTree(s);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	return T;
 }
@@ -1094,6 +1220,13 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 
 		if ((D[0]->data.str == "1") && !(D[1]->data.str == "1"))
@@ -1103,6 +1236,13 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		if (!(D[0]->data.str == "1") && (D[1]->data.str == "1"))
 		{
@@ -1111,6 +1251,13 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 		if ((D[0]->data.str == "1") && (D[1]->data.str == "1"))
@@ -1119,6 +1266,13 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 	}
 	if ((D[0]->data.str == "0") && !(D[1]->data.str == "0"))
@@ -1130,6 +1284,13 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		else
 		{
@@ -1137,6 +1298,13 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 	}
@@ -1149,6 +1317,13 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 		else
@@ -1157,12 +1332,26 @@ Algebra_Node* func_4a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 	}
 	if ((D[0]->data.str == "0") && (D[1]->data.str == "0"))
 	{ // Константа в степени константа.
 		const string s = "0";
 		T = SetOperatorTree(s);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	return T;
 }
@@ -1402,6 +1591,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		if ((D[0]->data.str == "1") && !(D[1]->data.str == "1"))
 		{
@@ -1410,6 +1606,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		if (!((D[0]->data.str == "1") && (D[1]->data.str == "1")))
 		{
@@ -1418,6 +1621,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		if ((D[0]->data.str == "1") && (D[1]->data.str == "1"))
 		{
@@ -1425,6 +1635,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 
@@ -1438,6 +1655,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 		else
@@ -1446,6 +1670,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 	}
@@ -1458,6 +1689,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
 			TreeRExprReplaceOnSubTreeD(T, "d", D[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 		}
 		else
 		{
@@ -1465,6 +1703,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
 			T = SetOperatorTree(s);
 			TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 			TreeRExprReplaceOnSubTreeD(T, "q", P[1]);
+			if (DEBUG)
+			{
+				vector<Token> V;
+				TreeToPolish(T, V);
+				string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+				while (0); // Для точки останова.
+			}
 
 		}
 	}
@@ -1472,6 +1717,13 @@ Algebra_Node* func_5a(Algebra_Node* P[2], Algebra_Node* D[2], string c)
     { // Логарифм постоянного числа по постоянной степени.
 		const string s = "0";
 		T = SetOperatorTree(s);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 
 	return T;
@@ -1526,6 +1778,13 @@ Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 
 	}
 	else
@@ -1533,6 +1792,13 @@ Algebra_Node* func_6a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		const string s = "exp(p)";
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 
 	}
 
@@ -1567,6 +1833,13 @@ Algebra_Node* func_7a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 
 	return T;
 }
@@ -1620,12 +1893,26 @@ Algebra_Node* func_8a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	else
 	{
 		const string s = "cos(p)";
 		T = SetOperatorTree(s);	
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 
 	}
 
@@ -1692,12 +1979,26 @@ Algebra_Node* func_9a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	else
 	{
 		const string s = "(-1)*cos(p)";
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 
 	}
 
@@ -1739,6 +2040,13 @@ Algebra_Node* func_10a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 
 	return T;
 }
@@ -1815,6 +2123,13 @@ Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 		
 	}
 	else
@@ -1822,6 +2137,13 @@ Algebra_Node* func_11a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		const string s = "(-1)/(cos(p))^2";
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 
 	}
 
@@ -1859,6 +2181,13 @@ Algebra_Node* func_12a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 
 	return T;	
 }
@@ -1873,12 +2202,26 @@ Algebra_Node* func_13a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	else
 	{
 		string s = "(-1)/(1-p^2)^(1/2)";
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 
 	}
 
@@ -1893,6 +2236,13 @@ Algebra_Node* func_14a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 	
 	return T;
 }
@@ -1907,6 +2257,13 @@ Algebra_Node* func_15a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	else
 	{
@@ -1914,6 +2271,13 @@ Algebra_Node* func_15a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	return T;
 }
@@ -1928,12 +2292,26 @@ Algebra_Node* func_16a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	else
 	{
 		string s = "ch(p)";
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 
 	}
 
@@ -1950,6 +2328,13 @@ Algebra_Node* func_17a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	else
 	{
@@ -1957,6 +2342,13 @@ Algebra_Node* func_17a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 
 	return T;
@@ -1970,6 +2362,13 @@ Algebra_Node* func_18a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 	
 	return T;
 }
@@ -1984,6 +2383,13 @@ Algebra_Node* func_19a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 	else
 	{
@@ -1991,6 +2397,13 @@ Algebra_Node* func_19a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 		T = SetOperatorTree(s);
 		TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 		TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+		if (DEBUG)
+		{
+			vector<Token> V;
+			TreeToPolish(T, V);
+			string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+			while (0); // Для точки останова.
+		}
 	}
 
 	return T;
@@ -2004,6 +2417,13 @@ Algebra_Node* func_20a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 	
 	return T;
 }
@@ -2016,6 +2436,13 @@ Algebra_Node* func_21a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 
 	return T;
 }
@@ -2028,6 +2455,13 @@ Algebra_Node* func_22a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 
 	return T;
 }
@@ -2040,6 +2474,13 @@ Algebra_Node* func_23a(Algebra_Node* P[1], Algebra_Node* D[1], string c)
 	T = SetOperatorTree(s);
 	TreeRExprReplaceOnSubTreeD(T, "p", P[0]);
 	TreeRExprReplaceOnSubTreeD(T, "D", D[0]);
+	if (DEBUG)
+	{
+		vector<Token> V;
+		TreeToPolish(T, V);
+		string r = PostfixToInfix(V); // В виде строки лучше обозримо.
+		while (0); // Для точки останова.
+	}
 
 	return T;
 }
@@ -2082,12 +2523,13 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 			
 		}
 		string c = T.str;
-		Algebra_Node* node;
+		Algebra_Node* node = SetNode("0");
 		if (c == "+" || c == "-") node = func_1a(P, D, c);
 		if (c == "*") node = func_2a(P, D, c);
-		else if (c == "/") node = func_3a(P, D, c);
-		else if (c == "^") node = func_4a(P, D, c);
-		else if (c == "log") node = func_5a(P, D, c);
+		if (c == "/") node = func_3a(P, D, c);
+		if (c == "^") node = func_4a(P, D, c);
+		if (c == "log") node = func_5a(P, D, c);
+		return node;
 		
 	}
 	else if (f_opr_one(T))
@@ -2109,7 +2551,7 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 
 		}
 		string c = T.str;
-		Algebra_Node* node;
+		Algebra_Node* node = SetNode("0");
 		if (c == "exp") node = func_6a(P, D, c);
 		else if (c == "ln") node = func_7a(P, D, c);
 		else if (c == "sin")  node = func_8a(P, D, c);
@@ -2128,6 +2570,12 @@ Algebra_Node* DerivateFunc(Algebra_Node* root) // Следить , чтобы у каждой ветви
 		else if (c == "arch") node = func_21a(P, D, c);
 		else if (c == "arth") node = func_22a(P, D, c);
 		else if (c == "arcth") node = func_23a(P, D, c);
+		return node;
+	}
+	else
+	{
+		Algebra_Node* node = SetNode("0");
+		return node;
 	}
 		
 }
