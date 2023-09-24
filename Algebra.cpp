@@ -39,6 +39,7 @@ int main() {
 	cout << r << endl;
 
     Algebra_Node* tree = PolishToTree(es);
+	Algebra_Tree* operator_tree = new Algebra_Tree(tree);
 	if (DEBUG)
 	{
 		Print_Tree_R(tree, "", true, true);

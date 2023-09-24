@@ -29,12 +29,12 @@ unordered_set<string> func_info_free = { "D" , "Z" , "P" , "Derivate" };
 
 static string ch_hor = "-", ch_ver = "|", ch_ddia = "/", ch_rddia = "\\", ch_udia = "\\", ch_ver_hor = "|-", ch_udia_hor = "\\-", ch_ddia_hor = "/-", ch_ver_spa = "| ";
 
-bool f_arg(Token& T)
+bool f_arg(const Token& T)
 {
     if (T.type == Token::Type::Algebra || T.type == Token::Type::Number) return true;
     else return false;
 }
-bool f_opr_two(Token& T) {
+bool f_opr_two(const Token& T) {
     string p = T.str;
     if (operator_info_two.count(p) || func_info_two.count(p)) {
         return true;
@@ -42,7 +42,7 @@ bool f_opr_two(Token& T) {
     return false;
 }
 
-bool f_opr_one(Token& T) {
+bool f_opr_one(const Token& T) {
     string p = T.str;
     if (operator_info_one.count(p) || func_info_one.count(p)) {
         return true;
@@ -50,7 +50,7 @@ bool f_opr_one(Token& T) {
     return false;
 }
 
-bool f_opr_free(Token& T) {
+bool f_opr_free(const Token& T) {
     string p = T.str;
     if (func_info_free.count(p)) {
         return true;
@@ -228,3 +228,49 @@ Algebra_Node* GetOperand(Algebra_Node* root , LR lr)
     if (lr == LR::LEFT) return root->left;
     if (lr == LR::RIGHT) return root->right;
 }
+
+Algebra_Tree::Algebra_Tree(Algebra_Node* node)
+{
+    this->root = node;
+}
+
+
+Algebra_Tree& operator + (Algebra_Tree& other)
+{
+    const Token& T = Token(Token::Type::Operator, "+", 2, false);
+    Algebra_Node* first = new Algebra_Node(T);
+    delete first;
+    return other;
+}
+
+Algebra_Tree& operator - (Algebra_Tree& other)
+{
+    const Token& T = Token(Token::Type::Operator, "-", 2, false);
+    Algebra_Node* first = new Algebra_Node(T);
+    delete first;
+    return other;
+}
+Algebra_Tree& operator * (Algebra_Tree& other)
+{
+    const Token& T = Token(Token::Type::Operator, "*", 3, false);
+    Algebra_Node* first = new Algebra_Node(T);
+    delete first;
+    return other;
+}
+/*
+Algebra_Tree& operator / (Algebra_Tree& object ,Algebra_Tree& other)
+{
+    const Token& T = Token(Token::Type::Operator, "/", 3, false);
+    Algebra_Node* first = new Algebra_Node(T);
+    delete first;
+    return other;
+}
+
+Algebra_Tree& operator ^ (Algebra_Tree& object, Algebra_Tree& other)
+{
+    const Token& T = Token(Token::Type::Operator, "^", 4, true);
+    Algebra_Node* first = new Algebra_Node(T);
+    delete first;
+    return other;
+}
+*/

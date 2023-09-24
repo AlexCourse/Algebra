@@ -14,12 +14,6 @@ enum LR {
     ONE   // оператор с одним аргументом
 };
 
-//class Algebra_Tree {
-    // Algebra_Node& root;
-    //public:
-       // Algebra_Tree(Algebra_Node* node);
-
-//};
 
 class Algebra_Node {
     public:
@@ -34,9 +28,20 @@ class Algebra_Node {
 
 };
 
-bool f_arg(Token& T);
-bool f_opr_two(Token& T);
-bool f_opr_one(Token& T);
+class Algebra_Tree {
+    Algebra_Node* root;
+public:
+    Algebra_Tree(Algebra_Node* node);
+    Algebra_Tree& operator + (Algebra_Tree& other);
+    Algebra_Tree& operator - (Algebra_Tree& other);
+    Algebra_Tree& operator * (Algebra_Tree& other);
+    
+};
+
+
+bool f_arg(const Token& T);
+bool f_opr_two(const Token& T);
+bool f_opr_one(const Token& T);
 
 void Print_Tree_R(Algebra_Node const* node, string const& prefix, bool root, bool last);
 void Print_Tree(Algebra_Node const* node, string const& prefix, bool root, bool last);

@@ -3,6 +3,18 @@
 #include <vector>
 #include <stack>
 
+struct Operator {
+	int precedence;
+	string associativity;
+};
+
+
+map<char, Operator> operator_info = { { '+' , { 2, "L" }} ,
+										{'-' , { 2, "L" }},
+										{'/' , { 3, "L" }},
+										{'*' , { 3, "L" }},
+										{'^' , { 4, "R" }},
+};
 
 bool isliter(char p)
 {
@@ -12,6 +24,8 @@ bool isliter(char p)
 	}
 	else return false;
 }
+
+
 
 deque<Token> exprToTokens(const string& expr) {
 	deque<Token> tokens;
