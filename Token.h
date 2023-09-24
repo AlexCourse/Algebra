@@ -24,7 +24,9 @@ public:
         RightParen,
         Algebra,
         Ration,
-        Function
+        ComplexNumber,
+        Function,
+        Comma
     };
 
     const Type type;

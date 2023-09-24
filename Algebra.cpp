@@ -18,12 +18,14 @@ using namespace std;
 
 void test_1() // Тестирование функций exprToTokens() , shuntingYard().
 {
-	string fh[4] = { "(1-5*(1/2+5/6-7*(5+8/9*4^3)))" // +
+	string fh[6] = { "(1-5*(1/2+5/6-7*(5+8/9*4^3)))" // +
 		        , "(x^2-1)*(x-4/5)*(7/8+3*x)^2 + 3*x*(x-1)" ,  // +
 		             "1+2/3*(1+7/8-6/9+2*(1-6/11+9/15))^2" , // + 
-		                  "cos(x^2)" // -
+		                  "cos(x^2)", // +
+		                  "sin(x^2-3*x+2)*sin(7/4)",
+		                  "log(x , 2)"
 	};
-	string s = fh[3];
+	string s = fh[4];
 	getline(cin, s);
 
 	deque<Token> fs, es;

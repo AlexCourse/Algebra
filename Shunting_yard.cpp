@@ -6,35 +6,47 @@
 
 
 deque<Token> shuntingYard(const deque<Token>& tokens) {
-	deque<Token> queue;
-	vector<Token> stack;
+	deque<Token> eh;
+	stack<Token> st; // Поменять на stack
 
 	// Пока есть токены для чтения:
 	for (auto T : tokens) {
 		// Читать токен
 		switch (T.type) {
 		case Token::Type::Number:
-			queue.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
+			eh.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
 			break;
 		case Token::Type::Integer:
-			queue.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
+			eh.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
 			break;
 		case Token::Type::Real:
-			queue.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
+			eh.push_back(T); // Если токен представляет собой число, то добавьте его в очередь вывода
 			break;
 		case Token::Type::Algebra:
-			queue.push_back(T);
+			eh.push_back(T);
 			break;
+		case Token::Type::Function:
+			st.push(T);
+		case Token::Type::Comma:
+		{
+			bool B = false;
+			while (!st.empty())
+			{
+				Token T_1 = st.top();
+				if (T_1.type == Token::Type::LeftParen) { B = true; break; }
+				else eh.push_back(T_1);
+			}
 
+		}
 		case Token::Type::Operator:
 		{
 			// Если токен является оператором, o1, то:
 			const auto o1 = T;
 			// пока есть токен оператора,
-			while (!stack.empty()) {
+			while (!st.empty()) {
 
 				// o2, в верхней части стека, и
-				const auto o2 = stack.back();
+				const auto o2 = st.top();
 
 				// либо o1 является левоассоциативным, и его приоритет равен
 				// *меньше или равно* значению o2,
@@ -44,35 +56,35 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 					(!o1.rightAssociative && o1.precedence <= o2.precedence)
 					|| (o1.rightAssociative && o1.precedence < o2.precedence)
 					) {
-					stack.pop_back();
+					st.pop();
 
-					queue.push_back(o2);
+					eh.push_back(o2);
 
 					continue;
 				}
 				break;
 			}
-			stack.push_back(o1);
+			st.push(o1);
 		}
 		break;
 
 		case Token::Type::LeftParen:
-			stack.push_back(T);
+			st.push(T);
 			break;
 
 		case Token::Type::RightParen:
 		{
 			bool match = false;
 
-			while (!stack.empty() && stack.back().type != Token::Type::LeftParen) {
-				queue.push_back(stack.back());
-				stack.pop_back();
+			while (!st.empty() && st.top().type != Token::Type::LeftParen) {
+				eh.push_back(st.top());
+				st.pop();
 				match = true;
 			}
 
-			stack.pop_back();
+			st.pop();
 
-			if (!match && stack.empty()) {
+			if (!match && st.empty()) {
 				printf("RightParen error (%s)\n", get<string>(T.value));
 				return {};
 			}
@@ -84,16 +96,16 @@ deque<Token> shuntingYard(const deque<Token>& tokens) {
 			return {};
 		}
 	}
-	while (!stack.empty()) {
-		if (stack.back().type == Token::Type::LeftParen) {
+	while (!st.empty()) {
+		if (st.top().type == Token::Type::LeftParen) {
 			printf("Mismatched parentheses error\n");
 			return {};
 		}
-		queue.push_back(std::move(stack.back()));
-		stack.pop_back();
+		eh.push_back(std::move(st.top()));
+		st.pop();
 	}
 
-	return queue;
+	return eh;
 }
 
 double PolishCalculation(deque<Token> es) 
@@ -155,31 +167,6 @@ double PolishCalculation(deque<Token> es)
 				op = "Push " + to_string(lhs) + " " + get<string>(T.value) + " " + to_string(rhs);
 				break;
 			}
-			else if (f_opr_one(T))
-			{
-				const auto x = stack.back();
-				stack.pop_back();
-				string c = get<string>(T.value);
-				if (c == "exp") { stack.push_back(exp(x)); }
-				if (c == "ln") { stack.push_back(log1p(x)); }
-				if (c == "sin") { stack.push_back(sin(x)); }
-				if (c == "cos") { stack.push_back(cos(x)); }
-				if (c == "tg") { stack.push_back(tan(x)); }
-				if (c == "ctg") { stack.push_back(1 / tan(x)); }
-				if (c == "arcsin") { stack.push_back(asin(x)); }
-				if (c == "arccos") { stack.push_back(acos(x)); }
-				if (c == "arctg") { stack.push_back(atan(x)); }
-				if (c == "arcctg") { stack.push_back(atan(1 / x)); }
-				if (c == "sh") { stack.push_back(sinh(x)); }
-				if (c == "ch") { stack.push_back(cosh(x)); }
-				if (c == "th") { stack.push_back(tanh(x)); }
-				if (c == "cth") { stack.push_back(1 / tanh(x)); }
-				if (c == "arsh") { stack.push_back(asinh(x)); }
-				if (c == "arch") { stack.push_back(acosh(x)); }
-				if (c == "arth") { stack.push_back(atanh(x)); }
-				if (c == "arcth") { stack.push_back(atanh(1 / x)); }
-
-			}
 		}
 		case Token::Type::Function:
 		{
@@ -206,13 +193,14 @@ double PolishCalculation(deque<Token> es)
 				if (c == "arch") { stack.push_back(acosh(x)); }
 				if (c == "arth") { stack.push_back(atanh(x)); }
 				if (c == "arcth") { stack.push_back(atanh(1 / x)); }
+
 			}
 		}
-
 		default:
 			printf("Token error\n");
 			// exit(0);
 		}
+		
 	}
 	return stack.back();
 

@@ -272,7 +272,14 @@ deque<Token> exprToTokens(const string& expr) {
 				const string s = string(b, p);
 				if (func_info.count(s)) tokens.push_back(Token{ Token::Type::Function, s });
 				else tokens.push_back(Token{ Token::Type::Algebra, s });
+				p--;
 				continue;
+
+			}
+			else if ((*p) == ',')
+			{
+				string s = string(p, p + 1);
+				tokens.push_back(Token{ Token::Type::Comma , s });
 			}
 			else {
 				Token::Type t = Token::Type::Unknown;
